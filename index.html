@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maya Haven | Under Construction</title>
+  <meta
+    name="description"
+    content="Maya Haven Real Estate is under serious construction. A new experience is on the way."
+  >
+  <meta name="theme-color" content="#090909">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Manrope:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  >
+  <style>
+    :root {
+      --bg: #090909;
+      --bg-soft: #101010;
+      --gold: #f0be42;
+      --gold-soft: rgba(240, 190, 66, 0.18);
+      --gold-line: rgba(240, 190, 66, 0.38);
+      --text: #f7e6b0;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+    }
+
+    body {
+      font-family: "Manrope", sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(240, 190, 66, 0.12), transparent 26%),
+        radial-gradient(circle at 80% 18%, rgba(255, 234, 167, 0.08), transparent 22%),
+        linear-gradient(180deg, #080808 0%, #111111 100%);
+      color: var(--text);
+      overflow: hidden;
+    }
+
+    img,
+    video {
+      display: block;
+      max-width: 100%;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.42), rgba(0, 0, 0, 0.7)),
+        linear-gradient(135deg, rgba(240, 190, 66, 0.08), transparent 42%);
+    }
+
+    .video-shell,
+    .video-shell video,
+    .hero::before,
+    .hero::after {
+      position: absolute;
+      inset: 0;
+    }
+
+    .video-shell {
+      z-index: -3;
+      background:
+        radial-gradient(circle at center, rgba(240, 190, 66, 0.12), transparent 40%),
+        linear-gradient(180deg, #0b0b0b 0%, #121212 100%);
+    }
+
+    .video-shell video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 500ms ease;
+      filter: saturate(0.82) contrast(1.02) brightness(0.5);
+    }
+
+    .video-shell.is-ready video {
+      opacity: 1;
+    }
+
+    .hero::before {
+      content: "";
+      z-index: -2;
+      background:
+        linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.68) 100%),
+        radial-gradient(circle at center, rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0.45) 68%);
+    }
+
+    .hero::after {
+      content: "";
+      z-index: -1;
+      background-image:
+        linear-gradient(rgba(240, 190, 66, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(240, 190, 66, 0.06) 1px, transparent 1px);
+      background-size: 68px 68px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.28), transparent 85%);
+      opacity: 0.35;
+    }
+
+    .brand-mark {
+      position: absolute;
+      top: clamp(18px, 3vw, 34px);
+      left: clamp(18px, 3vw, 34px);
+      width: min(30vw, 168px);
+      padding: 10px;
+      border-radius: 22px;
+      background: linear-gradient(180deg, rgba(14, 14, 14, 0.74), rgba(14, 14, 14, 0.4));
+      border: 1px solid rgba(240, 190, 66, 0.14);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+    }
+
+    .brand-mark img {
+      width: 100%;
+      height: auto;
+      object-fit: contain;
+    }
+
+    .hero-content {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 32px;
+    }
+
+    .headline-wrap {
+      position: relative;
+      text-align: center;
+      max-width: 980px;
+    }
+
+    .headline-wrap::before,
+    .headline-wrap::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      width: min(72vw, 560px);
+      height: 1px;
+      transform: translateX(-50%);
+      background: linear-gradient(90deg, transparent, var(--gold-line), transparent);
+    }
+
+    .headline-wrap::before {
+      top: -24px;
+    }
+
+    .headline-wrap::after {
+      bottom: -24px;
+    }
+
+    .headline {
+      margin: 0;
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.65rem, 5vw, 4.6rem);
+      font-weight: 700;
+      letter-spacing: clamp(0.26rem, 1.4vw, 0.82rem);
+      text-transform: uppercase;
+      line-height: 1.18;
+      color: var(--text);
+      text-shadow:
+        0 0 24px rgba(240, 190, 66, 0.18),
+        0 18px 45px rgba(0, 0, 0, 0.52);
+      animation: hoverHeadline 4.8s ease-in-out infinite;
+    }
+
+    .headline span {
+      display: inline-block;
+      padding-left: clamp(0.26rem, 1.4vw, 0.82rem);
+    }
+
+    .headline-glow {
+      position: absolute;
+      inset: 50% auto auto 50%;
+      width: min(72vw, 660px);
+      height: min(32vw, 220px);
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(240, 190, 66, 0.2), transparent 70%);
+      filter: blur(26px);
+      z-index: -1;
+      animation: pulseGlow 4.8s ease-in-out infinite;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @keyframes hoverHeadline {
+      0%,
+      100% {
+        transform: translate3d(0, 0, 0);
+      }
+
+      50% {
+        transform: translate3d(0, -12px, 0);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%,
+      100% {
+        opacity: 0.45;
+        transform: translate(-50%, -50%) scale(0.96);
+      }
+
+      50% {
+        opacity: 0.82;
+        transform: translate(-50%, -50%) scale(1.03);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .brand-mark {
+        width: min(42vw, 142px);
+        border-radius: 18px;
+      }
+
+      .hero-content {
+        padding: 28px 20px;
+      }
+
+      .headline-wrap::before,
+      .headline-wrap::after {
+        width: min(78vw, 320px);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .headline,
+      .headline-glow,
+      .video-shell video {
+        animation: none;
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="hero">
+    <div class="video-shell" id="video-shell" aria-hidden="true">
+      <video id="hero-video" autoplay muted loop playsinline preload="auto">
+        <source src="./assets/hero-video.mp4" type="video/mp4">
+      </video>
+    </div>
+
+    <div class="brand-mark">
+      <img src="./assets/logo-transparent.png" alt="Maya Haven Real Estate">
+    </div>
+
+    <section class="hero-content" aria-labelledby="construction-heading">
+      <div class="headline-wrap">
+        <div class="headline-glow" aria-hidden="true"></div>
+        <h1 class="headline" id="construction-heading">
+          <span>Site Under Serious Construction</span>
+        </h1>
+        <p class="sr-only">
+          Maya Haven Real Estate website preview page. A full website experience is currently under construction.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const video = document.getElementById("hero-video");
+    const shell = document.getElementById("video-shell");
+
+    const revealVideo = () => {
+      shell.classList.add("is-ready");
+    };
+
+    video.addEventListener("loadeddata", revealVideo, { once: true });
+    video.addEventListener("canplay", revealVideo, { once: true });
+    video.addEventListener("error", () => {
+      shell.classList.remove("is-ready");
+    });
+
+    const autoplayAttempt = video.play();
+    if (autoplayAttempt && typeof autoplayAttempt.catch === "function") {
+      autoplayAttempt.catch(() => {
+        shell.classList.remove("is-ready");
+      });
+    }
+  </script>
+</body>
+</html>
