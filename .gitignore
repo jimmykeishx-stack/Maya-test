@@ -1,0 +1,10 @@
+.next/
+node_modules/
+server.log
+server.err.log
+start.log
+start.err.log
+web-open.log
+web-open.err.log
+.DS_Store
+Thumbs.db
