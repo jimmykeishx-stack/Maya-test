@@ -45,12 +45,12 @@ export default function ContactPage() {
             <article className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
               <p className="quiet-label text-[var(--gold-strong)]">WhatsApp</p>
               <a
-                href="https://wa.me/254700123456"
+                href="https://wa.me/254720584744"
                 target="_blank"
                 rel="noreferrer"
                 className="mt-4 block font-display text-2xl"
               >
-                +254 700 123 456
+                +254 720 584 744
               </a>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">Use WhatsApp for fast viewing coordination, relocation help, and shortlist requests.</p>
             </article>
@@ -67,8 +67,6 @@ export default function ContactPage() {
       </section>
 
       <CTASection
-        title="Prefer a guided shortlist before the first call?"
-        description="Tell us what kind of home, district, and lifestyle you want, and Maya Haven can shape a more precise conversation from the start."
         primaryHref="/properties"
         primaryLabel="View Current Listings"
       />

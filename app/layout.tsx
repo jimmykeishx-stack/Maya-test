@@ -34,7 +34,7 @@ export default function RootLayout({
     description:
       "Luxury Nairobi real estate platform for high-end apartments, penthouses, curated residences, expat housing, and investment properties.",
     areaServed: "Nairobi",
-    telephone: "+254700123456"
+    telephone: "+254720584744"
   };
 
   return (

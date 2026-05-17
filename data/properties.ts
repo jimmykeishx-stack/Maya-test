@@ -11,7 +11,7 @@ export type Property = {
   highlight: string;
   blurb: string;
   description: string;
-  status: "For Sale" | "For Lease";
+  status: "For Sale" | "For Rent" | "For Lease";
   coverImage: string;
   gallery: string[];
   amenities: string[];
@@ -226,7 +226,7 @@ export const properties: Property[] = [
     blurb: "A sophisticated furnished residence built for expat arrival, flexibility, and five-star routine.",
     description:
       "Oriel Suites packages premium Nairobi living into a polished, low-friction address that suits consultants, executives, and high-mobility international residents.",
-    status: "For Lease",
+    status: "For Rent",
     coverImage:
       "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -280,6 +280,7 @@ export const properties: Property[] = [
 
 export const propertyLocations = ["All", "Westlands", "Karen", "Kilimani", "Riverside", "Kileleshwa", "Runda"] as const;
 export const propertyTypes = ["All", "Apartment", "Penthouse", "Residence", "Villa"] as const;
+export const transactionOptions = ["All", "Buy", "Rent", "Lease"] as const;
 export const bedroomOptions = ["Any", "1+", "2+", "3+", "4+", "5+"] as const;
 export const bathroomOptions = ["Any", "2+", "3+", "4+", "5+"] as const;
 export const sortOptions = [

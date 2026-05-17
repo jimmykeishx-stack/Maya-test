@@ -4,7 +4,6 @@ import { notFound } from "next/navigation";
 import { Bath, BedDouble, Building2, MapPin, MoveUpRight, Ruler, Sparkles } from "lucide-react";
 
 import { CTASection } from "@/components/site/cta-section";
-import { InquiryForm } from "@/components/site/inquiry-form";
 import { PropertyCard } from "@/components/site/property-card";
 import { PropertyGallery } from "@/components/site/property-gallery";
 import { Badge } from "@/components/ui/badge";
@@ -52,45 +51,35 @@ export default async function PropertyDetailPage({
           </div>
         </div>
 
-        <div className="grid gap-10 xl:grid-cols-[1.4fr_0.6fr]">
+        <div className="space-y-10">
           <PropertyGallery title={property.title} images={property.gallery} />
-
-          <aside className="space-y-6 xl:sticky xl:top-28 xl:self-start">
-            <div className="rounded-[2rem] border border-black/6 bg-[#12100f] p-7 text-white shadow-[0_28px_90px_rgba(0,0,0,0.22)]">
-              <p className="quiet-label text-[var(--gold)]">Property Overview</p>
-              <p className="mt-4 font-display text-4xl">{formatPrice(property.price)}</p>
-              <div className="mt-6 grid gap-4 text-sm text-white/70">
-                <span className="flex items-center gap-3"><BedDouble className="size-4 text-[var(--gold)]" /> {property.bedrooms} Bedrooms</span>
-                <span className="flex items-center gap-3"><Bath className="size-4 text-[var(--gold)]" /> {property.bathrooms} Bathrooms</span>
-                <span className="flex items-center gap-3"><Ruler className="size-4 text-[var(--gold)]" /> {property.sqft.toLocaleString()} sqft</span>
-                <span className="flex items-center gap-3"><Building2 className="size-4 text-[var(--gold)]" /> {property.status}</span>
-              </div>
-              <Separator className="my-6 bg-[linear-gradient(90deg,transparent,rgba(212,173,94,0.4),transparent)]" />
-              <div className="flex flex-wrap gap-3">
-                <Link
-                  href="/contact"
-                  className="inline-flex h-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d4ad5e_0%,#b89041_100%)] px-6 text-sm font-medium uppercase tracking-[0.18em] text-black"
-                >
-                  Schedule Viewing
-                </Link>
-                <a
-                  href="https://wa.me/254700123456"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 px-6 text-sm uppercase tracking-[0.18em] text-white/80"
-                >
-                  WhatsApp Inquiry
-                </a>
-              </div>
+          <div className="rounded-[2rem] border border-black/6 bg-[#12100f] p-7 text-white shadow-[0_28px_90px_rgba(0,0,0,0.22)]">
+            <p className="quiet-label text-[var(--gold)]">Property Overview</p>
+            <p className="mt-4 font-display text-4xl">{formatPrice(property.price)}</p>
+            <div className="mt-6 grid gap-4 text-sm text-white/70 md:grid-cols-2 xl:grid-cols-4">
+              <span className="flex items-center gap-3"><BedDouble className="size-4 text-[var(--gold)]" /> {property.bedrooms} Bedrooms</span>
+              <span className="flex items-center gap-3"><Bath className="size-4 text-[var(--gold)]" /> {property.bathrooms} Bathrooms</span>
+              <span className="flex items-center gap-3"><Ruler className="size-4 text-[var(--gold)]" /> {property.sqft.toLocaleString()} sqft</span>
+              <span className="flex items-center gap-3"><Building2 className="size-4 text-[var(--gold)]" /> {property.status}</span>
             </div>
-
-            <div className="rounded-[2rem] border border-black/6 bg-white/60 p-7">
-              <p className="quiet-label text-[var(--gold-strong)]">Inquiry Form</p>
-              <div className="mt-5">
-                <InquiryForm />
-              </div>
+            <Separator className="my-6 bg-[linear-gradient(90deg,transparent,rgba(212,173,94,0.4),transparent)]" />
+            <div className="flex flex-wrap gap-3">
+              <Link
+                href="/contact"
+                className="inline-flex h-12 items-center justify-center rounded-full bg-[linear-gradient(135deg,#d4ad5e_0%,#b89041_100%)] px-6 text-sm font-medium uppercase tracking-[0.18em] text-black"
+              >
+                Schedule Viewing
+              </Link>
+              <a
+                href="https://wa.me/254720584744"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex h-12 items-center justify-center rounded-full border border-white/10 px-6 text-sm uppercase tracking-[0.18em] text-white/80"
+              >
+                WhatsApp Inquiry
+              </a>
             </div>
-          </aside>
+          </div>
         </div>
       </section>
 
@@ -142,7 +131,7 @@ export default async function PropertyDetailPage({
                   Reserved for a future 3D tour, cinematic reel, or agent-guided walkthrough embed.
                 </p>
                 <a
-                  href="https://wa.me/254700123456"
+                  href="https://wa.me/254720584744"
                   target="_blank"
                   rel="noreferrer"
                   className="mt-6 inline-flex items-center gap-2 text-sm uppercase tracking-[0.22em] text-[var(--gold-strong)]"
@@ -173,8 +162,6 @@ export default async function PropertyDetailPage({
       </section>
 
       <CTASection
-        title="Ready for a discreet next step?"
-        description="Let Maya Haven prepare a private viewing route, shortlist alternatives, or shape a wider Nairobi luxury buying brief."
         primaryHref="/contact"
         primaryLabel="Speak With Maya Haven"
       />

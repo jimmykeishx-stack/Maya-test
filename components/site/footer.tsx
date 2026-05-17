@@ -23,9 +23,9 @@ export function Footer() {
         <div className="space-y-3">
           <p className="quiet-label text-[var(--gold)]">Connect</p>
           <div className="grid gap-2 text-sm text-white/70">
-            <a href="tel:+254700123456">+254 700 123 456</a>
+            <a href="tel:+254720584744">+254 720 584 744</a>
             <a href="mailto:private@mayahaven.co">private@mayahaven.co</a>
-            <a href="https://wa.me/254700123456" target="_blank" rel="noreferrer">
+            <a href="https://wa.me/254720584744" target="_blank" rel="noreferrer">
               WhatsApp Concierge
             </a>
           </div>

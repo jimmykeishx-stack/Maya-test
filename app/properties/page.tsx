@@ -14,7 +14,6 @@ export default function PropertiesPage() {
       <section className="site-shell space-y-6">
         <SectionHeading
           eyebrow="Properties"
-          title="A premium browsing experience for Nairobi's most compelling addresses."
           description="Search, sort, and explore curated luxury residences across Westlands, Karen, Kilimani, Riverside, Kileleshwa, and Runda."
         />
         <PropertiesBrowser properties={properties} />

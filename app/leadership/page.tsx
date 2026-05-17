@@ -96,8 +96,6 @@ export default function LeadershipPage() {
       </section>
 
       <CTASection
-        title="Schedule a private consultation shaped by Maya Haven's founding vision."
-        description="For clients who want a more intentional, high-touch property conversation, Maya Haven offers tailored guidance through every next decision."
         primaryHref="/contact"
         primaryLabel="Request Consultation"
       />

@@ -1,24 +1,22 @@
-import Image from "next/image";
-
 import { LuxuryButton } from "@/components/site/luxury-button";
-import { founder } from "@/data/site";
 
 export function LeadershipSection() {
   return (
     <section className="section-space">
-      <div className="site-shell grid gap-8 md:grid-cols-[0.9fr_1.1fr] md:items-center">
-        <div className="relative overflow-hidden rounded-[2rem] bg-[#151311]">
-          <Image src={founder.portrait} alt={founder.name} width={900} height={1200} className="h-full w-full object-cover" />
-        </div>
-        <div className="space-y-6">
-          <p className="quiet-label text-[var(--gold-strong)]">Leadership Preview</p>
+      <div className="site-shell">
+        <div className="mx-auto max-w-4xl space-y-6 text-center">
+          <p className="quiet-label text-[var(--gold-strong)]">Team Preview</p>
           <h2 className="font-display text-4xl leading-tight text-balance md:text-5xl">
-            Winnie Cherotich shapes Maya Haven with editorial restraint and uncompromising standards.
+            Meet the team behind the editorial eye, client care, and premium presentation.
           </h2>
-          <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">{founder.shortBio}</p>
-          <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">{founder.story}</p>
+          <p className="mx-auto max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
+            The team combines market awareness, presentation discipline, and a calm service rhythm designed for buyers who expect clarity and polish at every step.
+          </p>
+          <p className="mx-auto max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
+            From shortlist curation to viewing coordination, the focus stays on thoughtful guidance, premium communication, and a more intentional property experience.
+          </p>
           <LuxuryButton href="/leadership" size="lg">
-            Meet The Founder
+            Meet The Team
           </LuxuryButton>
         </div>
       </div>

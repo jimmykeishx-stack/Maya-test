@@ -1,14 +1,13 @@
 import { Building2, Landmark, ShieldCheck, Sparkles, TrendingUp, Users } from "lucide-react";
 
 import { CTASection } from "@/components/site/cta-section";
+import { ClientTestimonials } from "@/components/site/client-testimonials";
 import { LeadershipSection } from "@/components/site/leadership-section";
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { PropertyCard } from "@/components/site/property-card";
 import { SectionHeading } from "@/components/site/section-heading";
-import { TestimonialCarousel } from "@/components/site/testimonial-carousel";
 import { createMetadata } from "@/lib/metadata";
 import { getFeaturedProperties } from "@/data/properties";
-import { lifestylePillars } from "@/data/site";
 
 export const metadata = createMetadata({
   title: "Luxury Nairobi Real Estate",
@@ -41,7 +40,7 @@ export default function HomePage() {
     <>
       <section className="relative isolate flex min-h-screen items-end overflow-hidden bg-black pt-28 text-white">
         <video
-          className="absolute inset-0 h-full w-full object-cover"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
           autoPlay
           muted
           loop
@@ -51,9 +50,9 @@ export default function HomePage() {
         >
           <source src="/media/hero/maya-haven-hero.mp4" type="video/mp4" />
         </video>
-        <div className="film-overlay absolute inset-0" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,173,94,0.18),transparent_28%)]" />
-        <div className="site-shell relative z-10 grid gap-10 pb-16 md:pb-24 lg:grid-cols-[1.15fr_0.85fr] lg:items-end">
+        <div className="film-overlay pointer-events-none absolute inset-0" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,173,94,0.18),transparent_28%)]" />
+        <div className="site-shell relative z-10 pb-16 md:pb-24">
           <div className="space-y-6">
             <p className="quiet-label text-[var(--gold)]">Luxury African Real Estate</p>
             <h1 className="max-w-4xl font-display text-5xl leading-[0.95] text-balance md:text-7xl xl:text-[6rem]">
@@ -71,49 +70,18 @@ export default function HomePage() {
               </LuxuryButton>
             </div>
           </div>
-          <div className="grid gap-4 rounded-[2rem] border border-white/10 bg-white/6 p-6 backdrop-blur-xl">
-            <p className="quiet-label text-[var(--gold)]">Currently Featured</p>
-            <div>
-              <p className="font-display text-3xl">{featuredProperties[0].title}</p>
-              <p className="mt-3 text-sm leading-7 text-white/68">{featuredProperties[0].highlight}</p>
-            </div>
-            <div className="grid gap-3 text-sm text-white/62">
-              <span>Westlands, Karen, Kilimani, Riverside, Kileleshwa, Runda</span>
-              <span>Private consultations for buyers, expats, and investors</span>
-              <span>Luxury presentation built around atmosphere and confidence</span>
-            </div>
-          </div>
         </div>
       </section>
 
       <section className="section-space">
         <div className="site-shell space-y-10">
           <SectionHeading
-            eyebrow="Featured Properties"
-            title="Six residences chosen for drama, polish, and lasting desirability."
+            title="Featured Properties"
             description="A selection of premium Nairobi homes designed to reflect how the next generation of luxury buyers actually wants to live."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {featuredProperties.map((property, index) => (
               <PropertyCard key={property.id} property={property} priority={index < 2} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section-space">
-        <div className="site-shell space-y-10">
-          <SectionHeading
-            eyebrow="Lifestyle Directions"
-            title="Luxury living, interpreted through the rhythms that matter."
-            description="From elevated skyline rituals to investment-minded acquisitions, Maya Haven frames each home around the life it supports."
-          />
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {lifestylePillars.map((pillar) => (
-              <article key={pillar.title} className="rounded-[1.8rem] border border-black/6 bg-white/55 p-6 shadow-[0_18px_60px_rgba(15,12,8,0.06)]">
-                <p className="quiet-label text-[var(--gold-strong)]">{pillar.title}</p>
-                <p className="mt-5 text-lg leading-8 text-muted-foreground">{pillar.description}</p>
-              </article>
             ))}
           </div>
         </div>
@@ -187,13 +155,11 @@ export default function HomePage() {
         </div>
       </section>
 
-      <TestimonialCarousel />
+      <ClientTestimonials />
 
       <CTASection
-        title="Book a private consultation shaped around the way you want to live."
-        description="Whether you are relocating, acquiring a family residence, or building a long-term real estate position in Nairobi, Maya Haven can curate the right next move."
         primaryHref="/contact"
-        primaryLabel="Book Consultation"
+        primaryLabel="Contact Team"
         secondaryHref="/properties"
         secondaryLabel="View Listings"
       />

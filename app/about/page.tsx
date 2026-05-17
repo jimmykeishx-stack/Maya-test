@@ -92,8 +92,6 @@ export default function AboutPage() {
       </section>
 
       <CTASection
-        title="Discover homes aligned with your lifestyle, not just your search filters."
-        description="Maya Haven pairs editorial taste with high-conviction real estate curation for buyers who want more clarity from the very first click."
         primaryHref="/properties"
         primaryLabel="Browse Curated Listings"
       />

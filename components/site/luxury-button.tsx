@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 
-import { Button, type ButtonProps } from "@/components/ui/button";
+import { Button, buttonVariants, type ButtonProps } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 type LuxuryButtonProps = ButtonProps & {
@@ -18,10 +18,15 @@ export function LuxuryButton({ href, children, className, icon = true, ...props 
   );
 
   if (href) {
+    const { variant, size } = props;
+
     return (
-      <Button asChild className={cn("tracking-[0.14em] uppercase", className)} {...props}>
-        <Link href={href}>{content}</Link>
-      </Button>
+      <Link
+        href={href}
+        className={cn(buttonVariants({ variant, size, className }), "tracking-[0.14em] uppercase")}
+      >
+        {content}
+      </Link>
     );
   }
 

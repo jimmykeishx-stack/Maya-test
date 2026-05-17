@@ -19,7 +19,7 @@ export function InquiryForm() {
     >
       <LuxuryInput label="Full Name" placeholder="Your full name" />
       <LuxuryInput label="Email Address" type="email" placeholder="you@example.com" />
-      <LuxuryInput label="Phone Number" placeholder="+254 700 000 000" />
+      <LuxuryInput label="Phone Number" placeholder="+254 720 584 744" />
       <label className="grid gap-3">
         <span className="text-sm font-medium text-foreground">How can we prepare for your viewing?</span>
         <Textarea placeholder="Share your ideal move timeline, family needs, or investment brief." />

@@ -4,10 +4,11 @@ import { Search } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { bathroomOptions, bedroomOptions, propertyLocations, propertyTypes } from "@/data/properties";
+import { bathroomOptions, bedroomOptions, propertyLocations, propertyTypes, transactionOptions } from "@/data/properties";
 
 type FilterValues = {
   search: string;
+  transaction: string;
   location: string;
   bedrooms: string;
   bathrooms: string;
@@ -22,34 +23,37 @@ type FilterSidebarProps = {
 
 export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
   return (
-    <Card className="sticky top-28">
+    <Card>
       <CardContent className="space-y-5">
-        <div>
+        <div className="space-y-2">
           <p className="quiet-label text-[var(--gold-strong)]">Refine Search</p>
           <h3 className="mt-3 font-display text-3xl">Find your ideal address.</h3>
         </div>
-        <label className="grid gap-3">
-          <span className="text-sm font-medium">Search</span>
-          <div className="relative">
-            <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              value={values.search}
-              onChange={(event) => onChange("search", event.target.value)}
-              placeholder="Westlands penthouse"
-              className="pl-11"
-            />
-          </div>
-        </label>
-        <FilterSelect label="Location" value={values.location} onChange={(value) => onChange("location", value)} options={propertyLocations} />
-        <FilterSelect label="Bedrooms" value={values.bedrooms} onChange={(value) => onChange("bedrooms", value)} options={bedroomOptions} />
-        <FilterSelect label="Bathrooms" value={values.bathrooms} onChange={(value) => onChange("bathrooms", value)} options={bathroomOptions} />
-        <FilterSelect label="Property Type" value={values.type} onChange={(value) => onChange("type", value)} options={propertyTypes} />
-        <FilterSelect
-          label="Price Range"
-          value={values.priceRange}
-          onChange={(value) => onChange("priceRange", value)}
-          options={["All", "Under KES 40M", "KES 40M - 80M", "KES 80M - 150M", "Above KES 150M"]}
-        />
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_repeat(6,minmax(0,1fr))] xl:items-end">
+          <label className="grid gap-3">
+            <span className="text-sm font-medium">Search</span>
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={values.search}
+                onChange={(event) => onChange("search", event.target.value)}
+                placeholder="Westlands penthouse"
+                className="pl-11"
+              />
+            </div>
+          </label>
+          <FilterSelect label="Buy / Rent / Lease" value={values.transaction} onChange={(value) => onChange("transaction", value)} options={transactionOptions} />
+          <FilterSelect label="Location" value={values.location} onChange={(value) => onChange("location", value)} options={propertyLocations} />
+          <FilterSelect label="Bedrooms" value={values.bedrooms} onChange={(value) => onChange("bedrooms", value)} options={bedroomOptions} />
+          <FilterSelect label="Bathrooms" value={values.bathrooms} onChange={(value) => onChange("bathrooms", value)} options={bathroomOptions} />
+          <FilterSelect label="Property Type" value={values.type} onChange={(value) => onChange("type", value)} options={propertyTypes} />
+          <FilterSelect
+            label="Price Range"
+            value={values.priceRange}
+            onChange={(value) => onChange("priceRange", value)}
+            options={["All", "Under KES 40M", "KES 40M - 80M", "KES 80M - 150M", "Above KES 150M"]}
+          />
+        </div>
       </CardContent>
     </Card>
   );
