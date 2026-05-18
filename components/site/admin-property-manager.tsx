@@ -176,29 +176,17 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
 
   async function submitProperty() {
     const payload = formStateToProperty(formState);
-    const endpoint = editingId ? `/api/properties/${editingId}` : "/api/properties";
-    const method = editingId ? "PUT" : "POST";
-
-    const response = await fetch(endpoint, {
-      method,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(payload)
-    });
-
-    if (!response.ok) {
-      throw new Error("Unable to save property.");
-    }
-
-    const data = (await response.json()) as { property: Property };
 
     setProperties((current) => {
-      const withoutCurrent = current.filter((item) => item.id !== data.property.id);
-      return [data.property, ...withoutCurrent];
+      const withoutCurrent = current.filter((item) => item.id !== payload.id);
+      return [payload, ...withoutCurrent];
     });
 
-    setSuccess(editingId ? "Property updated successfully." : "Property uploaded successfully.");
+    setSuccess(
+      editingId
+        ? "Dummy admin preview updated locally for this session."
+        : "Dummy property added to the preview locally for this session."
+    );
     resetForm();
   }
 
@@ -209,20 +197,11 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
     setError("");
     setSuccess("");
 
-    const response = await fetch(`/api/properties/${id}`, {
-      method: "DELETE"
-    });
-
-    if (!response.ok) {
-      setError("Unable to delete property.");
-      return;
-    }
-
     setProperties((current) => current.filter((item) => item.id !== id));
     if (editingId === id) {
       resetForm();
     }
-    setSuccess("Property deleted successfully.");
+    setSuccess("Dummy property removed from the preview locally for this session.");
   }
 
   return (
@@ -231,7 +210,10 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
         <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="quiet-label text-[var(--gold-strong)]">Property Controls</p>
-            <h2 className="mt-4 font-display text-4xl leading-tight">Upload, edit, and delete managed properties.</h2>
+            <h2 className="mt-4 font-display text-4xl leading-tight">Upload, edit, and delete preview properties.</h2>
+            <p className="mt-4 max-w-3xl text-sm leading-7 text-muted-foreground">
+              This dummy admin is frontend-only. Changes update the preview on this page for the current session, but do not publish to the live website or save to a database.
+            </p>
           </div>
           {editingId ? (
             <button
@@ -255,7 +237,7 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
             try {
               await submitProperty();
             } catch {
-              setError("We could not save the property right now.");
+              setError("We could not update the dummy admin preview right now.");
             } finally {
               setIsSubmitting(false);
             }
@@ -484,7 +466,7 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <LuxuryButton type="submit" size="lg" className="w-full justify-center sm:w-auto" icon={!isSubmitting}>
-              {isSubmitting ? "Saving..." : editingId ? "Update Property" : "Upload Property"}
+              {isSubmitting ? "Saving..." : editingId ? "Update Preview Property" : "Add Preview Property"}
             </LuxuryButton>
           </div>
 

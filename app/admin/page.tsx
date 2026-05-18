@@ -6,17 +6,64 @@ import {
   getListingLabel,
   getMandateLabel,
   getMarketStatusLabel,
-  getSegmentLabel
+  getSegmentLabel,
+  properties
 } from "@/data/properties";
-import { getProperties } from "@/lib/property-store";
-import { getBuyerInquiries, getOwnerSubmissions } from "@/lib/submissions-store";
 
 export const metadata = createMetadata({
-  title: "Admin",
-  description: "Internal property management overview for listings, mandates, and submissions."
+  title: "Admin Preview",
+  description: "Frontend-only Maya Haven admin preview for listings, submissions, and operational dashboards."
 });
 
-export const dynamic = "force-dynamic";
+export const dynamic = "force-static";
+
+const demoBuyerInquiries = [
+  {
+    id: "buyer-1",
+    fullName: "Njeri M.",
+    email: "njeri@example.com",
+    phoneNumber: "+254 722 410 220",
+    message: "Looking for a 3-bedroom apartment in Riverside with strong security and easy access to international schools.",
+    createdAt: "2026-05-18T09:15:00.000Z"
+  },
+  {
+    id: "buyer-2",
+    fullName: "David O.",
+    email: "david@example.com",
+    phoneNumber: "+44 7700 900123",
+    message: "Diaspora investor seeking a commercial acquisition with reliable tenant demand and clean due diligence support.",
+    createdAt: "2026-05-17T14:40:00.000Z"
+  }
+];
+
+const demoOwnerSubmissions = [
+  {
+    id: "owner-1",
+    fullName: "Grace K.",
+    email: "grace@example.com",
+    phoneNumber: "+254 720 584 744",
+    propertyType: "Apartment",
+    location: "Kilimani",
+    listingType: "rent",
+    propertyDescription: "A furnished two-bedroom apartment suited for executive rentals and short relocation stays.",
+    ownershipConfirmed: true,
+    imageName: "kilimani-residence.jpg",
+    createdAt: "2026-05-16T11:05:00.000Z"
+  },
+  {
+    id: "owner-2",
+    fullName: "Samuel R.",
+    email: "samuel@example.com",
+    phoneNumber: "+1 917 555 0142",
+    propertyType: "Townhouse",
+    location: "Runda",
+    listingType: "sale",
+    propertyDescription: "A family townhouse with landscaped frontage, ready for mandate discussion and pricing guidance.",
+    ownershipConfirmed: true,
+    imageName: "runda-townhouse.png",
+    createdAt: "2026-05-15T08:30:00.000Z"
+  }
+];
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-KE", {
@@ -25,11 +72,7 @@ function formatDate(value: string) {
   }).format(new Date(value));
 }
 
-export default async function AdminPage() {
-  const properties = await getProperties();
-  const buyerInquiries = await getBuyerInquiries();
-  const ownerSubmissions = await getOwnerSubmissions();
-
+export default function AdminPage() {
   const saleCount = properties.filter((property) => property.listingType === "sale").length;
   const rentCount = properties.filter((property) => property.listingType === "rent").length;
   const commercialCount = properties.filter((property) => property.segment === "commercial").length;
@@ -41,11 +84,15 @@ export default async function AdminPage() {
     <div className="pb-24 pt-32">
       <section className="site-shell space-y-8">
         <div className="space-y-4">
-          <p className="quiet-label text-[var(--gold-strong)]">Admin Overview</p>
-          <h1 className="font-display text-4xl leading-tight md:text-5xl">Internal property management structure for listings, mandates, and submissions.</h1>
+          <p className="quiet-label text-[var(--gold-strong)]">Admin Preview</p>
+          <h1 className="font-display text-4xl leading-tight md:text-5xl">A dummy Maya Haven admin built for presentations, product reviews, and frontend demos.</h1>
           <p className="max-w-3xl text-sm leading-7 text-muted-foreground md:text-base">
-            This is an internal-facing overview for the upgraded Maya Haven marketplace. It summarizes sale and rent stock, market status visibility, exclusive mandates, buyer inquiries, and separate owner listing submissions.
+            This page is intentionally frontend-only. It demonstrates how listing controls, submission queues, and operational summaries can look without depending on a live database or a persistent deployment backend.
           </p>
+        </div>
+
+        <div className="rounded-[1.8rem] border border-[var(--gold-strong)]/25 bg-[linear-gradient(135deg,rgba(212,173,94,0.15),rgba(255,255,255,0.58))] p-6 text-sm leading-7 text-muted-foreground">
+          <strong className="font-medium text-foreground">Preview mode:</strong> upload, edit, and delete actions on this page only update the browser session. They do not publish to the public site and they reset when the page reloads.
         </div>
 
         <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -72,8 +119,8 @@ export default async function AdminPage() {
       <section className="section-space">
         <div className="site-shell space-y-6">
           <div>
-            <p className="quiet-label text-[var(--gold-strong)]">Listing Structure</p>
-            <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">Backend-ready listing architecture with sale, rent, segment, status, and mandate fields.</h2>
+            <p className="quiet-label text-[var(--gold-strong)]">Listing Controls</p>
+            <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">Frontend-only controls for a premium admin concept.</h2>
           </div>
           <AdminPropertyManager initialProperties={properties} />
           <div className="overflow-hidden rounded-[2rem] border border-black/6 bg-white/60">
@@ -106,26 +153,20 @@ export default async function AdminPage() {
               <MessageSquareText className="size-5 text-[var(--gold)]" />
               <div>
                 <p className="quiet-label text-[var(--gold)]">Buyer Inquiries</p>
-                <h2 className="mt-2 font-display text-3xl">Stored separately from owner submissions.</h2>
+                <h2 className="mt-2 font-display text-3xl">Sample inquiry pipeline for presentation use.</h2>
               </div>
             </div>
             <div className="grid gap-4">
-              {buyerInquiries.length ? (
-                buyerInquiries.slice(0, 6).map((inquiry) => (
-                  <article key={inquiry.id} className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <p className="font-display text-2xl">{inquiry.fullName}</p>
-                      <span className="text-xs uppercase tracking-[0.18em] text-white/45">{formatDate(inquiry.createdAt)}</span>
-                    </div>
-                    <p className="mt-3 text-sm text-white/65">{inquiry.email} • {inquiry.phoneNumber}</p>
-                    <p className="mt-4 text-sm leading-7 text-white/72">{inquiry.message}</p>
-                  </article>
-                ))
-              ) : (
-                <article className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5 text-sm text-white/65">
-                  No buyer inquiries stored yet.
+              {demoBuyerInquiries.map((inquiry) => (
+                <article key={inquiry.id} className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="font-display text-2xl">{inquiry.fullName}</p>
+                    <span className="text-xs uppercase tracking-[0.18em] text-white/45">{formatDate(inquiry.createdAt)}</span>
+                  </div>
+                  <p className="mt-3 text-sm text-white/65">{inquiry.email} • {inquiry.phoneNumber}</p>
+                  <p className="mt-4 text-sm leading-7 text-white/72">{inquiry.message}</p>
                 </article>
-              )}
+              ))}
             </div>
           </div>
 
@@ -134,32 +175,26 @@ export default async function AdminPage() {
               <FileCheck2 className="size-5 text-[var(--gold)]" />
               <div>
                 <p className="quiet-label text-[var(--gold)]">List With Us</p>
-                <h2 className="mt-2 font-display text-3xl">Dedicated owner submission workflow and storage path.</h2>
+                <h2 className="mt-2 font-display text-3xl">Sample owner submission queue for demo workflows.</h2>
               </div>
             </div>
             <div className="grid gap-4">
-              {ownerSubmissions.length ? (
-                ownerSubmissions.slice(0, 6).map((submission) => (
-                  <article key={submission.id} className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <p className="font-display text-2xl">{submission.fullName}</p>
-                      <span className="text-xs uppercase tracking-[0.18em] text-white/45">{formatDate(submission.createdAt)}</span>
-                    </div>
-                    <p className="mt-3 text-sm text-white/65">
-                      {submission.propertyType} • {submission.location} • {submission.listingType === "sale" ? "Sale" : "Rent"}
-                    </p>
-                    <p className="mt-3 text-sm text-white/65">{submission.email} • {submission.phoneNumber}</p>
-                    <p className="mt-4 text-sm leading-7 text-white/72">{submission.propertyDescription}</p>
-                    <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--gold)]">
-                      Ownership confirmed: {submission.ownershipConfirmed ? "Yes" : "No"}{submission.image ? ` • Image uploaded: ${submission.image.fileName}` : ""}
-                    </p>
-                  </article>
-                ))
-              ) : (
-                <article className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5 text-sm text-white/65">
-                  No owner listing submissions stored yet.
+              {demoOwnerSubmissions.map((submission) => (
+                <article key={submission.id} className="rounded-[1.6rem] border border-white/10 bg-white/5 p-5">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <p className="font-display text-2xl">{submission.fullName}</p>
+                    <span className="text-xs uppercase tracking-[0.18em] text-white/45">{formatDate(submission.createdAt)}</span>
+                  </div>
+                  <p className="mt-3 text-sm text-white/65">
+                    {submission.propertyType} • {submission.location} • {submission.listingType === "sale" ? "Sale" : "Rent"}
+                  </p>
+                  <p className="mt-3 text-sm text-white/65">{submission.email} • {submission.phoneNumber}</p>
+                  <p className="mt-4 text-sm leading-7 text-white/72">{submission.propertyDescription}</p>
+                  <p className="mt-4 text-xs uppercase tracking-[0.18em] text-[var(--gold)]">
+                    Ownership confirmed: {submission.ownershipConfirmed ? "Yes" : "No"} • Image uploaded: {submission.imageName}
+                  </p>
                 </article>
-              )}
+              ))}
             </div>
           </div>
         </div>
