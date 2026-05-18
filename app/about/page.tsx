@@ -3,7 +3,7 @@ import Image from "next/image";
 import { CTASection } from "@/components/site/cta-section";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createMetadata } from "@/lib/metadata";
-import { properties } from "@/data/properties";
+import { getProperties } from "@/lib/property-store";
 import { aboutStats, timeline, trustIndicators } from "@/data/site";
 
 export const metadata = createMetadata({
@@ -11,7 +11,11 @@ export const metadata = createMetadata({
   description: "Learn about Maya Haven's mission, trust-led approach, diaspora advisory positioning, and professional property services."
 });
 
-export default function AboutPage() {
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const properties = await getProperties();
+
   return (
     <div className="pb-24 pt-32">
       <section className="site-shell space-y-8">

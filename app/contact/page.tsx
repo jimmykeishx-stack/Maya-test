@@ -3,14 +3,18 @@ import Image from "next/image";
 import { CTASection } from "@/components/site/cta-section";
 import { InquiryForm } from "@/components/site/inquiry-form";
 import { createMetadata } from "@/lib/metadata";
-import { properties } from "@/data/properties";
+import { getProperties } from "@/lib/property-store";
 
 export const metadata = createMetadata({
   title: "Contact",
   description: "Contact Maya Haven for consultations, diaspora property support, owner listing guidance, and trusted advisory services."
 });
 
-export default function ContactPage() {
+export const dynamic = "force-dynamic";
+
+export default async function ContactPage() {
+  const properties = await getProperties();
+
   return (
     <div className="pb-24 pt-32">
       <section className="site-shell grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">

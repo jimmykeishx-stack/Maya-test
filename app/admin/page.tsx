@@ -1,19 +1,22 @@
 import { Building2, FileCheck2, FolderKanban, Home, Landmark, MessageSquareText, ShieldCheck, Tags } from "lucide-react";
 
+import { AdminPropertyManager } from "@/components/site/admin-property-manager";
 import { createMetadata } from "@/lib/metadata";
 import {
   getListingLabel,
   getMandateLabel,
   getMarketStatusLabel,
-  getSegmentLabel,
-  properties
+  getSegmentLabel
 } from "@/data/properties";
+import { getProperties } from "@/lib/property-store";
 import { getBuyerInquiries, getOwnerSubmissions } from "@/lib/submissions-store";
 
 export const metadata = createMetadata({
   title: "Admin",
   description: "Internal property management overview for listings, mandates, and submissions."
 });
+
+export const dynamic = "force-dynamic";
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-KE", {
@@ -23,6 +26,7 @@ function formatDate(value: string) {
 }
 
 export default async function AdminPage() {
+  const properties = await getProperties();
   const buyerInquiries = await getBuyerInquiries();
   const ownerSubmissions = await getOwnerSubmissions();
 
@@ -71,6 +75,7 @@ export default async function AdminPage() {
             <p className="quiet-label text-[var(--gold-strong)]">Listing Structure</p>
             <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">Backend-ready listing architecture with sale, rent, segment, status, and mandate fields.</h2>
           </div>
+          <AdminPropertyManager initialProperties={properties} />
           <div className="overflow-hidden rounded-[2rem] border border-black/6 bg-white/60">
             <div className="grid gap-px bg-black/6 md:grid-cols-[1.4fr_0.8fr_0.8fr_0.8fr_1fr]">
               {["Listing", "Intent", "Category", "Status", "Mandate"].map((heading) => (

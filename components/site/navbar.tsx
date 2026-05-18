@@ -71,9 +71,7 @@ export function Navbar() {
           <Image src="/media/brand/maya-haven-logo.jpeg" alt="Maya Haven" width={56} height={56} className="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12" />
           <div className="hidden min-[430px]:block">
             <p className="font-display text-base sm:text-lg">Maya Haven</p>
-            <p className={cn("text-[10px] uppercase tracking-[0.32em]", transparentHome ? "text-white/65" : "text-muted-foreground")}>
-              Property Advisory
-            </p>
+            <p className={cn("text-[10px] uppercase tracking-[0.32em]", transparentHome ? "text-white/65" : "text-muted-foreground")}>REAL ESTATE</p>
           </div>
         </Link>
 

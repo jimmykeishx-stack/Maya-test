@@ -13,13 +13,15 @@ import {
   getListingLabel,
   getMandateLabel,
   getMarketStatusLabel,
-  getPropertyBySlug,
-  getSegmentLabel,
-  getSimilarProperties,
-  properties
+  getSegmentLabel
 } from "@/data/properties";
+import { getProperties, getPropertyBySlug, getSimilarProperties } from "@/lib/property-store";
+
+export const dynamic = "force-dynamic";
 
 export async function generateStaticParams() {
+  const properties = await getProperties();
+
   return properties.map((property) => ({
     slug: property.slug
   }));
@@ -31,13 +33,13 @@ export default async function PropertyDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const property = getPropertyBySlug(slug);
+  const property = await getPropertyBySlug(slug);
 
   if (!property) {
     notFound();
   }
 
-  const similarProperties = getSimilarProperties(property.slug, property.segment, property.listingType);
+  const similarProperties = await getSimilarProperties(property.slug, property.segment, property.listingType);
 
   return (
     <div className="pb-24 pt-24 sm:pt-28">

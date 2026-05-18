@@ -11,7 +11,7 @@ import {
   getAffordableHousingProperties,
   getCommercialProperties,
   getFeaturedProperties
-} from "@/data/properties";
+} from "@/lib/property-store";
 import { createMetadata } from "@/lib/metadata";
 import { eventsGalleryItems, insightPosts, serviceCards } from "@/data/site";
 
@@ -20,6 +20,8 @@ export const metadata = createMetadata({
   description:
     "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora property consultation and management services."
 });
+
+export const dynamic = "force-dynamic";
 
 const serviceIconMap = {
   search: Search,
@@ -37,10 +39,10 @@ const categoryLinks = [
   { href: "/properties/affordable-housing", label: "Affordable Housing" }
 ];
 
-export default function HomePage() {
-  const featuredProperties = getFeaturedProperties();
-  const affordableProperties = getAffordableHousingProperties().slice(0, 2);
-  const commercialProperties = getCommercialProperties().slice(0, 2);
+export default async function HomePage() {
+  const featuredProperties = await getFeaturedProperties();
+  const affordableProperties = (await getAffordableHousingProperties()).slice(0, 2);
+  const commercialProperties = (await getCommercialProperties()).slice(0, 2);
 
   return (
     <>
@@ -60,7 +62,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,173,94,0.18),transparent_28%)]" />
         <div className="site-shell relative z-10 pb-14 sm:pb-16 md:pb-24">
           <div className="max-w-4xl space-y-5 sm:space-y-6">
-            <p className="quiet-label text-[var(--gold)]">Property Marketplace & Advisory</p>
+            <p className="quiet-label text-[var(--gold)]">REAL ESTATE</p>
             <h1 className="font-display text-4xl leading-[0.95] text-balance sm:text-5xl md:text-7xl xl:text-[6rem]">
               Find a property you can call home within Nairobi and beyond.
             </h1>

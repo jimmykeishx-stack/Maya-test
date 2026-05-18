@@ -3,14 +3,18 @@ import Link from "next/link";
 import { PropertiesBrowser } from "@/components/site/properties-browser";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createMetadata } from "@/lib/metadata";
-import { properties } from "@/data/properties";
+import { getProperties } from "@/lib/property-store";
 
 export const metadata = createMetadata({
   title: "Properties",
   description: "Browse Maya Haven's curated property marketplace across sale, rent, commercial, and affordable housing opportunities."
 });
 
-export default function PropertiesPage() {
+export const dynamic = "force-dynamic";
+
+export default async function PropertiesPage() {
+  const properties = await getProperties();
+
   return (
     <div className="pb-24 pt-28 sm:pt-32">
       <section className="site-shell space-y-6">

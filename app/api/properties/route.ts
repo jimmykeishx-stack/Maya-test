@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { queryProperties } from "@/lib/property-store";
-import type { ListingType, MarketSegment, MarketStatus } from "@/data/properties";
+import { createProperty, queryProperties } from "@/lib/property-store";
+import type { ListingType, MarketSegment, MarketStatus, Property } from "@/data/properties";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   const marketStatus = searchParams.get("marketStatus") as MarketStatus | null;
   const search = searchParams.get("search") ?? "";
 
-  const results = queryProperties({
+  const results = await queryProperties({
     listingType: listingType ?? undefined,
     segment: segment ?? undefined,
     marketStatus: marketStatus ?? undefined,
@@ -19,4 +19,15 @@ export async function GET(request: Request) {
   });
 
   return NextResponse.json({ count: results.length, properties: results });
+}
+
+export async function POST(request: Request) {
+  const property = (await request.json()) as Property;
+
+  if (!property.id || !property.slug || !property.title) {
+    return NextResponse.json({ error: "Missing required property fields." }, { status: 400 });
+  }
+
+  const record = await createProperty(property);
+  return NextResponse.json({ success: true, property: record });
 }

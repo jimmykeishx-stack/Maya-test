@@ -2,10 +2,14 @@
 
 import { PropertyCard } from "@/components/site/property-card";
 import { LuxuryButton } from "@/components/site/luxury-button";
-import { properties } from "@/data/properties";
+import type { Property } from "@/data/properties";
 import { useSavedListings } from "@/hooks/use-saved-listings";
 
-export function SavedListingsView() {
+type SavedListingsViewProps = {
+  properties: Property[];
+};
+
+export function SavedListingsView({ properties }: SavedListingsViewProps) {
   const { savedIds } = useSavedListings();
   const savedProperties = properties.filter((property) => savedIds.includes(property.id));
 
