@@ -7,7 +7,7 @@ import { properties } from "@/data/properties";
 
 export const metadata = createMetadata({
   title: "Contact",
-  description: "Contact Maya Haven for private consultations, schedule luxury property viewings, or begin an investment-focused Nairobi search."
+  description: "Contact Maya Haven for consultations, diaspora property support, owner listing guidance, and trusted advisory services."
 });
 
 export default function ContactPage() {
@@ -15,12 +15,12 @@ export default function ContactPage() {
     <div className="pb-24 pt-32">
       <section className="site-shell grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="space-y-5">
-          <p className="quiet-label text-[var(--gold-strong)]">Contact Maya Haven</p>
+          <p className="quiet-label text-[var(--gold-strong)]">Speak With Us</p>
           <h1 className="font-display text-5xl leading-tight text-balance md:text-6xl">
-            Start a private conversation about your next Nairobi address.
+            Start a direct conversation about buying, renting, listing, or managing property.
           </h1>
           <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-            Use the contact form to request a viewing, share an investment brief, or ask Maya Haven to curate a more intentional shortlist.
+            Use this form for buyer, tenant, diaspora, or consultation inquiries. Owner property submissions should go through the dedicated List With Us workflow.
           </p>
           <div className="rounded-[2rem] border border-black/6 bg-white/60 p-8">
             <InquiryForm />
@@ -66,10 +66,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      <CTASection
-        primaryHref="/properties"
-        primaryLabel="View Current Listings"
-      />
+      <CTASection primaryHref="/properties" primaryLabel="View Current Listings" secondaryHref="/list-with-us" secondaryLabel="List With Us" />
     </div>
   );
 }

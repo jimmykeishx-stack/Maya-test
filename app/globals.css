@@ -103,12 +103,12 @@ img {
 }
 
 .site-shell {
-  width: min(100% - 24px, 1380px);
+  width: min(100% - 20px, 1380px);
   margin-inline: auto;
 }
 
 .section-space {
-  padding-block: 4.75rem;
+  padding-block: 4rem;
 }
 
 .font-display {
@@ -118,7 +118,7 @@ img {
 .quiet-label {
   letter-spacing: 0.28em;
   text-transform: uppercase;
-  font-size: 0.72rem;
+  font-size: 0.68rem;
 }
 
 .film-overlay {
@@ -132,7 +132,15 @@ img {
 }
 
 @media (min-width: 768px) {
+  .site-shell {
+    width: min(100% - 40px, 1380px);
+  }
+
   .section-space {
     padding-block: 6.5rem;
+  }
+
+  .quiet-label {
+    font-size: 0.72rem;
   }
 }

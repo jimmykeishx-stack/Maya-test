@@ -4,11 +4,21 @@ import { Search } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { bathroomOptions, bedroomOptions, propertyLocations, propertyTypes, transactionOptions } from "@/data/properties";
+import {
+  availabilityOptions,
+  bathroomOptions,
+  bedroomOptions,
+  listingTypeOptions,
+  propertyLocations,
+  propertyTypes,
+  segmentOptions
+} from "@/data/properties";
 
-type FilterValues = {
+export type FilterValues = {
   search: string;
-  transaction: string;
+  listingType: string;
+  segment: string;
+  availability: string;
   location: string;
   bedrooms: string;
   bathrooms: string;
@@ -24,12 +34,12 @@ type FilterSidebarProps = {
 export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
   return (
     <Card>
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-5 p-4 sm:p-6">
         <div className="space-y-2">
           <p className="quiet-label text-[var(--gold-strong)]">Refine Search</p>
-          <h3 className="mt-3 font-display text-3xl">Find your ideal address.</h3>
+          <h3 className="mt-3 font-display text-2xl sm:text-3xl">Find your ideal address.</h3>
         </div>
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-[1.4fr_repeat(6,minmax(0,1fr))] xl:items-end">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.4fr_repeat(8,minmax(0,1fr))] xl:items-end">
           <label className="grid gap-3">
             <span className="text-sm font-medium">Search</span>
             <div className="relative">
@@ -42,7 +52,9 @@ export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
               />
             </div>
           </label>
-          <FilterSelect label="Buy / Rent / Lease" value={values.transaction} onChange={(value) => onChange("transaction", value)} options={transactionOptions} />
+          <FilterSelect label="Sale / Rent" value={values.listingType} onChange={(value) => onChange("listingType", value)} options={listingTypeOptions} />
+          <FilterSelect label="Category" value={values.segment} onChange={(value) => onChange("segment", value)} options={segmentOptions} />
+          <FilterSelect label="Status" value={values.availability} onChange={(value) => onChange("availability", value)} options={availabilityOptions} />
           <FilterSelect label="Location" value={values.location} onChange={(value) => onChange("location", value)} options={propertyLocations} />
           <FilterSelect label="Bedrooms" value={values.bedrooms} onChange={(value) => onChange("bedrooms", value)} options={bedroomOptions} />
           <FilterSelect label="Bathrooms" value={values.bathrooms} onChange={(value) => onChange("bathrooms", value)} options={bathroomOptions} />
@@ -76,7 +88,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-12 rounded-[1.2rem] border border-[rgba(42,39,34,0.12)] bg-white/70 px-4 text-sm outline-none transition focus:border-[rgba(212,173,94,0.55)]"
+        className="h-12 w-full rounded-[1.2rem] border border-[rgba(42,39,34,0.12)] bg-white/70 px-4 text-sm outline-none transition focus:border-[rgba(212,173,94,0.55)]"
       >
         {options.map((option) => (
           <option key={option} value={option}>

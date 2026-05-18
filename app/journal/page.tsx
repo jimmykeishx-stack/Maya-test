@@ -1,46 +1,5 @@
-import Image from "next/image";
+import { redirect } from "next/navigation";
 
-import { CTASection } from "@/components/site/cta-section";
-import { SectionHeading } from "@/components/site/section-heading";
-import { blogPosts } from "@/data/site";
-import { createMetadata } from "@/lib/metadata";
-
-export const metadata = createMetadata({
-  title: "Journal",
-  description: "Editorial notes on luxury living, investing, and relocating well in Nairobi."
-});
-
-export default function JournalPage() {
-  return (
-    <div className="pb-24 pt-32">
-      <section className="site-shell space-y-8">
-        <SectionHeading
-          eyebrow="Journal"
-          title="Editorial notes on luxury living, investing, and relocating well in Nairobi."
-          description="A blog-style layer for clients who want context, design intelligence, and a better sense of where premium real estate is heading."
-        />
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {blogPosts.map((post) => (
-            <article key={post.title} className="overflow-hidden rounded-[1.8rem] border border-black/6 bg-white/55 shadow-[0_18px_60px_rgba(15,12,8,0.06)]">
-              <div className="relative aspect-[4/3]">
-                <Image src={post.image} alt={post.title} fill className="object-cover" />
-              </div>
-              <div className="space-y-4 p-6">
-                <p className="quiet-label text-[var(--gold-strong)]">{post.category}</p>
-                <h3 className="font-display text-3xl leading-tight text-balance">{post.title}</h3>
-                <p className="text-base leading-8 text-muted-foreground">{post.excerpt}</p>
-              </div>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <CTASection
-        primaryHref="/contact"
-        primaryLabel="Contact Team"
-        secondaryHref="/properties"
-        secondaryLabel="View Listings"
-      />
-    </div>
-  );
+export default function JournalRedirectPage() {
+  redirect("/insight");
 }

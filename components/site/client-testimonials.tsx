@@ -11,18 +11,18 @@ import { clientReviews } from "@/data/site";
 
 export function ClientTestimonials() {
   return (
-    <section className="section-space bg-[#12100f] px-4 text-white">
+    <section className="section-space bg-[#12100f] px-3 text-white sm:px-4">
       <div className="site-shell">
         <div className="mx-auto max-w-3xl text-center">
           <p className="quiet-label text-[var(--gold)]">What Our Clients Say</p>
-          <h2 className="mt-4 font-display text-4xl leading-tight text-balance md:text-5xl">
+          <h2 className="mt-4 font-display text-3xl leading-tight text-balance sm:text-4xl md:text-5xl">
             A premium experience remembered for calm execution and polished detail.
           </h2>
         </div>
       </div>
-      <ContainerScroll className="site-shell mt-10">
-        <div className="sticky left-0 top-0 h-svh w-full py-10">
-          <CardsContainer className="mx-auto h-[430px] w-[min(100%,360px)]">
+      <ContainerScroll className="site-shell mt-10 min-h-[220svh] md:min-h-[280svh]">
+        <div className="sticky left-0 top-0 h-[82svh] w-full py-6 sm:h-[86svh] sm:py-10 md:h-svh">
+          <CardsContainer className="mx-auto h-[360px] w-[min(100%,320px)] sm:h-[400px] sm:w-[min(100%,340px)] md:h-[430px] md:w-[min(100%,360px)]">
             {clientReviews.map((review, index) => (
               <CardTransformed
                 key={review.id}
@@ -35,7 +35,7 @@ export function ClientTestimonials() {
               >
                 <div className="flex flex-col items-center space-y-4 text-center">
                   <ReviewStars className="text-[var(--gold)]" rating={review.rating} />
-                  <div className="mx-auto w-[88%] text-lg leading-8 text-white/82">
+                  <div className="mx-auto w-[88%] text-base leading-7 text-white/82 sm:text-lg sm:leading-8">
                     <blockquote id={`card-${review.id}-content`}>{review.quote}</blockquote>
                   </div>
                 </div>

@@ -1,4 +1,5 @@
-import { Building2, Landmark, ShieldCheck, Sparkles, TrendingUp, Users } from "lucide-react";
+import Link from "next/link";
+import { Building2, KeyRound, MessageSquareMore, Search, ShieldCheck, Users, Video } from "lucide-react";
 
 import { CTASection } from "@/components/site/cta-section";
 import { ClientTestimonials } from "@/components/site/client-testimonials";
@@ -6,39 +7,44 @@ import { LeadershipSection } from "@/components/site/leadership-section";
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { PropertyCard } from "@/components/site/property-card";
 import { SectionHeading } from "@/components/site/section-heading";
+import {
+  getAffordableHousingProperties,
+  getCommercialProperties,
+  getFeaturedProperties
+} from "@/data/properties";
 import { createMetadata } from "@/lib/metadata";
-import { getFeaturedProperties } from "@/data/properties";
+import { eventsGalleryItems, insightPosts, serviceCards } from "@/data/site";
 
 export const metadata = createMetadata({
-  title: "Luxury Nairobi Real Estate",
+  title: "Property Marketplace & Diaspora Advisory",
   description:
-    "Discover Maya Haven, a cinematic luxury real estate platform for curated residences, penthouses, and investment-led Nairobi living."
+    "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora property consultation and management services."
 });
 
-const trustPillars = [
-  {
-    title: "Curated Inventory",
-    description: "Every listing is positioned through architecture, mood, and long-term desirability, not just square footage.",
-    icon: Building2
-  },
-  {
-    title: "Discreet Advisory",
-    description: "Private consultation, polished viewings, and tailored shortlists designed for decisive high-net-worth buyers.",
-    icon: ShieldCheck
-  },
-  {
-    title: "Investment Clarity",
-    description: "We frame properties around scarcity, rental appeal, and futureproof urban relevance across Nairobi.",
-    icon: TrendingUp
-  }
+const serviceIconMap = {
+  search: Search,
+  users: Users,
+  key: KeyRound,
+  message: MessageSquareMore,
+  shield: ShieldCheck,
+  building: Building2
+};
+
+const categoryLinks = [
+  { href: "/properties/for-sale", label: "For Sale" },
+  { href: "/properties/for-rent", label: "For Rent" },
+  { href: "/properties/commercial", label: "Commercial" },
+  { href: "/properties/affordable-housing", label: "Affordable Housing" }
 ];
 
 export default function HomePage() {
   const featuredProperties = getFeaturedProperties();
+  const affordableProperties = getAffordableHousingProperties().slice(0, 2);
+  const commercialProperties = getCommercialProperties().slice(0, 2);
 
   return (
     <>
-      <section className="relative isolate flex min-h-screen items-end overflow-hidden bg-black pt-28 text-white">
+      <section className="relative isolate flex min-h-[92svh] items-end overflow-hidden bg-black pt-24 text-white sm:pt-28">
         <video
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
           autoPlay
@@ -52,21 +58,21 @@ export default function HomePage() {
         </video>
         <div className="film-overlay pointer-events-none absolute inset-0" />
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,173,94,0.18),transparent_28%)]" />
-        <div className="site-shell relative z-10 pb-16 md:pb-24">
-          <div className="space-y-6">
-            <p className="quiet-label text-[var(--gold)]">Luxury African Real Estate</p>
-            <h1 className="max-w-4xl font-display text-5xl leading-[0.95] text-balance md:text-7xl xl:text-[6rem]">
-              Curated Nairobi residences for a life of quiet distinction.
+        <div className="site-shell relative z-10 pb-14 sm:pb-16 md:pb-24">
+          <div className="max-w-4xl space-y-5 sm:space-y-6">
+            <p className="quiet-label text-[var(--gold)]">Property Marketplace & Advisory</p>
+            <h1 className="font-display text-4xl leading-[0.95] text-balance sm:text-5xl md:text-7xl xl:text-[6rem]">
+              Find a property you can call home within Nairobi and beyond.
             </h1>
-            <p className="max-w-2xl text-base leading-8 text-white/72 md:text-lg">
-              Maya Haven presents high-end apartments, cinematic penthouses, expat-ready homes, and investment addresses through an editorial lens that feels calm, architectural, and globally refined.
+            <p className="max-w-2xl text-sm leading-7 text-white/72 sm:text-base md:text-lg md:leading-8">
+              Maya Haven combines premium property curation with trusted diaspora consultation, sourcing, due diligence, and management support for clients buying, renting, investing, or listing in Kenya.
             </p>
-            <div className="flex flex-wrap gap-3">
-              <LuxuryButton href="/properties" size="lg">
+            <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <LuxuryButton href="/properties" size="lg" className="w-full justify-center sm:w-auto">
                 Explore Properties
               </LuxuryButton>
-              <LuxuryButton href="/contact" size="lg" variant="secondary">
-                Schedule Viewing
+              <LuxuryButton href="/contact" size="lg" variant="secondary" className="w-full justify-center sm:w-auto">
+                SPEAK WITH US
               </LuxuryButton>
             </div>
           </div>
@@ -74,10 +80,32 @@ export default function HomePage() {
       </section>
 
       <section className="section-space">
+        <div className="site-shell space-y-6">
+          <SectionHeading
+            eyebrow="Browse by Intent"
+            title="Clearer pathways for sale, rent, commercial, and affordable housing."
+            description="Start with the category that matches your goal, then refine further by location, price band, status, and property type."
+          />
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            {categoryLinks.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className="rounded-[1.6rem] border border-black/6 bg-white/60 px-5 py-6 text-center font-display text-2xl transition hover:-translate-y-0.5"
+              >
+                {item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-space">
         <div className="site-shell space-y-10">
           <SectionHeading
-            title="Featured Properties"
-            description="A selection of premium Nairobi homes designed to reflect how the next generation of luxury buyers actually wants to live."
+            eyebrow="Featured Listings"
+            title="Premium listings curated across Nairobi's strongest residential and investment corridors."
+            description="A refined mix of homes and mandate-led opportunities for buyers, diaspora clients, and long-view investors."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {featuredProperties.map((property, index) => (
@@ -90,19 +118,19 @@ export default function HomePage() {
       <section className="section-space bg-[#12100f] text-white">
         <div className="site-shell space-y-10">
           <SectionHeading
-            eyebrow="Why Maya Haven"
-            title="Trust, aesthetic judgment, and conversion-focused calm."
-            description="Luxury property buyers need more than listings. They need clarity, atmosphere, and an experience that feels aligned with the homes themselves."
+            eyebrow="Services"
+            title="Advisory and management services designed around trust, sourcing discipline, and client protection."
+            description="From finding a property to finding the right buyer or tenant, the service structure is designed to be practical, premium, and quietly effective."
             className="max-w-4xl"
           />
-          <div className="grid gap-6 md:grid-cols-3">
-            {trustPillars.map((pillar) => {
-              const Icon = pillar.icon;
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {serviceCards.map((service) => {
+              const Icon = serviceIconMap[service.icon as keyof typeof serviceIconMap] ?? Building2;
               return (
-                <article key={pillar.title} className="rounded-[1.8rem] border border-white/10 bg-white/5 p-7">
+                <article key={service.title} className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6 sm:p-7">
                   <Icon className="size-6 text-[var(--gold)]" />
-                  <h3 className="mt-6 font-display text-3xl">{pillar.title}</h3>
-                  <p className="mt-4 text-sm leading-7 text-white/62">{pillar.description}</p>
+                  <h3 className="mt-5 font-display text-2xl sm:mt-6 sm:text-3xl">{service.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-white/62">{service.description}</p>
                 </article>
               );
             })}
@@ -114,55 +142,120 @@ export default function HomePage() {
 
       <section className="section-space">
         <div className="site-shell grid gap-8 lg:grid-cols-[1fr_1fr]">
-          <div className="overflow-hidden rounded-[2rem] border border-black/6 bg-[linear-gradient(135deg,rgba(212,173,94,0.18),rgba(255,255,255,0.4))] p-8">
-            <p className="quiet-label text-[var(--gold-strong)]">Private Market Access</p>
-            <h3 className="mt-4 font-display text-4xl leading-tight">Some of our most compelling homes never become public inventory.</h3>
-            <p className="mt-4 max-w-xl text-base leading-8 text-muted-foreground">
-              Buyers working with Maya Haven receive elevated guidance, discreet opportunities, and neighborhoods framed around lifestyle fit, not generic filters.
+          <div className="overflow-hidden rounded-[2rem] border border-black/6 bg-[linear-gradient(135deg,rgba(212,173,94,0.18),rgba(255,255,255,0.4))] p-6 sm:p-8">
+            <p className="quiet-label text-[var(--gold-strong)]">Diaspora Connect</p>
+            <h3 className="mt-4 font-display text-3xl leading-tight sm:text-4xl">Consultation, sourcing, due diligence, and guided virtual viewings for clients abroad.</h3>
+            <p className="mt-4 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base md:leading-8">
+              Designed for Kenyans abroad who need reliable local representation, cleaner property verification, and practical help through purchase completion and management.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <LuxuryButton href="/contact" size="lg">
-                Book a Consultation
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+              <LuxuryButton href="/diaspora-connect" size="lg" className="w-full justify-center sm:w-auto">
+                Explore Diaspora Connect
               </LuxuryButton>
-              <LuxuryButton href="/about" variant="outline" size="lg">
-                Discover the Brand
+              <LuxuryButton href="/contact" variant="outline" size="lg" className="w-full justify-center sm:w-auto">
+                SPEAK WITH US
               </LuxuryButton>
             </div>
           </div>
-          <div className="grid gap-5 rounded-[2rem] border border-black/6 bg-white/60 p-8">
+          <div className="grid gap-5 rounded-[2rem] border border-black/6 bg-white/60 p-6 sm:p-8">
             <div className="flex items-start gap-4">
-              <Sparkles className="mt-1 size-5 text-[var(--gold-strong)]" />
+              <ShieldCheck className="mt-1 size-5 text-[var(--gold-strong)]" />
               <div>
-                <h3 className="font-display text-2xl">Editorial Property Positioning</h3>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">Homes are presented through feeling, tone, and visual hierarchy rather than template-driven catalog design.</p>
+                <h3 className="font-display text-[1.7rem] leading-tight sm:text-2xl">Due Diligence First</h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">Support that starts with verification, seller and developer vetting, and clearer documentation before commitment.</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <Users className="mt-1 size-5 text-[var(--gold-strong)]" />
+              <Video className="mt-1 size-5 text-[var(--gold-strong)]" />
               <div>
-                <h3 className="font-display text-2xl">High-Touch Client Journey</h3>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">Every step, from shortlist to viewing, is designed to remove noise and increase buyer confidence.</p>
+                <h3 className="font-display text-[1.7rem] leading-tight sm:text-2xl">Guided Virtual Viewings</h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">Live walkthroughs, recorded recaps, and practical commentary for clients making decisions from outside Kenya.</p>
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <Landmark className="mt-1 size-5 text-[var(--gold-strong)]" />
+              <Building2 className="mt-1 size-5 text-[var(--gold-strong)]" />
               <div>
-                <h3 className="font-display text-2xl">A Global Standard, Rooted in Nairobi</h3>
-                <p className="mt-2 text-sm leading-7 text-muted-foreground">The visual language feels international while staying grounded in the city, neighborhoods, and buyers we know deeply.</p>
+                <h3 className="font-display text-[1.7rem] leading-tight sm:text-2xl">Property Management Support</h3>
+                <p className="mt-2 text-sm leading-7 text-muted-foreground">Ongoing support for owners who need local coordination after purchase, tenancy placement, or handover.</p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
+      <section className="section-space">
+        <div className="site-shell space-y-10">
+          <SectionHeading
+            eyebrow="Affordable Housing Options"
+            title="Structured options for practical ownership and dependable family living."
+            description="Affordable housing deserves clear presentation too, especially for first-time buyers, family-backed purchases, and realistic rental planning."
+          />
+          <div className="grid gap-6 md:grid-cols-2">
+            {affordableProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-space bg-[#12100f] text-white">
+        <div className="site-shell space-y-10">
+          <SectionHeading
+            eyebrow="Commercial"
+            title="Commercial properties for lease, acquisition, and mandate-led investor conversations."
+            description="Selected office, retail, and mixed-use opportunities for operators, landlords, and clients expanding into Kenya."
+            className="max-w-4xl"
+          />
+          <div className="grid gap-6 md:grid-cols-2">
+            {commercialProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <ClientTestimonials />
 
-      <CTASection
-        primaryHref="/contact"
-        primaryLabel="Contact Team"
-        secondaryHref="/properties"
-        secondaryLabel="View Listings"
-      />
+      <section className="section-space">
+        <div className="site-shell space-y-10">
+          <SectionHeading
+            eyebrow="MAYA HAVEN INSIGHT"
+            title="Editorial guidance for buyers, landlords, and diaspora clients."
+            description="Context, not clutter. A more useful content layer for the questions people ask before they transact."
+          />
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {insightPosts.map((post) => (
+              <article key={post.title} className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
+                <p className="quiet-label text-[var(--gold-strong)]">{post.category}</p>
+                <h3 className="mt-4 font-display text-3xl leading-tight">{post.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-muted-foreground">{post.excerpt}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section-space bg-[#12100f] text-white">
+        <div className="site-shell space-y-10">
+          <SectionHeading
+            eyebrow="Events & Gallery"
+            title="A CMS-ready layer for briefings, showcases, and client milestones."
+            description="Built to host property launches, diaspora investor sessions, gallery updates, and transaction milestones with the same premium restraint."
+            className="max-w-4xl"
+          />
+          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {eventsGalleryItems.map((item) => (
+              <article key={item.title} className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6">
+                <p className="quiet-label text-[var(--gold)]">{item.category}</p>
+                <h3 className="mt-4 font-display text-3xl leading-tight">{item.title}</h3>
+                <p className="mt-4 text-sm leading-7 text-white/65">{item.excerpt}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <CTASection primaryHref="/contact" primaryLabel="SPEAK WITH US" secondaryHref="/list-with-us" secondaryLabel="List With Us" />
     </>
   );
 }

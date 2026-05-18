@@ -5,19 +5,33 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-export function formatPrice(amount: number) {
-  return new Intl.NumberFormat("en-KE", {
-    style: "currency",
-    currency: "KES",
-    maximumFractionDigits: 0
-  }).format(amount);
+export type SupportedCurrency = "KES" | "USD" | "GBP" | "EUR";
+
+export const currencyRates: Record<SupportedCurrency, number> = {
+  KES: 1,
+  USD: 129,
+  GBP: 165,
+  EUR: 140
+};
+
+export function convertFromKes(amount: number, currency: SupportedCurrency) {
+  if (currency === "KES") return amount;
+  return amount / currencyRates[currency];
 }
 
-export function formatCompactPrice(amount: number) {
-  return new Intl.NumberFormat("en-KE", {
+export function formatCurrencyAmount(amount: number, currency: SupportedCurrency, compact = false) {
+  return new Intl.NumberFormat(currency === "KES" ? "en-KE" : "en", {
     style: "currency",
-    currency: "KES",
-    notation: "compact",
-    maximumFractionDigits: 1
-  }).format(amount);
+    currency,
+    notation: compact ? "compact" : "standard",
+    maximumFractionDigits: compact ? 1 : 0
+  }).format(convertFromKes(amount, currency));
+}
+
+export function formatPrice(amount: number, currency: SupportedCurrency = "KES") {
+  return formatCurrencyAmount(amount, currency);
+}
+
+export function formatCompactPrice(amount: number, currency: SupportedCurrency = "KES") {
+  return formatCurrencyAmount(amount, currency, true);
 }

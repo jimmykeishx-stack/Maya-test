@@ -4,6 +4,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 
 import { Footer } from "@/components/site/footer";
 import { Navbar } from "@/components/site/navbar";
+import { CurrencyProvider } from "@/hooks/use-currency";
 import { SavedListingsProvider } from "@/hooks/use-saved-listings";
 import { createMetadata } from "@/lib/metadata";
 import "./globals.css";
@@ -32,8 +33,8 @@ export default function RootLayout({
     "@type": "RealEstateAgent",
     name: "Maya Haven",
     description:
-      "Luxury Nairobi real estate platform for high-end apartments, penthouses, curated residences, expat housing, and investment properties.",
-    areaServed: "Nairobi",
+      "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora property consultation and management services.",
+    areaServed: "Nairobi and beyond",
     telephone: "+254720584744"
   };
 
@@ -42,9 +43,11 @@ export default function RootLayout({
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
         <SavedListingsProvider>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
+          <CurrencyProvider>
+            <Navbar />
+            <main>{children}</main>
+            <Footer />
+          </CurrencyProvider>
         </SavedListingsProvider>
       </body>
     </html>
