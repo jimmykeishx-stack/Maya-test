@@ -21,7 +21,7 @@ export default async function PropertiesPage() {
         <SectionHeading
           eyebrow="Properties"
           title="A clearer marketplace for sale, rent, commercial, and affordable housing."
-          description="Search, sort, and explore residential, diaspora-ready rental, commercial, and affordable housing opportunities with market status visibility built in."
+          description="Search, sort, and explore residential, investor-ready rental, commercial, and affordable housing opportunities with market status visibility built in."
         />
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {[

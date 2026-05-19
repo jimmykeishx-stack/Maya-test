@@ -2,7 +2,7 @@ export const clientReviews = [
   {
     id: "client-01",
     name: "James S.",
-    role: "Diaspora Investor",
+    role: "International Property Investor",
     rating: 5,
     quote: "The process felt discreet, professional, and genuinely protective of our capital from the first consultation.",
     avatarUrl: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&q=80"
@@ -51,7 +51,7 @@ export const serviceCards = [
   },
   {
     title: "Consultation Services",
-    description: "Private advisory sessions for diaspora buyers, first-time investors, and clients structuring the next move carefully.",
+    description: "Private advisory sessions for investors abroad, first-time buyers, and clients structuring the next move carefully.",
     icon: "message"
   },
   {
@@ -74,7 +74,7 @@ export const trustIndicators = [
   },
   {
     title: "Diaspora-Ready Guidance",
-    description: "Processes built for clients abroad who need clarity, verification, and trusted local coordination across every transaction stage.",
+    description: "Processes built for global investors who need clarity, verification, and trusted local coordination across every transaction stage.",
     eyebrow: "Client Confidence"
   },
   {
@@ -87,19 +87,19 @@ export const trustIndicators = [
 export const aboutStats = [
   { value: "KES 2.4B+", label: "Property opportunities reviewed" },
   { value: "6", label: "Core service lines" },
-  { value: "24/7", label: "Diaspora communication support" },
+  { value: "Priority", label: "response times" },
   { value: "100%", label: "Consultation-led approach" }
 ];
 
 export const timeline = [
   { year: "2021", title: "Advisory Foundation", description: "Maya Haven begins as a relationship-led property advisory focused on clarity, sourcing, and trust." },
-  { year: "2023", title: "Diaspora Expansion", description: "The platform expands to support Kenyans abroad with virtual viewings, purchase guidance, and management coordination." },
+  { year: "2023", title: "Global Investor Expansion", description: "The platform expands to support investors abroad with virtual viewings, purchase guidance, and management coordination." },
   { year: "2025", title: "Premium Marketplace Evolution", description: "Residential, commercial, and affordable housing services converge into a more structured digital property platform." }
 ];
 
 export const insightPosts = [
   {
-    title: "How Diaspora Buyers Can Reduce Risk Before Paying a Deposit",
+    title: "How Investors Abroad Can Reduce Risk Before Paying a Deposit",
     category: "MAYA HAVEN INSIGHT",
     image: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1400&q=80",
     excerpt: "A practical guide to viewing verification, developer vetting, legal review, and on-ground representation before funds move."
@@ -144,7 +144,7 @@ export const diasporaProcess = [
 export const diasporaFaqs = [
   {
     question: "Can Maya Haven help if I am buying from outside Kenya?",
-    answer: "Yes. Diaspora Connect is specifically designed for clients abroad who need sourcing, virtual viewings, local verification, and support through completion."
+    answer: "Yes. Diaspora Connect is designed for investors abroad who need sourcing, virtual viewings, local verification, and support through completion."
   },
   {
     question: "Do you vet developers and property owners?",
@@ -164,7 +164,8 @@ export const virtualViewingFeatures = [
   "Scheduled live walkthroughs with commentary and neighborhood context",
   "Recorded video recaps for later review with family or investment partners",
   "Room-by-room practical observations, not only marketing highlights",
-  "Support comparing multiple options before travel or commitment"
+  "Support comparing multiple options before travel or commitment",
+  "Prioritized response times with dedicated investor support during active searches"
 ];
 
 export const eventsGalleryItems = [

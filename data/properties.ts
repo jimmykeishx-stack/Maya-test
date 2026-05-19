@@ -68,7 +68,7 @@ export const properties: Property[] = [
     bedrooms: 4,
     bathrooms: 5,
     sqft: 4800,
-    priceSuffix: "asking",
+    priceSuffix: "",
     highlight: "Private rooftop deck with skyline plunge pool",
     blurb: "A dramatic glass-wrapped penthouse with skyline dining terraces and concierge-level arrival.",
     description:
@@ -76,7 +76,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "4" },
       { label: "Bathrooms", value: "5" },
-      { label: "Footprint", value: "4,800 sqft" }
+      { label: "Size", value: "4,800 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -109,7 +109,7 @@ export const properties: Property[] = [
     bedrooms: 5,
     bathrooms: 6,
     sqft: 7200,
-    priceSuffix: "asking",
+    priceSuffix: "",
     highlight: "Garden pavilion with heated pool and wellness studio",
     blurb: "A secluded family estate balancing warm stone textures, landscaped privacy, and resort-scale living.",
     description:
@@ -117,7 +117,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "5" },
       { label: "Bathrooms", value: "6" },
-      { label: "Footprint", value: "7,200 sqft" }
+      { label: "Size", value: "7,200 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -133,7 +133,7 @@ export const properties: Property[] = [
       "Garden-facing family lounge",
       "Primary dressing gallery"
     ],
-    agentNote: "Ideal for diaspora families planning a primary move or a long-hold Nairobi home.",
+    agentNote: "Ideal for investors abroad planning a primary move or a long-hold Nairobi home.",
     youtubeVideoId: "ysz5S6PUM-U"
   },
   {
@@ -158,7 +158,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "3" },
       { label: "Bathrooms", value: "3" },
-      { label: "Footprint", value: "2,100 sqft" }
+      { label: "Size", value: "2,100 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -198,7 +198,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "4" },
       { label: "Bathrooms", value: "4" },
-      { label: "Footprint", value: "3,600 sqft" }
+      { label: "Size", value: "3,600 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -214,7 +214,7 @@ export const properties: Property[] = [
       "Soft oak and stone palette",
       "Quiet study suite"
     ],
-    agentNote: "Strong fit for diaspora families landing in Nairobi before a long-term purchase decision.",
+    agentNote: "Strong fit for investors abroad and globally mobile households landing in Nairobi before a long-term purchase decision.",
     youtubeVideoId: "aqz-KE-bpKQ"
   },
   {
@@ -231,7 +231,7 @@ export const properties: Property[] = [
     bedrooms: 3,
     bathrooms: 3,
     sqft: 2300,
-    priceSuffix: "asking",
+    priceSuffix: "",
     highlight: "Panoramic corner terraces and curated co-working suite",
     blurb: "A smartly composed residence for households balancing hosting, remote work, and city leisure.",
     description:
@@ -239,7 +239,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "3" },
       { label: "Bathrooms", value: "3" },
-      { label: "Footprint", value: "2,300 sqft" }
+      { label: "Size", value: "2,300 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -255,7 +255,7 @@ export const properties: Property[] = [
       "Walk-through dressing room",
       "Soft-lit kitchen island"
     ],
-    agentNote: "Well suited to diaspora returnees who need a premium city foothold with investment resilience."
+    agentNote: "Well suited to international property investors who need a premium city foothold with investment resilience."
   },
   {
     id: "mh-runda-manor",
@@ -271,7 +271,7 @@ export const properties: Property[] = [
     bedrooms: 6,
     bathrooms: 7,
     sqft: 9100,
-    priceSuffix: "asking",
+    priceSuffix: "",
     highlight: "Grand reception manor with guest pavilion and mature gardens",
     blurb: "A landmark family estate with sculpted lawns, formal entertaining rooms, and uncompromising presence.",
     description:
@@ -279,7 +279,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "6" },
       { label: "Bathrooms", value: "7" },
-      { label: "Footprint", value: "9,100 sqft" }
+      { label: "Size", value: "9,100 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -319,7 +319,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "2" },
       { label: "Bathrooms", value: "2" },
-      { label: "Footprint", value: "1,550 sqft" }
+      { label: "Size", value: "1,550 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -351,15 +351,15 @@ export const properties: Property[] = [
     bedrooms: 2,
     bathrooms: 2,
     sqft: 980,
-    priceSuffix: "asking",
+    priceSuffix: "",
     highlight: "Entry-level home ownership with secure community planning",
     blurb: "A dependable affordable-housing option for buyers seeking structure, access, and realistic long-term ownership.",
     description:
-      "Ruaka Greens is positioned for first-time homeowners, diaspora-backed family purchases, and buyers balancing affordability with clean management and clear due diligence support.",
+      "Ruaka Greens is positioned for first-time homeowners, investor-backed family purchases, and buyers balancing affordability with clean management and clear due diligence support.",
     metrics: [
       { label: "Bedrooms", value: "2" },
       { label: "Bathrooms", value: "2" },
-      { label: "Footprint", value: "980 sqft" }
+      { label: "Size", value: "980 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -375,7 +375,7 @@ export const properties: Property[] = [
       "Commuter access to Nairobi",
       "Document-ready transaction support"
     ],
-    agentNote: "Suitable for affordable homeownership and diaspora-supported family purchases."
+    agentNote: "Suitable for affordable homeownership and investor-backed family purchases."
   },
   {
     id: "mh-kayole-tenants",
@@ -399,7 +399,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Bedrooms", value: "3" },
       { label: "Bathrooms", value: "2" },
-      { label: "Footprint", value: "1,250 sqft" }
+      { label: "Size", value: "1,250 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -439,7 +439,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Meeting Rooms", value: "2" },
       { label: "Parking Bays", value: "6" },
-      { label: "Footprint", value: "2,800 sqft" }
+      { label: "Size", value: "2,800 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -480,7 +480,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Retail Frontage", value: "2 bays" },
       { label: "Office Levels", value: "3" },
-      { label: "Footprint", value: "6,400 sqft" }
+      { label: "Size", value: "6,400 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -520,7 +520,7 @@ export const properties: Property[] = [
     metrics: [
       { label: "Retail Bays", value: "3" },
       { label: "Parking Bays", value: "8" },
-      { label: "Footprint", value: "2,400 sqft" }
+      { label: "Size", value: "2,400 sqft" }
     ],
     coverImage: "https://images.unsplash.com/photo-1517502884422-41eaead166d4?auto=format&fit=crop&w=1600&q=80",
     gallery: [
@@ -576,7 +576,7 @@ export const sortOptions = [
   { label: "Newest Curation", value: "featured" },
   { label: "Price: High to Low", value: "price-desc" },
   { label: "Price: Low to High", value: "price-asc" },
-  { label: "Largest Footprint", value: "size-desc" }
+  { label: "Largest Size", value: "size-desc" }
 ] as const;
 
 export function getListingLabel(listingType: ListingType) {
@@ -625,3 +625,5 @@ export function getSimilarProperties(slug: string, segment: MarketSegment, listi
     .filter((property) => property.slug !== slug && property.segment === segment && property.listingType === listingType && property.marketStatus !== "archived")
     .slice(0, 3);
 }
+
+

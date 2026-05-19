@@ -16,9 +16,9 @@ import { createMetadata } from "@/lib/metadata";
 import { eventsGalleryItems, insightPosts, serviceCards } from "@/data/site";
 
 export const metadata = createMetadata({
-  title: "Property Marketplace & Diaspora Advisory",
+  title: "Property Marketplace & Global Investor Advisory",
   description:
-    "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora property consultation and management services."
+    "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted property consultation, investor support, and management services."
 });
 
 export const dynamic = "force-dynamic";
@@ -67,7 +67,7 @@ export default async function HomePage() {
               Find a property you can call home within Nairobi and beyond.
             </h1>
             <p className="max-w-2xl text-sm leading-7 text-white/72 sm:text-base md:text-lg md:leading-8">
-              Maya Haven combines premium property curation with trusted diaspora consultation, sourcing, due diligence, and management support for clients buying, renting, investing, or listing in Kenya.
+              Maya Haven combines premium property curation with trusted investor consultation, sourcing, due diligence, and management support for clients buying, renting, investing, or listing in Kenya.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <LuxuryButton href="/properties" size="lg" className="w-full justify-center sm:w-auto">
@@ -107,7 +107,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Featured Listings"
             title="Premium listings curated across Nairobi's strongest residential and investment corridors."
-            description="A refined mix of homes and mandate-led opportunities for buyers, diaspora clients, and long-view investors."
+            description="A refined mix of homes and mandate-led opportunities for buyers, international property investors, and long-view capital."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {featuredProperties.map((property, index) => (
@@ -148,7 +148,7 @@ export default async function HomePage() {
             <p className="quiet-label text-[var(--gold-strong)]">Diaspora Connect</p>
             <h3 className="mt-4 font-display text-3xl leading-tight sm:text-4xl">Consultation, sourcing, due diligence, and guided virtual viewings for clients abroad.</h3>
             <p className="mt-4 max-w-xl text-sm leading-7 text-muted-foreground sm:text-base md:leading-8">
-              Designed for Kenyans abroad who need reliable local representation, cleaner property verification, and practical help through purchase completion and management.
+              Designed for investors abroad who need reliable local representation, cleaner property verification, and practical help through purchase completion and management.
             </p>
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <LuxuryButton href="/diaspora-connect" size="lg" className="w-full justify-center sm:w-auto">
@@ -222,7 +222,7 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="MAYA HAVEN INSIGHT"
-            title="Editorial guidance for buyers, landlords, and diaspora clients."
+            title="Editorial guidance for buyers, landlords, and international property investors."
             description="Context, not clutter. A more useful content layer for the questions people ask before they transact."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -242,7 +242,7 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Events & Gallery"
             title="A CMS-ready layer for briefings, showcases, and client milestones."
-            description="Built to host property launches, diaspora investor sessions, gallery updates, and transaction milestones with the same premium restraint."
+            description="Built to host property launches, investor briefings, gallery updates, and transaction milestones with the same premium restraint."
             className="max-w-4xl"
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

@@ -31,7 +31,7 @@ const demoBuyerInquiries = [
     fullName: "David O.",
     email: "david@example.com",
     phoneNumber: "+44 7700 900123",
-    message: "Diaspora investor seeking a commercial acquisition with reliable tenant demand and clean due diligence support.",
+    message: "International property investor seeking a commercial acquisition with reliable tenant demand and clean due diligence support.",
     createdAt: "2026-05-17T14:40:00.000Z"
   }
 ];

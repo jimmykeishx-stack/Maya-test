@@ -8,7 +8,7 @@ export function Footer() {
         <div className="space-y-5">
           <Image src="/media/brand/maya-haven-logo.jpeg" alt="Maya Haven logo" width={140} height={110} className="h-auto w-32" />
           <p className="max-w-md text-sm leading-7 text-white/60">
-            Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora consultation and management support.
+            Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted investor consultation and management support.
           </p>
         </div>
         <div className="space-y-3">

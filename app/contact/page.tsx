@@ -7,7 +7,7 @@ import { getProperties } from "@/lib/property-store";
 
 export const metadata = createMetadata({
   title: "Contact",
-  description: "Contact Maya Haven for consultations, diaspora property support, owner listing guidance, and trusted advisory services."
+  description: "Contact Maya Haven for consultations, global investor support, owner listing guidance, and trusted advisory services."
 });
 
 export const dynamic = "force-dynamic";
@@ -24,7 +24,7 @@ export default async function ContactPage() {
             Start a direct conversation about buying, renting, listing, or managing property.
           </h1>
           <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-            Use this form for buyer, tenant, diaspora, or consultation inquiries. Owner property submissions should go through the dedicated List With Us workflow.
+            Use this form for buyer, tenant, investor-abroad, or consultation inquiries. Owner property submissions should go through the dedicated List With Us workflow.
           </p>
           <div className="rounded-[2rem] border border-black/6 bg-white/60 p-8">
             <InquiryForm />

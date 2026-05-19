@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 
@@ -22,12 +23,13 @@ export type OwnerSubmissionRecord = {
   expectedPrice: string;
   propertyDescription: string;
   ownershipConfirmed: boolean;
-  image?: {
+  images?: {
     fileName: string;
     mimeType: string;
     size: number;
     storedAt: string;
-  };
+    hash: string;
+  }[];
 };
 
 const submissionsDir = path.join(process.cwd(), "data", "submissions");
@@ -91,23 +93,35 @@ export async function saveOwnerSubmission(input: {
   expectedPrice: string;
   propertyDescription: string;
   ownershipConfirmed: boolean;
-  image?: File | null;
+  images?: File[];
 }) {
   await ensureDirectories();
 
-  let imageRecord: OwnerSubmissionRecord["image"] | undefined;
+  const imageRecords: NonNullable<OwnerSubmissionRecord["images"]> = [];
+  const seenHashes = new Set<string>();
 
-  if (input.image && input.image.size > 0) {
-    const safeName = `${Date.now()}-${sanitizeFileName(input.image.name)}`;
+  for (const [index, image] of (input.images ?? []).entries()) {
+    if (!image || image.size <= 0) continue;
+
+    const buffer = Buffer.from(await image.arrayBuffer());
+    const hash = createHash("sha256").update(buffer).digest("hex");
+
+    if (seenHashes.has(hash)) {
+      continue;
+    }
+
+    seenHashes.add(hash);
+
+    const safeName = `${Date.now()}-${index + 1}-${hash.slice(0, 10)}-${sanitizeFileName(image.name)}`;
     const storedAt = path.join(uploadsDir, safeName);
-    const buffer = Buffer.from(await input.image.arrayBuffer());
     await writeFile(storedAt, buffer);
-    imageRecord = {
-      fileName: input.image.name,
-      mimeType: input.image.type,
-      size: input.image.size,
-      storedAt
-    };
+    imageRecords.push({
+      fileName: image.name,
+      mimeType: image.type,
+      size: image.size,
+      storedAt,
+      hash
+    });
   }
 
   const record: OwnerSubmissionRecord = {
@@ -122,7 +136,7 @@ export async function saveOwnerSubmission(input: {
     expectedPrice: input.expectedPrice,
     propertyDescription: input.propertyDescription,
     ownershipConfirmed: input.ownershipConfirmed,
-    image: imageRecord
+    images: imageRecords.length ? imageRecords : undefined
   };
 
   const records = await readRecords<OwnerSubmissionRecord>("owner-listings.json");

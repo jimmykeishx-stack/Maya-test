@@ -1,15 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { LuxuryInput } from "@/components/site/luxury-input";
 import { Textarea } from "@/components/ui/textarea";
 
+type UploadPreview = {
+  file: File;
+  previewUrl: string;
+  signature: string;
+};
+
+const MAX_IMAGES = 30;
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+
+function replaceExtension(name: string, extension: string) {
+  return name.replace(/\.[^.]+$/, extension);
+}
+
+async function hashFile(file: File) {
+  const buffer = await file.arrayBuffer();
+  const digest = await crypto.subtle.digest("SHA-256", buffer);
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, "0"))
+    .join("");
+}
+
+async function optimizeImage(file: File) {
+  if (!file.type.startsWith("image/") || file.type === "image/gif" || file.type === "image/svg+xml") {
+    return file;
+  }
+
+  const bitmap = await createImageBitmap(file);
+  const longestSide = Math.max(bitmap.width, bitmap.height);
+  const scale = longestSide > 2200 ? 2200 / longestSide : 1;
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d");
+  if (!context) {
+    bitmap.close();
+    return file;
+  }
+
+  context.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  const outputType = file.type === "image/webp" ? "image/webp" : "image/jpeg";
+  const extension = outputType === "image/webp" ? ".webp" : ".jpg";
+
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, outputType, 0.82);
+  });
+
+  if (!blob || blob.size >= file.size) {
+    return file;
+  }
+
+  return new File([blob], replaceExtension(file.name, extension), {
+    type: outputType,
+    lastModified: file.lastModified
+  });
+}
+
 export function ListWithUsForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState("");
+  const [isDragging, setIsDragging] = useState(false);
+  const [images, setImages] = useState<UploadPreview[]>([]);
+  const inputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     phoneNumber: "",
@@ -19,9 +84,84 @@ export function ListWithUsForm() {
     listingType: "sale",
     expectedPrice: "",
     propertyDescription: "",
-    ownershipConfirmed: false,
-    image: null as File | null
+    ownershipConfirmed: false
   });
+
+  function clearImages() {
+    images.forEach((image) => URL.revokeObjectURL(image.previewUrl));
+    setImages([]);
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  }
+
+  async function addImages(files: File[]) {
+    if (!files.length) {
+      return;
+    }
+
+    setError("");
+
+    const nextImages = [...images];
+    const seenSignatures = new Set(nextImages.map((image) => image.signature));
+    let skippedDuplicates = 0;
+    let skippedInvalid = 0;
+    let message = "";
+
+    for (const rawFile of files) {
+      if (nextImages.length >= MAX_IMAGES) {
+        message = `You can upload up to ${MAX_IMAGES} images per listing.`;
+        break;
+      }
+
+      if (!rawFile.type.startsWith("image/") || rawFile.size > MAX_IMAGE_SIZE * 2) {
+        skippedInvalid += 1;
+        continue;
+      }
+
+      const optimizedFile = await optimizeImage(rawFile);
+
+      if (optimizedFile.size > MAX_IMAGE_SIZE) {
+        skippedInvalid += 1;
+        continue;
+      }
+
+      const signature = await hashFile(optimizedFile);
+
+      if (seenSignatures.has(signature)) {
+        skippedDuplicates += 1;
+        continue;
+      }
+
+      seenSignatures.add(signature);
+      nextImages.push({
+        file: optimizedFile,
+        previewUrl: URL.createObjectURL(optimizedFile),
+        signature
+      });
+    }
+
+    setImages((current) => {
+      current
+        .filter((image) => !nextImages.some((nextImage) => nextImage.signature === image.signature))
+        .forEach((image) => URL.revokeObjectURL(image.previewUrl));
+      return nextImages;
+    });
+
+    if (!message && skippedDuplicates > 0 && skippedInvalid === 0) {
+      message = `${skippedDuplicates} duplicate image${skippedDuplicates === 1 ? "" : "s"} removed from this submission.`;
+    } else if (!message && skippedInvalid > 0) {
+      message = `${skippedInvalid} image${skippedInvalid === 1 ? "" : "s"} could not be added. Use image files under 20MB before optimization.`;
+    }
+
+    if (message) {
+      setError(message);
+    }
+
+    if (inputRef.current) {
+      inputRef.current.value = "";
+    }
+  }
 
   return (
     <form
@@ -43,9 +183,9 @@ export function ListWithUsForm() {
           payload.append("propertyDescription", formData.propertyDescription);
           payload.append("ownershipConfirmed", String(formData.ownershipConfirmed));
 
-          if (formData.image) {
-            payload.append("image", formData.image);
-          }
+          images.forEach((image) => {
+            payload.append("images", image.file);
+          });
 
           const response = await fetch("/api/owner-listings", {
             method: "POST",
@@ -53,7 +193,8 @@ export function ListWithUsForm() {
           });
 
           if (!response.ok) {
-            throw new Error("Unable to submit owner listing.");
+            const body = (await response.json().catch(() => null)) as { error?: string } | null;
+            throw new Error(body?.error ?? "Unable to submit owner listing.");
           }
 
           setSubmitted(true);
@@ -66,11 +207,11 @@ export function ListWithUsForm() {
             listingType: "sale",
             expectedPrice: "",
             propertyDescription: "",
-            ownershipConfirmed: false,
-            image: null
+            ownershipConfirmed: false
           });
-        } catch {
-          setError("We could not save your property submission just now. Please try again.");
+          clearImages();
+        } catch (submitError) {
+          setError(submitError instanceof Error ? submitError.message : "We could not save your property submission just now. Please try again.");
         } finally {
           setIsSubmitting(false);
         }
@@ -146,18 +287,83 @@ export function ListWithUsForm() {
         />
       </label>
 
-      <label className="grid gap-3">
-        <span className="text-sm font-medium text-foreground">Image Upload</span>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(event) => {
-            const image = event.target.files?.[0] ?? null;
-            setFormData((current) => ({ ...current, image }));
+      <div className="grid gap-3">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-sm font-medium text-foreground">Property Images</span>
+          <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{images.length} / {MAX_IMAGES} optimized images selected</span>
+        </div>
+        <div
+          onDragOver={(event) => {
+            event.preventDefault();
+            setIsDragging(true);
           }}
-          className="block w-full rounded-[1.2rem] border border-[rgba(42,39,34,0.12)] bg-white/70 px-4 py-3 text-sm"
-        />
-      </label>
+          onDragLeave={(event) => {
+            event.preventDefault();
+            setIsDragging(false);
+          }}
+          onDrop={async (event) => {
+            event.preventDefault();
+            setIsDragging(false);
+            await addImages(Array.from(event.dataTransfer.files));
+          }}
+          className={`rounded-[1.4rem] border border-dashed px-5 py-6 transition ${isDragging ? "border-[rgba(212,173,94,0.65)] bg-[rgba(212,173,94,0.08)]" : "border-[rgba(42,39,34,0.12)] bg-white/65"}`}
+        >
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={async (event) => {
+              await addImages(Array.from(event.target.files ?? []));
+            }}
+            className="hidden"
+          />
+          <div className="space-y-3 text-center">
+            <p className="font-display text-2xl text-foreground">Drop up to 30 images or browse from your device.</p>
+            <p className="mx-auto max-w-2xl text-sm leading-7 text-muted-foreground">
+              Images are optimized before upload, duplicates are removed automatically, and larger batches are prepared for smoother review.
+            </p>
+            <div className="flex justify-center">
+              <button
+                type="button"
+                onClick={() => inputRef.current?.click()}
+                className="rounded-full border border-black/10 bg-white/75 px-5 py-3 text-sm uppercase tracking-[0.18em] text-foreground transition hover:-translate-y-0.5"
+              >
+                Browse Images
+              </button>
+            </div>
+          </div>
+        </div>
+        <p className="text-xs leading-6 text-muted-foreground">Recommended: 20 to 30 clear property images. Each file must be 10MB or smaller after optimization.</p>
+      </div>
+
+      {images.length ? (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {images.map((image, index) => (
+            <article key={image.signature} className="overflow-hidden rounded-[1.4rem] border border-black/6 bg-white/65">
+              <div className="relative aspect-[4/3]">
+                <img src={image.previewUrl} alt={`Property upload preview ${index + 1}`} className="h-full w-full object-cover" />
+              </div>
+              <div className="flex items-center justify-between gap-3 p-4">
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-medium text-foreground">{image.file.name}</p>
+                  <p className="text-xs text-muted-foreground">{(image.file.size / 1024 / 1024).toFixed(2)} MB</p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    URL.revokeObjectURL(image.previewUrl);
+                    setImages((current) => current.filter((currentImage) => currentImage.signature !== image.signature));
+                  }}
+                  className="rounded-full border border-black/10 bg-white/80 px-3 py-2 text-[0.72rem] uppercase tracking-[0.16em] text-foreground"
+                >
+                  Remove
+                </button>
+              </div>
+            </article>
+          ))}
+        </div>
+      ) : null}
 
       <label className="flex items-start gap-3 rounded-[1.2rem] border border-[rgba(42,39,34,0.08)] bg-white/55 px-4 py-4 text-sm text-muted-foreground">
         <input

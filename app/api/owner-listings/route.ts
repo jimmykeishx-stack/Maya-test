@@ -14,10 +14,24 @@ export async function POST(request: Request) {
   const expectedPrice = String(formData.get("expectedPrice") ?? "");
   const propertyDescription = String(formData.get("propertyDescription") ?? "");
   const ownershipConfirmed = String(formData.get("ownershipConfirmed") ?? "") === "true";
-  const image = formData.get("image");
+  const images = formData
+    .getAll("images")
+    .filter((value): value is File => value instanceof File && value.size > 0);
 
   if (!fullName || !phoneNumber || !email || !propertyType || !location || !listingType || !expectedPrice || !propertyDescription || !ownershipConfirmed) {
     return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+  }
+
+  if (images.length > 30) {
+    return NextResponse.json({ error: "A maximum of 30 images is allowed per listing submission." }, { status: 400 });
+  }
+
+  if (images.some((image) => !image.type.startsWith("image/"))) {
+    return NextResponse.json({ error: "Only image uploads are supported." }, { status: 400 });
+  }
+
+  if (images.some((image) => image.size > 10 * 1024 * 1024)) {
+    return NextResponse.json({ error: "Each image must be 10MB or smaller after optimization." }, { status: 400 });
   }
 
   const record = await saveOwnerSubmission({
@@ -30,8 +44,8 @@ export async function POST(request: Request) {
     expectedPrice,
     propertyDescription,
     ownershipConfirmed,
-    image: image instanceof File ? image : null
+    images
   });
 
-  return NextResponse.json({ success: true, id: record.id });
+  return NextResponse.json({ success: true, id: record.id, imageCount: record.images?.length ?? 0 });
 }

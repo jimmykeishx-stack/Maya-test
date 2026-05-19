@@ -115,7 +115,7 @@ function buildMetrics(form: PropertyFormState) {
     metrics.push({ label: "Bathrooms", value: form.bathrooms.trim() });
   }
 
-  metrics.push({ label: "Footprint", value: `${Number(form.sqft || 0).toLocaleString()} sqft` });
+  metrics.push({ label: "Size", value: `${Number(form.sqft || 0).toLocaleString()} sqft` });
 
   return metrics;
 }
@@ -357,7 +357,7 @@ export function AdminPropertyManager({ initialProperties }: AdminPropertyManager
               <Input
                 value={formState.priceSuffix}
                 onChange={(event) => setFormState((current) => ({ ...current, priceSuffix: event.target.value }))}
-                placeholder="asking / per month"
+                placeholder="per month / annual lease"
               />
             </AdminField>
             <AdminField label="Bedrooms">

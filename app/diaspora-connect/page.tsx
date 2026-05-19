@@ -7,7 +7,7 @@ import { diasporaFaqs, diasporaProcess, serviceCards, virtualViewingFeatures } f
 
 export const metadata = createMetadata({
   title: "Diaspora Connect",
-  description: "Trusted property consultation, sourcing, due diligence, virtual viewings, and management support for Kenyans abroad."
+  description: "Trusted property consultation, sourcing, due diligence, virtual viewings, and management support for investors abroad."
 });
 
 const serviceIconMap = {
@@ -25,8 +25,8 @@ export default function DiasporaConnectPage() {
       <section className="site-shell space-y-8">
         <SectionHeading
           eyebrow="Diaspora Connect"
-          title="Trusted property support for Kenyans abroad buying, managing, or investing back home."
-          description="From first consultation to final handover, Maya Haven helps diaspora clients move with more clarity, cleaner verification, and stronger on-ground representation."
+          title="Trusted property support for investors abroad buying, managing, or investing in Kenyan real estate."
+          description="From first consultation to final handover, Maya Haven helps international property investors move with more clarity, cleaner verification, and stronger on-ground representation."
         />
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
           <div className="rounded-[2rem] border border-black/6 bg-white/65 p-8">
@@ -82,7 +82,7 @@ export default function DiasporaConnectPage() {
           <SectionHeading
             eyebrow="Trust & Due Diligence"
             title="Consultation-led support built around verification, documentation, and calmer decision-making."
-            description="Diaspora clients often need more than listings. They need someone who can screen, compare, verify, coordinate, and communicate locally with maturity."
+            description="International property investors often need more than listings. They need someone who can screen, compare, verify, coordinate, and communicate locally with maturity."
             className="max-w-4xl"
           />
           <div className="grid gap-6 md:grid-cols-3">
@@ -103,12 +103,12 @@ export default function DiasporaConnectPage() {
       </section>
 
       <section className="section-space">
-        <div className="site-shell grid gap-5">
+        <div className="site-shell grid gap-6 sm:gap-7">
           <p className="quiet-label text-[var(--gold-strong)]">FAQ</p>
           {diasporaFaqs.map((item) => (
-            <article key={item.question} className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
-              <h3 className="font-display text-2xl">{item.question}</h3>
-              <p className="mt-3 text-sm leading-7 text-muted-foreground">{item.answer}</p>
+            <article key={item.question} className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6 sm:p-7">
+              <h3 className="font-display text-2xl leading-tight sm:text-[1.9rem]">{item.question}</h3>
+              <p className="mt-4 text-sm leading-7 text-muted-foreground sm:text-[0.98rem]">{item.answer}</p>
             </article>
           ))}
         </div>

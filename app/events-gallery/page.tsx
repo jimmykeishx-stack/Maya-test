@@ -35,7 +35,7 @@ export default function EventsGalleryPage() {
         </div>
       </section>
 
-      <CTASection primaryHref="/contact" primaryLabel="SPEAK WITH US" secondaryHref="/diaspora-connect" secondaryLabel="Diaspora Services" />
+      <CTASection primaryHref="/contact" primaryLabel="SPEAK WITH US" secondaryHref="/diaspora-connect" secondaryLabel="Global Investor Support" />
     </div>
   );
 }

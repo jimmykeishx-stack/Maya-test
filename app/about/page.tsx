@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { CTASection } from "@/components/site/cta-section";
+import { EarbTrustBadge } from "@/components/site/earb-trust-badge";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createMetadata } from "@/lib/metadata";
 import { getProperties } from "@/lib/property-store";
@@ -8,7 +9,7 @@ import { aboutStats, timeline, trustIndicators } from "@/data/site";
 
 export const metadata = createMetadata({
   title: "About",
-  description: "Learn about Maya Haven's mission, trust-led approach, diaspora advisory positioning, and professional property services."
+  description: "Learn about Maya Haven's mission, trust-led approach, investor advisory positioning, and professional property services."
 });
 
 export const dynamic = "force-dynamic";
@@ -22,7 +23,7 @@ export default async function AboutPage() {
         <SectionHeading
           eyebrow="About Maya Haven"
           title="A modern property marketplace built around trust, clarity, and better on-ground support."
-          description="Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora consultation and management services."
+          description="Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted investor consultation and management services."
         />
         <div className="grid gap-6 md:grid-cols-4">
           {aboutStats.map((stat) => (
@@ -54,7 +55,7 @@ export default async function AboutPage() {
               Maya Haven combines sourcing discipline, presentation quality, and practical transaction support for clients buying, renting, listing, or managing property in Kenya.
             </p>
             <p className="text-base leading-8 text-muted-foreground md:text-lg">
-              That includes diaspora clients who need local representation, owner-clients who need stronger tenant or buyer sourcing, and families who want a calmer route into homeownership.
+              That includes investors abroad who need local representation, owner-clients who need stronger tenant or buyer sourcing, and families who want a calmer route into homeownership.
             </p>
           </div>
         </div>
@@ -67,8 +68,8 @@ export default async function AboutPage() {
             <p className="mt-4 font-display text-3xl leading-tight">Create a calmer, more trusted path into property decisions within Nairobi and beyond.</p>
           </article>
           <article className="rounded-[1.8rem] border border-white/10 bg-white/5 p-7">
-            <p className="quiet-label text-[var(--gold)]">Diaspora Focus</p>
-            <p className="mt-4 font-display text-3xl leading-tight">Support Kenyans abroad with guided sourcing, due diligence, and local coordination.</p>
+            <p className="quiet-label text-[var(--gold)]">Global Investor Support</p>
+            <p className="mt-4 font-display text-3xl leading-tight">Support investors abroad with guided sourcing, due diligence, and local coordination.</p>
           </article>
           <article className="rounded-[1.8rem] border border-white/10 bg-white/5 p-7">
             <p className="quiet-label text-[var(--gold)]">Professional Standards</p>
@@ -93,6 +94,7 @@ export default async function AboutPage() {
               </article>
             ))}
           </div>
+          <EarbTrustBadge />
         </div>
       </section>
 

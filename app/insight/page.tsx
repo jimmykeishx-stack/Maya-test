@@ -7,7 +7,7 @@ import { insightPosts } from "@/data/site";
 
 export const metadata = createMetadata({
   title: "MAYA HAVEN INSIGHT",
-  description: "Market intelligence, diaspora guidance, and owner-facing property insight from Maya Haven."
+  description: "Market intelligence, global investor guidance, and owner-facing property insight from Maya Haven."
 });
 
 export default function InsightPage() {
@@ -16,7 +16,7 @@ export default function InsightPage() {
       <section className="site-shell space-y-8">
         <SectionHeading
           eyebrow="MAYA HAVEN INSIGHT"
-          title="Market guidance for buyers, diaspora clients, landlords, and investors."
+          title="Market guidance for buyers, international property investors, landlords, and owners."
           description="A cleaner editorial layer for the questions clients actually ask before they buy, rent, list, or move capital."
         />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

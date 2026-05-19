@@ -13,7 +13,7 @@
     "bedrooms": 4,
     "bathrooms": 5,
     "sqft": 4800,
-    "priceSuffix": "asking",
+    "priceSuffix": "",
     "highlight": "Private rooftop deck with skyline plunge pool",
     "blurb": "A dramatic glass-wrapped penthouse with skyline dining terraces and concierge-level arrival.",
     "description": "Positioned above Westlands with uninterrupted dusk views, this residence suits buyers seeking architectural presence, premium entertaining, and a globally polished Nairobi address.",
@@ -27,7 +27,7 @@
         "value": "5"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "4,800 sqft"
       }
     ],
@@ -69,7 +69,7 @@
     "bedrooms": 5,
     "bathrooms": 6,
     "sqft": 7200,
-    "priceSuffix": "asking",
+    "priceSuffix": "",
     "highlight": "Garden pavilion with heated pool and wellness studio",
     "blurb": "A secluded family estate balancing warm stone textures, landscaped privacy, and resort-scale living.",
     "description": "Designed for graceful family life, the residence blends indoor calm with entertaining scale, all within a richly planted Karen compound with discreet security and polished hospitality.",
@@ -83,7 +83,7 @@
         "value": "6"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "7,200 sqft"
       }
     ],
@@ -108,7 +108,7 @@
       "Garden-facing family lounge",
       "Primary dressing gallery"
     ],
-    "agentNote": "Ideal for diaspora families planning a primary move or a long-hold Nairobi home.",
+    "agentNote": "Ideal for investors abroad planning a primary move or a long-hold Nairobi home.",
     "youtubeVideoId": "ysz5S6PUM-U"
   },
   {
@@ -139,7 +139,7 @@
         "value": "3"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "2,100 sqft"
       }
     ],
@@ -194,7 +194,7 @@
         "value": "4"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "3,600 sqft"
       }
     ],
@@ -219,7 +219,7 @@
       "Soft oak and stone palette",
       "Quiet study suite"
     ],
-    "agentNote": "Strong fit for diaspora families landing in Nairobi before a long-term purchase decision.",
+    "agentNote": "Strong fit for investors abroad and globally mobile households landing in Nairobi before a long-term purchase decision.",
     "youtubeVideoId": "aqz-KE-bpKQ"
   },
   {
@@ -236,7 +236,7 @@
     "bedrooms": 3,
     "bathrooms": 3,
     "sqft": 2300,
-    "priceSuffix": "asking",
+    "priceSuffix": "",
     "highlight": "Panoramic corner terraces and curated co-working suite",
     "blurb": "A smartly composed residence for households balancing hosting, remote work, and city leisure.",
     "description": "The lofts elevate everyday living with generous glazing, restrained materials, and flexible social spaces in one of Nairobi's best-connected premium districts.",
@@ -250,7 +250,7 @@
         "value": "3"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "2,300 sqft"
       }
     ],
@@ -275,7 +275,7 @@
       "Walk-through dressing room",
       "Soft-lit kitchen island"
     ],
-    "agentNote": "Well suited to diaspora returnees who need a premium city foothold with investment resilience."
+    "agentNote": "Well suited to international property investors who need a premium city foothold with investment resilience."
   },
   {
     "id": "mh-runda-manor",
@@ -291,7 +291,7 @@
     "bedrooms": 6,
     "bathrooms": 7,
     "sqft": 9100,
-    "priceSuffix": "asking",
+    "priceSuffix": "",
     "highlight": "Grand reception manor with guest pavilion and mature gardens",
     "blurb": "A landmark family estate with sculpted lawns, formal entertaining rooms, and uncompromising presence.",
     "description": "The Runda Manor is designed for generational hosting, diplomatic entertaining, and quietly powerful living, with every room scaled for ceremony and calm in equal measure.",
@@ -305,7 +305,7 @@
         "value": "7"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "9,100 sqft"
       }
     ],
@@ -360,7 +360,7 @@
         "value": "2"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "1,550 sqft"
       }
     ],
@@ -401,10 +401,10 @@
     "bedrooms": 2,
     "bathrooms": 2,
     "sqft": 980,
-    "priceSuffix": "asking",
+    "priceSuffix": "",
     "highlight": "Entry-level home ownership with secure community planning",
     "blurb": "A dependable affordable-housing option for buyers seeking structure, access, and realistic long-term ownership.",
-    "description": "Ruaka Greens is positioned for first-time homeowners, diaspora-backed family purchases, and buyers balancing affordability with clean management and clear due diligence support.",
+    "description": "Ruaka Greens is positioned for first-time homeowners, investor-backed family purchases, and buyers balancing affordability with clean management and clear due diligence support.",
     "metrics": [
       {
         "label": "Bedrooms",
@@ -415,7 +415,7 @@
         "value": "2"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "980 sqft"
       }
     ],
@@ -440,7 +440,7 @@
       "Commuter access to Nairobi",
       "Document-ready transaction support"
     ],
-    "agentNote": "Suitable for affordable homeownership and diaspora-supported family purchases."
+    "agentNote": "Suitable for affordable homeownership and investor-backed family purchases."
   },
   {
     "id": "mh-kayole-tenants",
@@ -470,7 +470,7 @@
         "value": "2"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "1,250 sqft"
       }
     ],
@@ -525,7 +525,7 @@
         "value": "6"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "2,800 sqft"
       }
     ],
@@ -581,7 +581,7 @@
         "value": "3"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "6,400 sqft"
       }
     ],
@@ -636,7 +636,7 @@
         "value": "8"
       },
       {
-        "label": "Footprint",
+        "label": "Size",
         "value": "2,400 sqft"
       }
     ],
@@ -664,3 +664,4 @@
     "agentNote": "Commercial rental stock suited to operators and investor-landlord conversations."
   }
 ]
+

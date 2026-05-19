@@ -14,6 +14,17 @@ import {
 const dataDir = path.join(process.cwd(), "data");
 const filePath = path.join(dataDir, "property-records.json");
 
+function normalizeProperty(property: Property): Property {
+  return {
+    ...property,
+    priceSuffix: property.priceSuffix?.trim().toLowerCase() === "asking" ? undefined : property.priceSuffix,
+    metrics: property.metrics.map((metric) => ({
+      ...metric,
+      label: metric.label === "Footprint" ? "Size" : metric.label
+    }))
+  };
+}
+
 async function ensurePropertyFile() {
   await mkdir(dataDir, { recursive: true });
 
@@ -29,15 +40,15 @@ export async function getProperties() {
 
   try {
     const raw = await readFile(filePath, "utf8");
-    return JSON.parse(raw) as Property[];
+    return (JSON.parse(raw) as Property[]).map(normalizeProperty);
   } catch {
-    return seedProperties;
+    return seedProperties.map(normalizeProperty);
   }
 }
 
 async function saveProperties(records: Property[]) {
   await ensurePropertyFile();
-  await writeFile(filePath, JSON.stringify(records, null, 2), "utf8");
+  await writeFile(filePath, JSON.stringify(records.map(normalizeProperty), null, 2), "utf8");
 }
 
 export async function queryProperties(filters: {
@@ -98,16 +109,18 @@ export async function getSimilarProperties(slug: string, segment: MarketSegment,
 
 export async function createProperty(property: Property) {
   const records = await getProperties();
-  const nextRecords = [property, ...records.filter((record) => record.id !== property.id && record.slug !== property.slug)];
+  const normalized = normalizeProperty(property);
+  const nextRecords = [normalized, ...records.filter((record) => record.id !== property.id && record.slug !== property.slug)];
   await saveProperties(nextRecords);
-  return property;
+  return normalized;
 }
 
 export async function updateProperty(id: string, updates: Property) {
   const records = await getProperties();
-  const nextRecords = records.map((property) => (property.id === id ? updates : property));
+  const normalized = normalizeProperty(updates);
+  const nextRecords = records.map((property) => (property.id === id ? normalized : property));
   await saveProperties(nextRecords);
-  return updates;
+  return normalized;
 }
 
 export async function deleteProperty(id: string) {

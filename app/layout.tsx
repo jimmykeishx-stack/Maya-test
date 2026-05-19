@@ -33,7 +33,7 @@ export default function RootLayout({
     "@type": "RealEstateAgent",
     name: "Maya Haven",
     description:
-      "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted diaspora property consultation and management services.",
+      "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted property consultation, investor support, and management services.",
     areaServed: "Nairobi and beyond",
     telephone: "+254720584744"
   };

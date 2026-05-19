@@ -30,7 +30,7 @@ export default function ListWithUsPage() {
             <p className="quiet-label text-[var(--gold-strong)]">Owner Guidance</p>
             <div className="mt-4 grid gap-4 text-sm leading-7 text-muted-foreground">
               <p>Use this workflow for sale and rental listings only. Buyer and tenant inquiries are managed separately through the contact flow.</p>
-              <p>We recommend preparing clear pricing expectations, recent property imagery, ownership confirmation, and a realistic availability timeline before submission.</p>
+              <p>We recommend preparing clear pricing expectations, 20 to 30 recent property images, ownership confirmation, and a realistic availability timeline before submission.</p>
             </div>
           </div>
         </div>

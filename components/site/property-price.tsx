@@ -12,11 +12,12 @@ type PropertyPriceProps = {
 export function PropertyPrice({ amount, compact = false, suffix, className }: PropertyPriceProps) {
   const { formatAmount, formatCompactAmount } = useCurrency();
   const formatted = compact ? formatCompactAmount(amount) : formatAmount(amount);
+  const normalizedSuffix = suffix?.trim().toLowerCase() === "asking" ? undefined : suffix;
 
   return (
     <span className={className}>
       {formatted}
-      {suffix ? <span className="ml-2 text-[0.7em] uppercase tracking-[0.18em] opacity-70">{suffix}</span> : null}
+      {normalizedSuffix ? <span className="ml-2 text-[0.7em] uppercase tracking-[0.18em] opacity-70">{normalizedSuffix}</span> : null}
     </span>
   );
 }
