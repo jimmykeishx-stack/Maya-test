@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { requireAdminApi } from "@/lib/auth/api";
 import { deleteProperty, updateProperty } from "@/lib/property-store";
 import type { Property } from "@/data/properties";
 
@@ -9,6 +10,12 @@ export async function PUT(
     params: Promise<{ id: string }>;
   }
 ) {
+  const { response } = await requireAdminApi();
+
+  if (response) {
+    return response;
+  }
+
   const { id } = await context.params;
   const property = (await request.json()) as Property;
 
@@ -26,6 +33,12 @@ export async function DELETE(
     params: Promise<{ id: string }>;
   }
 ) {
+  const { response } = await requireAdminApi();
+
+  if (response) {
+    return response;
+  }
+
   const { id } = await context.params;
 
   if (!id) {

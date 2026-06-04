@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { requireAdminApi } from "@/lib/auth/api";
 import { createProperty, queryProperties } from "@/lib/property-store";
 import type { ListingType, MarketSegment, MarketStatus, Property } from "@/data/properties";
 
@@ -22,6 +23,12 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
+  const { response } = await requireAdminApi();
+
+  if (response) {
+    return response;
+  }
+
   const property = (await request.json()) as Property;
 
   if (!property.id || !property.slug || !property.title) {

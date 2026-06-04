@@ -2,6 +2,7 @@ import Image from "next/image";
 
 import { CTASection } from "@/components/site/cta-section";
 import { InquiryForm } from "@/components/site/inquiry-form";
+import { companyContact } from "@/data/site";
 import { createMetadata } from "@/lib/metadata";
 import { getProperties } from "@/lib/property-store";
 
@@ -40,21 +41,33 @@ export default async function ContactPage() {
               className="h-full w-full object-cover"
             />
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-6 md:grid-cols-3">
             <article className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
               <p className="quiet-label text-[var(--gold-strong)]">Office</p>
-              <p className="mt-4 font-display text-2xl">Riverside Drive, Nairobi</p>
+              <p className="mt-4 font-display text-2xl">{companyContact.officeLabel}</p>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">Private consultations by appointment, weekday and weekend concierge scheduling available.</p>
+            </article>
+            <article className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
+              <p className="quiet-label text-[var(--gold-strong)]">Email</p>
+              <div className="mt-4 grid gap-2 text-base leading-7 sm:text-lg">
+                <a href={`mailto:${companyContact.primaryEmail}`} className="font-medium text-foreground transition hover:text-[var(--gold-strong)]">
+                  {companyContact.primaryEmail}
+                </a>
+                <a href={`mailto:${companyContact.secondaryEmail}`} className="font-medium text-foreground transition hover:text-[var(--gold-strong)]">
+                  {companyContact.secondaryEmail}
+                </a>
+              </div>
+              <p className="mt-3 text-sm leading-7 text-muted-foreground">Use email for consultation briefs, shortlist requests, and owner listing coordination.</p>
             </article>
             <article className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
               <p className="quiet-label text-[var(--gold-strong)]">WhatsApp</p>
               <a
-                href="https://wa.me/254720584744"
+                href={companyContact.whatsappHref}
                 target="_blank"
                 rel="noreferrer"
                 className="mt-4 block font-display text-2xl"
               >
-                +254 720 584 744
+                {companyContact.whatsappDisplay}
               </a>
               <p className="mt-3 text-sm leading-7 text-muted-foreground">Use WhatsApp for fast viewing coordination, relocation help, and shortlist requests.</p>
             </article>

@@ -54,7 +54,7 @@ export default async function HomePage() {
           loop
           playsInline
           preload="metadata"
-          poster={featuredProperties[0].coverImage}
+          poster={featuredProperties[0]?.coverImage}
         >
           <source src="/media/hero/maya-haven-hero.mp4" type="video/mp4" />
         </video>

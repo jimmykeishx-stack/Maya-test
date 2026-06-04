@@ -11,20 +11,21 @@ type PropertyGalleryProps = {
 
 export function PropertyGallery({ title, images }: PropertyGalleryProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const galleryImages = images.length ? images : ["/placeholder.jpg"];
 
   return (
     <div className="space-y-4">
       <motion.div
-        key={images[activeIndex]}
+        key={galleryImages[activeIndex]}
         initial={{ opacity: 0.55, scale: 1.02 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1] }}
         className="relative aspect-[16/10] overflow-hidden rounded-[2rem]"
       >
-        <Image src={images[activeIndex]} alt={`${title} view ${activeIndex + 1}`} fill className="object-cover" />
+        <Image src={galleryImages[activeIndex]} alt={`${title} view ${activeIndex + 1}`} fill className="object-cover" />
       </motion.div>
       <div className="grid grid-cols-4 gap-3">
-        {images.map((image, index) => (
+        {galleryImages.map((image, index) => (
           <button
             key={image}
             type="button"

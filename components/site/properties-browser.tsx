@@ -19,12 +19,12 @@ const defaultFilters: FilterValues = {
   search: "",
   listingType: "All",
   segment: "All",
-  availability: "Live Listings",
+  availability: "available",
   location: "All",
   bedrooms: "Any",
   bathrooms: "Any",
   type: "All",
-  priceRange: "All"
+  priceRange: "all"
 };
 
 export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrowserProps) {
@@ -61,12 +61,7 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
           (filters.segment === "Commercial" && property.segment === "commercial") ||
           (filters.segment === "Affordable Housing" && property.segment === "affordable-housing");
 
-        const matchesAvailability =
-          filters.availability === "All Statuses" ||
-          (filters.availability === "Live Listings" && property.marketStatus === "available") ||
-          (filters.availability === "Sold" && property.marketStatus === "sold") ||
-          (filters.availability === "Rented" && property.marketStatus === "rented") ||
-          (filters.availability === "Archived" && property.marketStatus === "archived");
+        const matchesAvailability = filters.availability === "all" || property.marketStatus === filters.availability;
 
         const matchesLocation = filters.location === "All" || property.location === filters.location;
         const matchesType = filters.type === "All" || property.type === filters.type;
@@ -77,11 +72,16 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
         const matchesBathrooms = Number.isNaN(minimumBaths) || (property.bathrooms ?? 0) >= minimumBaths;
 
         const matchesPrice =
-          filters.priceRange === "All" ||
-          (filters.priceRange === "Under KES 40M" && property.price < 40000000) ||
-          (filters.priceRange === "KES 40M - 80M" && property.price >= 40000000 && property.price <= 80000000) ||
-          (filters.priceRange === "KES 80M - 150M" && property.price > 80000000 && property.price <= 150000000) ||
-          (filters.priceRange === "Above KES 150M" && property.price > 150000000);
+          filters.priceRange === "all" ||
+          (filters.priceRange === "sale-under-40m" && property.price < 40000000) ||
+          (filters.priceRange === "sale-40m-80m" && property.price >= 40000000 && property.price <= 80000000) ||
+          (filters.priceRange === "sale-80m-150m" && property.price > 80000000 && property.price <= 150000000) ||
+          (filters.priceRange === "sale-above-150m" && property.price > 150000000) ||
+          (filters.priceRange === "rent-0-100k" && property.price <= 100000) ||
+          (filters.priceRange === "rent-100k-250k" && property.price > 100000 && property.price <= 250000) ||
+          (filters.priceRange === "rent-250k-500k" && property.price > 250000 && property.price <= 500000) ||
+          (filters.priceRange === "rent-500k-1m" && property.price > 500000 && property.price <= 1000000) ||
+          (filters.priceRange === "rent-above-1m" && property.price > 1000000);
 
         return (
           matchesSearch &&
@@ -111,7 +111,28 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
           startTransition(() => {
             setVisibleCount(6);
             setNotifyRequested(false);
-            setFilters((current) => ({ ...current, [field]: value }));
+            setFilters((current) => {
+              if (field === "listingType") {
+                const nextAvailability = value === "Sale" ? current.availability === "rented" ? "available" : current.availability : value === "Rent" ? current.availability === "sold" ? "available" : current.availability : current.availability;
+                const nextPriceRange =
+                  value === "Rent"
+                    ? current.priceRange.startsWith("sale-")
+                      ? "all"
+                      : current.priceRange
+                    : current.priceRange.startsWith("rent-")
+                      ? "all"
+                      : current.priceRange;
+
+                return {
+                  ...current,
+                  listingType: value,
+                  availability: nextAvailability,
+                  priceRange: nextPriceRange
+                };
+              }
+
+              return { ...current, [field]: value };
+            });
           });
         }}
       />

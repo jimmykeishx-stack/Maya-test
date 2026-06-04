@@ -25,6 +25,7 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
   const { isSaved, toggleSaved } = useSavedListings();
   const saved = isSaved(property.id);
   const isUnavailable = property.marketStatus !== "available";
+  const primaryImage = property.coverImage || property.gallery?.[0] || "/placeholder.jpg";
 
   return (
     <motion.article
@@ -34,7 +35,7 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
     >
       <div className="relative aspect-[4/4.5] overflow-hidden">
         <Image
-          src={property.coverImage}
+          src={primaryImage}
           alt={property.title}
           fill
           priority={priority}

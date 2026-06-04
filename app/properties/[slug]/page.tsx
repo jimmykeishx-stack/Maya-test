@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MapPin, MoveUpRight, Sparkles } from "lucide-react";
 
@@ -9,6 +10,7 @@ import { PropertyGallery } from "@/components/site/property-gallery";
 import { PropertyPrice } from "@/components/site/property-price";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { companyContact } from "@/data/site";
 import {
   getListingLabel,
   getMandateLabel,
@@ -16,6 +18,7 @@ import {
   getSegmentLabel
 } from "@/data/properties";
 import { getProperties, getPropertyBySlug, getSimilarProperties } from "@/lib/property-store";
+import { createMetadata } from "@/lib/metadata";
 
 export const dynamic = "force-dynamic";
 
@@ -25,6 +28,29 @@ export async function generateStaticParams() {
   return properties.map((property) => ({
     slug: property.slug
   }));
+}
+
+export async function generateMetadata({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const property = await getPropertyBySlug(slug);
+
+  if (!property) {
+    return createMetadata({
+      title: "Property Not Found",
+      description: "This Maya Haven property could not be found."
+    });
+  }
+  const primaryImage = property.coverImage || property.gallery?.[0] || "/placeholder.jpg";
+
+  return createMetadata({
+    title: property.title,
+    description: property.blurb || property.description,
+    image: primaryImage
+  });
 }
 
 export default async function PropertyDetailPage({
@@ -40,6 +66,8 @@ export default async function PropertyDetailPage({
   }
 
   const similarProperties = await getSimilarProperties(property.slug, property.segment, property.listingType);
+  const primaryImage = property.coverImage || property.gallery?.[0] || "/placeholder.jpg";
+  const galleryImages = property.gallery.length ? property.gallery : [primaryImage];
 
   return (
     <div className="pb-24 pt-24 sm:pt-28">
@@ -68,7 +96,7 @@ export default async function PropertyDetailPage({
         </div>
 
         <div className="space-y-10">
-          <PropertyGallery title={property.title} images={property.gallery} />
+          <PropertyGallery title={property.title} images={galleryImages} />
           <div className="rounded-[2rem] border border-black/6 bg-[#12100f] p-5 text-white shadow-[0_28px_90px_rgba(0,0,0,0.22)] sm:p-7">
             <p className="quiet-label text-[var(--gold)]">Property Overview</p>
             <PropertyPrice amount={property.price} suffix={property.priceSuffix} className="mt-4 block font-display text-3xl sm:text-4xl" />
@@ -89,7 +117,7 @@ export default async function PropertyDetailPage({
                 SPEAK WITH US
               </Link>
               <a
-                href="https://wa.me/254720584744"
+                href={companyContact.whatsappHref}
                 target="_blank"
                 rel="noreferrer"
                 className="inline-flex h-12 w-full items-center justify-center rounded-full border border-white/10 px-6 text-sm uppercase tracking-[0.18em] text-white/80 sm:w-auto"
@@ -163,7 +191,7 @@ export default async function PropertyDetailPage({
                   Reserved for a future 3D tour, cinematic reel, or additional guided media support where needed.
                 </p>
                 <a
-                  href="https://wa.me/254720584744"
+                  href={companyContact.whatsappHref}
                   target="_blank"
                   rel="noreferrer"
                   className="mt-6 inline-flex items-center gap-2 text-sm uppercase tracking-[0.22em] text-[var(--gold-strong)]"

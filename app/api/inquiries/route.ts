@@ -1,25 +1,13 @@
-import { NextResponse } from "next/server";
-
-import { saveBuyerInquiry } from "@/lib/submissions-store";
+import { errorResponse, successResponse } from "@/lib/backend/core/api-response";
+import { leadSchema } from "@/lib/backend/validation/schemas";
+import { createInquiry } from "@/services/inquiries";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as {
-    fullName?: string;
-    email?: string;
-    phoneNumber?: string;
-    message?: string;
-  };
-
-  if (!body.fullName || !body.email || !body.phoneNumber || !body.message) {
-    return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
+  try {
+    const payload = leadSchema.parse(await request.json());
+    const record = await createInquiry(payload);
+    return successResponse("Inquiry captured successfully", { id: record.id, status: record.status });
+  } catch (error) {
+    return errorResponse(error instanceof Error ? error.message : "Missing required fields.", 400);
   }
-
-  const record = await saveBuyerInquiry({
-    fullName: body.fullName,
-    email: body.email,
-    phoneNumber: body.phoneNumber,
-    message: body.message
-  });
-
-  return NextResponse.json({ success: true, id: record.id });
 }

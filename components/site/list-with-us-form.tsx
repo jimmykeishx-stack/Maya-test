@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 
+import { companyContact } from "@/data/site";
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { LuxuryInput } from "@/components/site/luxury-input";
 import { Textarea } from "@/components/ui/textarea";
@@ -380,6 +381,17 @@ export function ListWithUsForm() {
         {isSubmitting ? "Submitting..." : "Submit Property"}
       </LuxuryButton>
 
+      <p className="text-xs text-muted-foreground">
+        For direct owner coordination, you can also email{" "}
+        <a href={`mailto:${companyContact.primaryEmail}`} className="text-foreground underline decoration-black/20 underline-offset-4 transition hover:text-[var(--gold-strong)]">
+          {companyContact.primaryEmail}
+        </a>{" "}
+        or{" "}
+        <a href={`mailto:${companyContact.secondaryEmail}`} className="text-foreground underline decoration-black/20 underline-offset-4 transition hover:text-[var(--gold-strong)]">
+          {companyContact.secondaryEmail}
+        </a>
+        .
+      </p>
       {submitted ? <p className="text-sm text-[var(--gold-strong)]">Your property submission has been received for review.</p> : null}
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
     </form>

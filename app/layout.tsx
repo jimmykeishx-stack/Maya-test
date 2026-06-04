@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 
 import { Footer } from "@/components/site/footer";
+import { FloatingWhatsappButton } from "@/components/site/floating-whatsapp-button";
 import { Navbar } from "@/components/site/navbar";
+import { AuthProvider } from "@/components/auth/auth-provider";
+import { companyContact } from "@/data/site";
 import { CurrencyProvider } from "@/hooks/use-currency";
 import { SavedListingsProvider } from "@/hooks/use-saved-listings";
 import { createMetadata } from "@/lib/metadata";
@@ -35,20 +38,24 @@ export default function RootLayout({
     description:
       "Maya Haven helps clients find a property they can call home within Nairobi and beyond, while offering trusted property consultation, investor support, and management services.",
     areaServed: "Nairobi and beyond",
-    telephone: "+254720584744"
+    telephone: companyContact.whatsappDisplay.replace(/\s+/g, ""),
+    email: [companyContact.primaryEmail, companyContact.secondaryEmail]
   };
 
   return (
     <html lang="en" className={`${inter.variable} ${playfair.variable}`}>
       <body>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-        <SavedListingsProvider>
-          <CurrencyProvider>
-            <Navbar />
-            <main>{children}</main>
-            <Footer />
-          </CurrencyProvider>
-        </SavedListingsProvider>
+        <AuthProvider>
+          <SavedListingsProvider>
+            <CurrencyProvider>
+              <Navbar />
+              <main>{children}</main>
+              <FloatingWhatsappButton />
+              <Footer />
+            </CurrencyProvider>
+          </SavedListingsProvider>
+        </AuthProvider>
       </body>
     </html>
   );

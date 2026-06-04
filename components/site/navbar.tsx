@@ -3,12 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ChevronDown, Heart, Menu } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 
 import { CurrencySwitcher } from "@/components/site/currency-switcher";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
+import { companyContact } from "@/data/site";
 import { useSavedListings } from "@/hooks/use-saved-listings";
 import { cn } from "@/lib/utils";
 
@@ -34,6 +35,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopPropertiesOpen, setDesktopPropertiesOpen] = useState(false);
+  const closeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -47,6 +49,14 @@ export function Navbar() {
     setDesktopPropertiesOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    return () => {
+      if (closeTimeoutRef.current) {
+        clearTimeout(closeTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const transparentHome = pathname === "/" && !scrolled;
   const isPropertiesRoute = pathname.startsWith("/properties");
 
@@ -56,6 +66,28 @@ export function Navbar() {
   );
 
   const closeMobileMenu = () => setMobileOpen(false);
+  const openPropertiesMenu = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setDesktopPropertiesOpen(true);
+  };
+  const scheduleClosePropertiesMenu = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
+    closeTimeoutRef.current = setTimeout(() => {
+      setDesktopPropertiesOpen(false);
+    }, 140);
+  };
+  const closePropertiesMenuNow = () => {
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setDesktopPropertiesOpen(false);
+  };
 
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4 sm:pt-4">
@@ -77,33 +109,56 @@ export function Navbar() {
 
         <nav className="hidden items-center gap-6 text-sm xl:flex">
           <div
-            className="relative"
-            onMouseEnter={() => setDesktopPropertiesOpen(true)}
-            onMouseLeave={() => setDesktopPropertiesOpen(false)}
+            className="relative -mx-3 px-3 py-3"
+            onMouseEnter={openPropertiesMenu}
+            onMouseLeave={scheduleClosePropertiesMenu}
+            onFocusCapture={openPropertiesMenu}
+            onBlurCapture={(event) => {
+              const nextTarget = event.relatedTarget;
+              if (!(nextTarget instanceof Node) || !event.currentTarget.contains(nextTarget)) {
+                scheduleClosePropertiesMenu();
+              }
+            }}
           >
             <button
               type="button"
               onClick={() => setDesktopPropertiesOpen((current) => !current)}
+              onKeyDown={(event) => {
+                if (event.key === "Escape") {
+                  closePropertiesMenuNow();
+                }
+              }}
+              aria-haspopup="menu"
+              aria-expanded={desktopPropertiesOpen}
+              aria-controls="desktop-properties-menu"
               className={cn("inline-flex items-center gap-2 transition-colors", isPropertiesRoute ? "text-[var(--gold-strong)]" : desktopTextClass)}
             >
               Properties
               <ChevronDown className={cn("size-4 transition-transform", desktopPropertiesOpen && "rotate-180")} />
             </button>
             {desktopPropertiesOpen ? (
-              <div className="absolute left-0 top-full mt-4 w-60 rounded-[1.4rem] border border-black/8 bg-[rgba(255,250,243,0.97)] p-3 text-foreground shadow-[0_20px_55px_rgba(15,12,8,0.12)]">
-                <div className="grid gap-1">
-                  {propertyLinks.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      className={cn(
-                        "rounded-[1rem] px-3 py-2 text-sm transition hover:bg-black/[0.04]",
-                        pathname === link.href ? "text-[var(--gold-strong)]" : "text-muted-foreground hover:text-foreground"
-                      )}
-                    >
-                      {link.label}
-                    </Link>
-                  ))}
+              <div className="absolute left-0 top-full w-64 pt-3">
+                <div
+                  id="desktop-properties-menu"
+                  role="menu"
+                  className="rounded-[1.4rem] border border-black/8 bg-[rgba(255,250,243,0.97)] p-3 text-foreground shadow-[0_20px_55px_rgba(15,12,8,0.12)]"
+                >
+                  <div className="grid gap-1">
+                    {propertyLinks.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        role="menuitem"
+                        onClick={closePropertiesMenuNow}
+                        className={cn(
+                          "rounded-[1rem] px-3 py-2 text-sm transition hover:bg-black/[0.04]",
+                          pathname === link.href ? "text-[var(--gold-strong)]" : "text-muted-foreground hover:text-foreground"
+                        )}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
             ) : null}
@@ -177,6 +232,19 @@ export function Navbar() {
                 <Link href="/events-gallery" onClick={closeMobileMenu} className="text-lg text-white/75 transition hover:text-white">
                   Events & Gallery
                 </Link>
+              </div>
+
+              <div className="grid gap-2">
+                <p className="quiet-label text-white/45">Connect</p>
+                <a href={`mailto:${companyContact.primaryEmail}`} className="text-base text-white/75 transition hover:text-white">
+                  {companyContact.primaryEmail}
+                </a>
+                <a href={`mailto:${companyContact.secondaryEmail}`} className="text-base text-white/75 transition hover:text-white">
+                  {companyContact.secondaryEmail}
+                </a>
+                <a href={companyContact.whatsappHref} target="_blank" rel="noreferrer" className="text-base text-white/75 transition hover:text-white">
+                  WhatsApp: {companyContact.whatsappDisplay}
+                </a>
               </div>
 
               <CurrencySwitcher className="text-white" />

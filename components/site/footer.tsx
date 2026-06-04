@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { companyContact } from "@/data/site";
+
 export function Footer() {
   return (
     <footer className="border-t border-black/5 bg-[#12100f] text-white">
@@ -26,9 +28,10 @@ export function Footer() {
         <div className="space-y-3">
           <p className="quiet-label text-[var(--gold)]">Connect</p>
           <div className="grid gap-2 text-sm text-white/70">
-            <a href="tel:+254720584744">+254 720 584 744</a>
-            <a href="mailto:private@mayahaven.co">private@mayahaven.co</a>
-            <a href="https://wa.me/254720584744" target="_blank" rel="noreferrer">
+            <a href={`tel:${companyContact.whatsappDisplay.replace(/\s+/g, "")}`}>{companyContact.whatsappDisplay}</a>
+            <a href={`mailto:${companyContact.primaryEmail}`}>{companyContact.primaryEmail}</a>
+            <a href={`mailto:${companyContact.secondaryEmail}`}>{companyContact.secondaryEmail}</a>
+            <a href={companyContact.whatsappHref} target="_blank" rel="noreferrer">
               WhatsApp Concierge
             </a>
             <Link href="/terms">Terms & Conditions</Link>

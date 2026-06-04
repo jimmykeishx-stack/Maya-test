@@ -1,3 +1,12 @@
+export const companyContact = {
+  primaryEmail: "info@mayahaven.com",
+  secondaryEmail: "mayahavenhomes@gmail.com",
+  whatsappDisplay: "+254 720 584 744",
+  whatsappNumber: "254720584744",
+  whatsappHref: "https://wa.me/254720584744",
+  officeLabel: "Riverside Drive, Nairobi"
+} as const;
+
 export const clientReviews = [
   {
     id: "client-01",
