@@ -4,10 +4,11 @@ export type Database = {
   public: {
     Enums: {
       app_role: "user" | "agent" | "admin";
+      blog_status: "draft" | "published" | "archived";
       lead_status: "new" | "contacted" | "viewing_scheduled" | "negotiating" | "converted" | "closed_lost";
       property_listing_type: "sale" | "rent";
       property_mandate_type: "exclusive" | "open";
-      property_market_status: "available" | "sold" | "rented" | "archived";
+      property_status: "available" | "sold" | "rented" | "archived";
       property_segment: "residential" | "commercial" | "affordable_housing";
     };
     Tables: {
@@ -28,7 +29,7 @@ export type Database = {
       agents: {
         Row: {
           id: string;
-          profile_id: string | null;
+
           full_name: string | null;
           title: string | null;
           email: string | null;
@@ -81,6 +82,44 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["amenities"]["Insert"]>;
         Relationships: [];
       };
+      blog_posts: {
+        Row: {
+          id: string;
+          author_profile_id: string | null;
+          slug: string;
+          title: string;
+          excerpt: string;
+          body: string;
+          status: Database["public"]["Enums"]["blog_status"];
+          category: string;
+          tags: string[];
+          featured_image_url: string | null;
+          seo_title: string | null;
+          seo_description: string | null;
+          published_at: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          author_profile_id?: string | null;
+          slug: string;
+          title: string;
+          excerpt: string;
+          body: string;
+          status?: Database["public"]["Enums"]["blog_status"];
+          category: string;
+          tags?: string[];
+          featured_image_url?: string | null;
+          seo_title?: string | null;
+          seo_description?: string | null;
+          published_at?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["blog_posts"]["Insert"]>;
+        Relationships: [];
+      };
       inquiries: {
         Row: {
           id: string;
@@ -122,7 +161,7 @@ export type Database = {
           description: string;
           property_type: string;
           listing_type: Database["public"]["Enums"]["property_listing_type"];
-          market_status: Database["public"]["Enums"]["property_market_status"];
+          status: Database["public"]["Enums"]["property_status"];
           segment: Database["public"]["Enums"]["property_segment"];
           mandate_type: Database["public"]["Enums"]["property_mandate_type"];
           price: number;
@@ -130,18 +169,15 @@ export type Database = {
           currency: string;
           negotiable: boolean;
           featured: boolean;
-          status: string | null;
           price_suffix: string | null;
           area_sqft: number | null;
-          size_sqft: number | null;
-          lot_size_sqft: number | null;
+          lot_area_sqft: number | null;
           bedrooms: number | null;
           bathrooms: number | null;
           parking_spaces: number | null;
           furnished: boolean | null;
           year_built: number | null;
           floor_number: number | null;
-          location_label: string | null;
           highlight: string | null;
           blurb: string | null;
           agent_note: string | null;
@@ -159,10 +195,9 @@ export type Database = {
           agent_id: string | null;
           owner_profile_id: string | null;
           created_by: string | null;
-          published_at: string | null;
+          created_at: string | null;
           archived_at: string | null;
           soft_deleted_at: string | null;
-          created_at: string;
           updated_at: string;
         };
         Insert: {
@@ -173,7 +208,7 @@ export type Database = {
           description: string;
           property_type: string;
           listing_type: Database["public"]["Enums"]["property_listing_type"];
-          market_status?: Database["public"]["Enums"]["property_market_status"];
+          status?: Database["public"]["Enums"]["property_status"];
           segment?: Database["public"]["Enums"]["property_segment"];
           mandate_type?: Database["public"]["Enums"]["property_mandate_type"];
           price: number;
@@ -181,18 +216,15 @@ export type Database = {
           currency?: string;
           negotiable?: boolean;
           featured?: boolean;
-          status?: string | null;
           price_suffix?: string | null;
           area_sqft?: number | null;
-          size_sqft?: number | null;
-          lot_size_sqft?: number | null;
+          lot_area_sqft?: number | null;
           bedrooms?: number | null;
           bathrooms?: number | null;
           parking_spaces?: number | null;
           furnished?: boolean | null;
           year_built?: number | null;
           floor_number?: number | null;
-          location_label?: string | null;
           highlight?: string | null;
           blurb?: string | null;
           agent_note?: string | null;
@@ -210,10 +242,9 @@ export type Database = {
           agent_id?: string | null;
           owner_profile_id?: string | null;
           created_by?: string | null;
-          published_at?: string | null;
+          created_at?: string | null;
           archived_at?: string | null;
           soft_deleted_at?: string | null;
-          created_at?: string;
           updated_at?: string;
         };
         Update: Partial<Database["public"]["Tables"]["properties"]["Insert"]>;

@@ -16,7 +16,6 @@ export function ClientTestimonials() {
         <div className="mx-auto max-w-3xl text-center">
           <p className="quiet-label text-[var(--gold)]">What Our Clients Say</p>
           <h2 className="mt-4 font-display text-3xl leading-tight text-balance sm:text-4xl md:text-5xl">
-            A premium experience remembered for calm execution and polished detail.
           </h2>
         </div>
       </div>

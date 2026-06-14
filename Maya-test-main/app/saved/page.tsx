@@ -18,8 +18,6 @@ export default async function SavedPage() {
       <section className="site-shell space-y-8">
         <SectionHeading
           eyebrow="Saved Listings"
-          title="A personal shortlist for the homes that deserve a second look."
-          description="This preview uses local frontend state only, allowing buyers to build and revisit a luxury property shortlist without backend persistence."
         />
         <SavedListingsView properties={properties} />
       </section>

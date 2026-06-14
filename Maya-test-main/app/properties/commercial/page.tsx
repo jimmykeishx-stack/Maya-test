@@ -18,8 +18,6 @@ export default async function CommercialPage() {
       <section className="site-shell space-y-6">
         <SectionHeading
           eyebrow="Commercial"
-          title="Commercial property opportunities for lease, acquisition, and investor review."
-          description="A dedicated section for office suites, retail frontage, mixed-use assets, and mandate-led commercial sourcing."
         />
         <PropertiesBrowser properties={properties} initialFilters={{ segment: "Commercial" }} />
       </section>

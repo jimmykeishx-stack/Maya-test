@@ -7,7 +7,7 @@ The current UI needs dynamic records for:
 - Property cards: title, slug, location, listing type, segment, status, mandate badge, price, bedrooms, bathrooms, size, cover image, short blurb.
 - Property detail pages: gallery, highlight, long description, amenities, feature bullets, video ID, similar properties.
 - Homepage property sections: featured, affordable housing, commercial.
-- Search and filters: listing type, market segment, market status, location, bedrooms, bathrooms, property type, price, size sorting.
+- Search and filters: listing type, market segment, status, location, bedrooms, bathrooms, property type, price, size sorting.
 - Inquiry forms: full name, email, phone number, message, optional source and property reference.
 
 The UI still consumes the existing `Property` TypeScript shape. The Supabase service maps normalized database rows into that shape so the visual components remain unchanged.

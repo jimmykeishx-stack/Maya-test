@@ -4,7 +4,7 @@ import { getProperties, getPropertyBySlug, queryProperties } from "@/lib/propert
 type PropertyListQuery = {
   listingType?: "sale" | "rent";
   segment?: "residential" | "commercial" | "affordable-housing";
-  marketStatus?: "available" | "sold" | "rented" | "archived";
+  Status?: "available" | "sold" | "rented" | "archived";
   search?: string;
   location?: string;
   minPrice?: number;
@@ -37,7 +37,7 @@ export async function listProperties(query: PropertyListQuery) {
   const base = await queryProperties({
     listingType: query.listingType,
     segment: query.segment,
-    marketStatus: query.marketStatus,
+    marketStatus: query.Status,
     search: query.search
   });
 

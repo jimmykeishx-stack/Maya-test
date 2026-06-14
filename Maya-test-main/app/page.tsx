@@ -61,12 +61,12 @@ export default async function HomePage() {
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(212,173,94,0.18),transparent_28%)]" />
         <div className="site-shell relative z-10 pb-14 sm:pb-16 md:pb-24">
           <div className="max-w-4xl space-y-5 sm:space-y-6">
-            <p className="quiet-label text-[var(--gold)]">REAL ESTATE</p>
+            <p className="quiet-label text-[var(--gold)]">MAYA HAVEN REAL ESTATE</p>
             <h1 className="font-display text-4xl leading-[0.95] text-balance sm:text-5xl md:text-7xl xl:text-[6rem]">
-              Find a property you can call home within Nairobi and beyond.
+              Your dream home awaits.
             </h1>
             <p className="max-w-2xl text-sm leading-7 text-white/72 sm:text-base md:text-lg md:leading-8">
-              Maya Haven combines premium property curation with trusted investor consultation, sourcing, due diligence, and management support for clients buying, renting, investing, or listing in Kenya.
+              Discover your perfect home within Nairobi and beyond.
             </p>
             <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
               <LuxuryButton href="/properties" size="lg" className="w-full justify-center sm:w-auto">
@@ -84,8 +84,7 @@ export default async function HomePage() {
         <div className="site-shell space-y-6">
           <SectionHeading
             eyebrow="Browse by Intent"
-            title="Clearer pathways for sale, rent, commercial, and affordable housing."
-            description="Start with the category that matches your goal, then refine further by location, price band, status, and property type."
+            description="Select the category that matches your goal, then refine further."
           />
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {categoryLinks.map((item) => (
@@ -105,7 +104,6 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="Featured Listings"
-            title="Premium listings curated across Nairobi's strongest residential and investment corridors."
             description="A refined mix of homes and mandate-led opportunities for buyers, international property investors, and long-view capital."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -119,9 +117,7 @@ export default async function HomePage() {
       <section className="section-space bg-[#12100f] text-white">
         <div className="site-shell space-y-10">
           <SectionHeading
-            eyebrow="Services"
-            title="Advisory and management services designed around trust, sourcing discipline, and client protection."
-            description="From finding a property to finding the right buyer or tenant, the service structure is designed to be practical, premium, and quietly effective."
+            title=" Advisory and management services."
             className="max-w-4xl"
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
@@ -136,7 +132,7 @@ export default async function HomePage() {
               );
             })}
           </div>
-        </div>
+        </div>Advisory and management services
       </section>
 
       <LeadershipSection />
@@ -188,8 +184,7 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="Affordable Housing Options"
-            title="Structured options for practical ownership and dependable family living."
-            description="Affordable housing deserves clear presentation too, especially for first-time buyers, family-backed purchases, and realistic rental planning."
+            description="For first-time buyers, family-backed purchases, and lower rental planning."
           />
           <div className="grid gap-6 md:grid-cols-2">
             {affordableProperties.map((property) => (
@@ -203,7 +198,6 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="Commercial"
-            title="Commercial properties for lease, acquisition, and mandate-led investor conversations."
             description="Selected office, retail, and mixed-use opportunities for operators, landlords, and clients expanding into Kenya."
             className="max-w-4xl"
           />
@@ -221,8 +215,6 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="MAYA HAVEN INSIGHT"
-            title="Editorial guidance for buyers, landlords, and international property investors."
-            description="Context, not clutter. A more useful content layer for the questions people ask before they transact."
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {insightPosts.map((post) => (
@@ -240,9 +232,6 @@ export default async function HomePage() {
         <div className="site-shell space-y-10">
           <SectionHeading
             eyebrow="Events & Gallery"
-            title="A CMS-ready layer for briefings, showcases, and client milestones."
-            description="Built to host property launches, investor briefings, gallery updates, and transaction milestones with the same premium restraint."
-            className="max-w-4xl"
           />
           <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
             {eventsGalleryItems.map((item) => (

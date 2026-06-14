@@ -16,8 +16,6 @@ export default function ListWithUsPage() {
         <div className="space-y-5">
           <SectionHeading
             eyebrow="LIST WITH US"
-            title="A dedicated owner workflow for sale and rental property submissions."
-            description="Fill out our form and a member of our team will contact you for further details subject to our Terms & Conditions."
           />
           <p className="text-sm text-muted-foreground">
             By submitting, you confirm the information shared is accurate and acknowledge our{" "}

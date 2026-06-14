@@ -77,7 +77,7 @@ function mapAdminProperty(row: PropertyRow): AdminProperty {
     location: row.location ?? "",
     bedrooms: row.bedrooms,
     bathrooms: row.bathrooms,
-    areaSqft: row.area_sqft,
+    areaSqft: row.area_sqft ?? row.area_sqft,
     amenities,
     featured: row.featured,
     status: normalizeStatus(row.status),

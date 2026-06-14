@@ -1,0 +1,320 @@
+version: 1
+plan:
+  name: Maya Haven Insight Section
+  max_concurrency: 4
+  max_consecutive_failures: 2
+  max_cycles: 8
+  auto_reject_retries: 1
+  verifier_config:
+    default_verifiers: [verifier]
+    audit_sample_rate: 0.0
+
+tasks:
+  # ========================
+  # TRACK 1: Database + API
+  # ========================
+  - id: insight-database-api
+    title: Database schema and API routes
+    prompt: |
+      Build the database schema and API routes for the Maya Haven Insight blog system.
+
+      WORKSPACE: C:\Users\Administrator\Desktop\Final well done\Maya-test-main
+
+      EXISTING CONTEXT:
+      - lib/backend/contracts.ts already has BlogPostRecord type
+      - lib/backend/services/blog-service.ts exists with basic JSON storage
+      - app/api/v1/cms/posts/route.ts may already exist - check and enhance it
+
+      DELIVERABLES:
+
+      1. SUPABASE SCHEMA (supabase/migrations/001_create_blog_posts.sql):
+         Create a comprehensive blog_posts table with these fields:
+         - id: UUID primary key
+         - title: TEXT NOT NULL
+         - slug: TEXT UNIQUE NOT NULL (auto-generated from title)
+         - excerpt: TEXT NOT NULL
+         - content: TEXT NOT NULL (rich text/HTML content)
+         - category: TEXT NOT NULL (enum: 'Market Trends', 'Property Investment', 'Buying Guide', 'Selling Guide', 'Luxury Living', 'Real Estate News', 'Home Design', 'Property Management')
+         - tags: TEXT[] default '{}'
+         - featured_image: TEXT
+         - author: TEXT NOT NULL
+         - meta_title: TEXT
+         - meta_description: TEXT
+         - featured: BOOLEAN default false
+         - published: BOOLEAN default false
+         - published_at: TIMESTAMPTZ
+         - created_at: TIMESTAMPTZ default now()
+         - updated_at: TIMESTAMPTZ default now()
+
+         Add RLS policies for admin-only insert/update/delete, public read for published posts.
+         Add indexes on slug, category, published, featured, published_at.
+
+      2. ENHANCE BLOG SERVICE (lib/backend/services/blog-service.ts):
+         - Add getPostBySlug(slug)
+         - Add getPostsByCategory(category)
+         - Add getFeaturedPosts()
+         - Add updateBlogPost(id, data)
+         - Add deleteBlogPost(id)
+         - Add listBlogPosts(options: { page, pageSize, category, search, publishedOnly })
+         - All functions should work with Supabase when SUPABASE_URL is set, fall back to JSON store otherwise
+         - Include reading time calculation (words / 200 wpm)
+         - Include SEO metadata generation
+
+      3. API ROUTES (new files):
+         - app/api/v1/insight/route.ts: GET (list with pagination/filtering), POST (admin only)
+         - app/api/v1/insight/[slug]/route.ts: GET (single post), PATCH (admin), DELETE (admin)
+         - app/api/v1/insight/categories/route.ts: GET (all categories with counts)
+         - app/api/v1/insight/featured/route.ts: GET (featured posts)
+
+      4. TYPE DEFINITIONS (types/insight.ts):
+         - InsightPost (public-facing type)
+         - InsightPostAdmin (admin view with all fields)
+         - CreateInsightPost, UpdateInsightPost
+         - InsightCategory
+         - PaginationOptions, PaginatedResponse
+
+      CODE STANDARDS:
+      - Follow existing patterns in lib/backend/services/
+      - Use createApiSuccess/createApiFailure from lib/backend/core/api-response.ts
+      - Use requireAdmin from lib/auth/admin.ts for protected routes
+      - Include proper error handling and validation
+      - Export types from lib/backend/contracts.ts if not already present
+
+    assigned_to: coder
+    verified_by: verifier
+    verify_prompt: |
+      Verify the database schema and API routes work correctly:
+
+      1. Check supabase/migrations/001_create_blog_posts.sql exists and has proper RLS policies
+      2. Verify lib/backend/services/blog-service.ts has all required functions
+      3. Check API routes handle: listing, single post, create, update, delete, categories, featured
+      4. Verify admin authentication on write operations
+      5. Check types/insight.ts exports all required types
+      6. Run TypeScript compilation to verify no type errors
+    max_retries: 2
+
+  # ========================
+  # TRACK 2: Public UI
+  # ========================
+  - id: insight-public-ui
+    title: Public insight pages and components
+    prompt: |
+      Build the premium public-facing Insight section for Maya Haven.
+
+      WORKSPACE: C:\Users\Administrator\Desktop\Final well done\Maya-test-main
+
+      DESIGN DIRECTION:
+      - Premium real estate publication aesthetic (Architectural Digest meets Sotheby's)
+      - Color palette: Deep charcoal (#12100f), warm white (#faf9f7), soft beige, luxury gold (#d4ad5e)
+      - Typography: Elegant serif for headings (existing font-display), clean sans for body
+      - Animations: Subtle fade-in, smooth transitions, parallax on hero images
+
+      DELIVERABLES:
+
+      1. ENHANCE app/insight/page.tsx - Insight Landing Page:
+         - Hero section with featured article (large editorial image, headline, excerpt, author, date, reading time)
+         - Search bar with real-time filtering
+         - Category filter pills/buttons
+         - Grid of article cards (responsive: 1 col mobile, 2 tablet, 3 desktop)
+         - Pagination with elegant styling
+         - Empty state for no results
+         - Loading skeleton states
+
+      2. NEW app/insight/[slug]/page.tsx - Article Detail Page:
+         - Server component that fetches post by slug
+         - Large hero image with overlay gradient
+         - Article metadata (category, author, date, reading time)
+         - Rich content rendering (handle HTML content safely)
+         - Social sharing buttons (copy link, WhatsApp, email)
+         - Related articles section (same category, 3 max)
+         - Newsletter subscription CTA
+         - SEO metadata (generateMetadata function)
+         - Structured data (JSON-LD for article)
+
+      3. NEW COMPONENTS (components/insight/):
+         - ArticleCard.tsx: Featured image, category badge, title, excerpt, author avatar, date, reading time
+         - FeaturedArticleHero.tsx: Large hero with image overlay, gradient, headline, CTA
+         - CategoryFilter.tsx: Horizontal scrollable pills
+         - SearchBar.tsx: Elegant search input with icon
+         - ArticleContent.tsx: Safe HTML renderer with styling
+         - SocialShare.tsx: WhatsApp, email, copy link buttons
+         - NewsletterCTA.tsx: Email subscription form
+         - RelatedArticles.tsx: Grid of 3 related posts
+         - ReadingProgress.tsx: Progress bar at top of article
+         - ArticleSkeleton.tsx: Loading state
+
+      4. UPDATE DATA (data/site.ts):
+         - Add more realistic insightPosts sample data (8-10 posts across different categories)
+         - Each post should have realistic titles, excerpts, images from Unsplash
+         - Include mixed categories and featured status
+
+      CODE STANDARDS:
+      - Use 'use client' only where interactivity is needed
+      - Server Components for data fetching
+      - next/image for all images
+      - Proper loading.tsx and error.tsx for routes
+      - Mobile-first responsive design
+      - Dark mode support via existing CSS variables
+      - Smooth animations with CSS transitions (no heavy JS libraries)
+
+    assigned_to: coder
+    verified_by: verifier
+    verify_prompt: |
+      Verify the public UI implementation:
+
+      1. Check app/insight/page.tsx has hero, search, filters, article grid, pagination
+      2. Verify app/insight/[slug]/page.tsx renders article with all sections
+      3. Check all components in components/insight/ exist and are properly typed
+      4. Verify SEO metadata on article pages
+      5. Check responsive design patterns
+      6. Verify dark mode support
+      7. Run dev server and check pages load without errors
+    max_retries: 2
+
+  # ========================
+  # TRACK 3: Admin UI
+  # ========================
+  - id: insight-admin-ui
+    title: Admin Insight Manager dashboard
+    prompt: |
+      Build the admin dashboard for managing Insight articles.
+
+      WORKSPACE: C:\Users\Administrator\Desktop\Final well done\Maya-test-main
+
+      EXISTING PATTERNS:
+      - app/admin/properties/ has the property management UI
+      - components/admin/properties/property-form.tsx has the editor
+      - Use similar patterns for consistency
+
+      DELIVERABLES:
+
+      1. NEW app/admin/insight/page.tsx - Insight Manager Dashboard:
+         - Stats overview (total posts, published, drafts, featured)
+         - Table/list of all posts with columns: title, category, status, featured, date, actions
+         - Search and filter controls
+         - "Create New Post" button
+         - Quick actions: edit, delete, toggle publish, toggle featured
+         - Bulk actions for multiple selection
+
+      2. NEW app/admin/insight/new/page.tsx - Create Post:
+         - Article editor form (same component used for create/edit)
+
+      3. NEW app/admin/insight/[id]/edit/page.tsx - Edit Post:
+         - Article editor with existing data
+
+      4. NEW components/admin/insight/ArticleEditor.tsx:
+         - Full-featured editor with all fields:
+           * Title input (auto-generates slug)
+           * Slug input (editable, with regenerate button)
+           * Meta title input
+           * Meta description textarea
+           * Excerpt textarea
+           * Rich text editor (use a simple textarea with basic formatting for MVP, or implement with contenteditable)
+           * Featured image upload (drag & drop, preview)
+           * Category selector (dropdown)
+           * Author input
+           * Tags input (comma-separated or chip-based)
+           * Published toggle
+           * Featured toggle
+           * Preview button
+           * Save as Draft button
+           * Publish button
+
+      5. NEW components/admin/insight/InsightTable.tsx:
+         - Table component for listing posts
+         - Sortable columns
+         - Row actions (edit, delete, quick toggles)
+         - Status badges with colors
+
+      6. API INTEGRATION in the editor:
+         - POST to /api/v1/insight/ for create
+         - PATCH to /api/v1/insight/[slug]/ for update
+         - DELETE to /api/v1/insight/[slug]/ for delete
+         - Include loading states and error handling
+
+      7. NAVIGATION UPDATE:
+         - Update app/admin/(protected)/layout.tsx to include Insight in sidebar nav
+
+      CODE STANDARDS:
+      - Use existing admin auth (requireAdmin from lib/auth/admin.ts)
+      - Follow existing admin UI patterns and styling
+      - Include proper form validation
+      - Show success/error notifications after save
+      - Protect all routes with admin authentication
+      - Mobile-responsive admin interface
+
+    assigned_to: coder
+    verified_by: verifier
+    verify_prompt: |
+      Verify the admin UI implementation:
+
+      1. Check app/admin/insight/page.tsx has stats and table view
+      2. Verify editor has all required fields (title, slug, meta, content, image, category, etc.)
+      3. Check create and edit pages work with the editor
+      4. Verify API calls are made correctly on save
+      5. Check admin authentication is enforced
+      6. Verify sidebar navigation includes Insight link
+      7. Run TypeScript compilation to verify no type errors
+    max_retries: 2
+
+  # ========================
+  # FINAL INTEGRATION
+  # ========================
+  - id: insight-integration
+    title: Final integration and polish
+    prompt: |
+      Final integration pass for the Insight section.
+
+      WORKSPACE: C:\Users\Administrator\Desktop\Final well done\Maya-test-main
+
+      TASKS:
+
+      1. UPDATE app/journal/page.tsx:
+         - Change the redirect destination or update the journal page itself to use the new Insight system
+
+      2. NAVIGATION:
+         - Update components/site/navbar.tsx to include Insight link in navigation
+         - Ensure mobile menu works correctly
+
+      3. FOOTER:
+         - Update components/site/footer.tsx with Insight-related links
+
+      4. LOADING STATES:
+         - Create app/insight/loading.tsx with elegant skeleton
+         - Create app/insight/[slug]/loading.tsx with article skeleton
+
+      5. ERROR HANDLING:
+         - Create app/insight/error.tsx
+         - Create app/insight/[slug]/error.tsx
+         - Handle 404 for non-existent articles
+
+      6. RESPONSIVE TESTING:
+         - Ensure all Insight pages work on mobile (375px+), tablet (768px+), desktop (1280px+)
+
+      7. PERFORMANCE:
+         - Ensure images use proper sizes and loading="lazy" where appropriate
+         - Check no layout shift on load
+
+      8. DOCUMENTATION:
+         - Create docs/insight.md with:
+           * Database schema overview
+           * API endpoints reference
+           * Component structure
+           * Admin workflow instructions
+
+    assigned_to: coder
+    depends_on: [insight-database-api, insight-public-ui, insight-admin-ui]
+    verified_by: verifier
+    verify_prompt: |
+      Final integration verification:
+
+      1. Check all three tracks are integrated properly
+      2. Verify navigation includes Insight in navbar and footer
+      3. Check loading and error states exist for all Insight routes
+      4. Run dev server and verify:
+         - /insight loads
+         - /insight/[slug] loads for existing posts
+         - /admin/insight loads with auth
+         - No console errors
+      5. Verify docs/insight.md exists with API reference
+    max_retries: 2

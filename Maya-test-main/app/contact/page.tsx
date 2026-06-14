@@ -21,12 +21,6 @@ export default async function ContactPage() {
       <section className="site-shell grid gap-8 lg:grid-cols-[0.95fr_1.05fr]">
         <div className="space-y-5">
           <p className="quiet-label text-[var(--gold-strong)]">Speak With Us</p>
-          <h1 className="font-display text-5xl leading-tight text-balance md:text-6xl">
-            Start a direct conversation about buying, renting, listing, or managing property.
-          </h1>
-          <p className="max-w-2xl text-base leading-8 text-muted-foreground md:text-lg">
-            Use this form for buyer, tenant, investor-abroad, or consultation inquiries. Owner property submissions should go through the dedicated List With Us workflow.
-          </p>
           <div className="rounded-[2rem] border border-black/6 bg-white/60 p-8">
             <InquiryForm />
           </div>

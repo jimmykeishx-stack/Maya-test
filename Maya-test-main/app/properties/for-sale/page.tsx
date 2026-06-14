@@ -18,8 +18,6 @@ export default async function ForSalePage() {
       <section className="site-shell space-y-6">
         <SectionHeading
           eyebrow="For Sale"
-          title="Properties currently positioned for sale."
-          description="A direct view of active sale-side opportunities, from premium residences to selected commercial and affordable housing stock."
         />
         <PropertiesBrowser properties={properties} initialFilters={{ listingType: "Sale" }} />
       </section>

@@ -88,17 +88,6 @@ export function InquiryForm() {
       <LuxuryButton type="submit" className="w-full" size="lg" icon={!isSubmitting} disabled={isSubmitting}>
         {isSubmitting ? "Submitting..." : "Speak With Us"}
       </LuxuryButton>
-      <p className="text-xs text-muted-foreground">
-        Buyer inquiries are stored separately from owner listing submissions. Prefer email?{" "}
-        <a href={`mailto:${companyContact.primaryEmail}`} className="text-foreground underline decoration-black/20 underline-offset-4 transition hover:text-[var(--gold-strong)]">
-          {companyContact.primaryEmail}
-        </a>{" "}
-        or{" "}
-        <a href={`mailto:${companyContact.secondaryEmail}`} className="text-foreground underline decoration-black/20 underline-offset-4 transition hover:text-[var(--gold-strong)]">
-          {companyContact.secondaryEmail}
-        </a>
-        .
-      </p>
       {submitted ? <p className="text-sm text-[var(--gold-strong)]">Your inquiry has been received. A member of our team will reach out shortly.</p> : null}
       {error ? <p className="text-sm text-red-700">{error}</p> : null}
     </form>

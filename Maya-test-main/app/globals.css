@@ -131,6 +131,21 @@ img {
   text-wrap: balance;
 }
 
+/* Scrollbar hide utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Article content prose overrides */
+.article-content h2 {
+  scroll-margin-top: 80px;
+}
+
 @media (min-width: 768px) {
   .site-shell {
     width: min(100% - 40px, 1380px);

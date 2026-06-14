@@ -3,7 +3,7 @@ import { z } from "zod";
 export const propertyQuerySchema = z.object({
   listingType: z.enum(["sale", "rent"]).optional(),
   segment: z.enum(["residential", "commercial", "affordable-housing"]).optional(),
-  marketStatus: z.enum(["available", "sold", "rented", "archived"]).optional(),
+  Status: z.enum(["available", "sold", "rented", "archived"]).optional(),
   search: z.string().trim().optional(),
   location: z.string().trim().optional(),
   minPrice: z.coerce.number().optional(),

@@ -11,7 +11,8 @@ Run these in Supabase Dashboard -> SQL Editor -> New Query.
 7. Run `supabase/migrations/20260601_000007_properties_form_schema_alignment.sql`.
 8. Run `supabase/migrations/20260603_000008_property_images_primary_flag.sql`.
 9. Run `supabase/migrations/20260603_000009_backfill_property_media_amenities.sql`.
-10. Run `supabase/seed.sql`.
+10. Run `supabase/migrations/20260610_000010_blog_posts_admin_rls.sql`.
+11. Run `supabase/seed.sql`.
 
 Do not run the simplified `CREATE TABLE properties (...)` script for this project. The Maya Haven frontend requires normalized media, amenities, agents, property-agent assignments, and inquiry tables.
 
@@ -19,6 +20,7 @@ The storage migration creates the `property-media` bucket for admin-side image u
 The property CRUD migration creates the `property-images` bucket used by the production admin property form and adds admin-table RLS policies for property create, edit, delete, and image storage writes.
 The admin RLS storage fix migration adds a secure `public.is_admin()` helper and resets Storage policies for both `property-images` and the legacy `property-media` bucket.
 The properties form schema alignment migration adds any missing columns required by the admin property form and backfills compatible values without deleting existing rows.
+The blog posts admin RLS migration lets authenticated users listed in `public.admins` manage Insight posts, matching the admin auth model used by property CRUD.
 
 After the SQL succeeds, restart the Next.js dev server so `.env.local` is loaded:
 

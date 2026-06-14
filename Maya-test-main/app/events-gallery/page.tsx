@@ -15,8 +15,7 @@ export default function EventsGalleryPage() {
     <div className="pb-24 pt-32">
       <section className="site-shell space-y-8">
         <SectionHeading
-          eyebrow="Events & Gallery"
-          title="A CMS-ready showcase for market briefings, curated viewings, and client milestones."
+          title="Events & Gallery."
           description="Designed as a flexible content section for launches, showcases, investor sessions, and visual proof of delivery."
         />
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">

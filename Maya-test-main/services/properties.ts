@@ -2,11 +2,13 @@ import {
   properties as fallbackProperties,
   type ListingType,
   type MarketSegment,
-  type MarketStatus,
   type MandateType,
   type Property,
   type PropertyMetric
 } from "@/data/properties";
+
+type MarketStatus = Property["marketStatus"];
+
 import { supabase } from "@/lib/supabase";
 
 type PropertyFilters = {
@@ -121,7 +123,7 @@ function normalizeSegment(row: Record<string, unknown>): MarketSegment {
 }
 
 function normalizeMarketStatus(row: Record<string, unknown>): MarketStatus {
-  const raw = readString(row, ["market_status", "status", "availability"], "available").toLowerCase();
+  const raw = readString(row, ["status", "availability"], "available").toLowerCase();
   if (raw.includes("sold")) return "sold";
   if (raw.includes("rent") || raw.includes("lease") || raw.includes("leased")) return "rented";
   if (raw.includes("archive")) return "archived";

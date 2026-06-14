@@ -18,8 +18,6 @@ export default async function ForRentPage() {
       <section className="site-shell space-y-6">
         <SectionHeading
           eyebrow="For Rent"
-          title="Rental opportunities for relocation, family living, and commercial occupancy."
-          description="Clearer rental separation for clients looking for homes, managed tenancies, and workspace opportunities."
         />
         <PropertiesBrowser properties={properties} initialFilters={{ listingType: "Rent" }} />
       </section>

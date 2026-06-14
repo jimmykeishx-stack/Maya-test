@@ -25,7 +25,6 @@ export default function DiasporaConnectPage() {
       <section className="site-shell space-y-8">
         <SectionHeading
           eyebrow="Diaspora Connect"
-          title="Trusted property support for investors abroad buying, managing, or investing in Kenyan real estate."
           description="From first consultation to final handover, Maya Haven helps international property investors move with more clarity, cleaner verification, and stronger on-ground representation."
         />
         <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
@@ -63,7 +62,6 @@ export default function DiasporaConnectPage() {
         <div className="site-shell grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
           <div>
             <p className="quiet-label text-[var(--gold-strong)]">Process</p>
-            <h2 className="mt-4 font-display text-4xl leading-tight md:text-5xl">A timeline designed to reduce distance, uncertainty, and avoidable risk.</h2>
           </div>
           <div className="grid gap-5">
             {diasporaProcess.map((item) => (
@@ -81,8 +79,6 @@ export default function DiasporaConnectPage() {
         <div className="site-shell space-y-8">
           <SectionHeading
             eyebrow="Trust & Due Diligence"
-            title="Consultation-led support built around verification, documentation, and calmer decision-making."
-            description="International property investors often need more than listings. They need someone who can screen, compare, verify, coordinate, and communicate locally with maturity."
             className="max-w-4xl"
           />
           <div className="grid gap-6 md:grid-cols-3">

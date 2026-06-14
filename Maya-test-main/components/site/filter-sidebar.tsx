@@ -83,7 +83,6 @@ export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
       <CardContent className="space-y-5 p-4 sm:p-6">
         <div className="space-y-2">
           <p className="quiet-label text-[var(--gold-strong)]">Refine Search</p>
-          <h3 className="mt-3 font-display text-2xl sm:text-3xl">Find your ideal address.</h3>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-[1.4fr_repeat(8,minmax(0,1fr))] xl:items-end">
           <label className="grid gap-3">
@@ -105,7 +104,6 @@ export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
             value={values.availability}
             onChange={(value) => onChange("availability", value)}
             options={statusOptions}
-            helperText="Status labels adapt to sale or rent so you only see outcomes relevant to the market you are browsing."
           />
           <FilterSelect label="Location" value={values.location} onChange={(value) => onChange("location", value)} options={propertyLocations} />
           <FilterSelect label="Bedrooms" value={values.bedrooms} onChange={(value) => onChange("bedrooms", value)} options={bedroomOptions} />
@@ -116,13 +114,6 @@ export function FilterSidebar({ values, onChange }: FilterSidebarProps) {
             value={values.priceRange}
             onChange={(value) => onChange("priceRange", value)}
             options={priceOptions}
-            helperText={
-              values.listingType === "Rent"
-                ? "Monthly rental brackets appear automatically when rent is selected."
-                : values.listingType === "Sale"
-                  ? "Purchase price bands stay focused on capital values for sale listings."
-                  : "Choose Sale or Rent to switch between purchase and rental price bands."
-            }
           />
         </div>
       </CardContent>

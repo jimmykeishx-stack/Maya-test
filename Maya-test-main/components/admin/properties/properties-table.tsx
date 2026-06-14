@@ -22,7 +22,7 @@ function formatPrice(value: number, listingType: AdminProperty["listingType"]) {
   return `KES ${formatted}${listingType === "rent" ? " / month" : ""}`;
 }
 
-function statusLabel(status: AdminProperty["status"]) {
+function getMarketStatusLabel(status: AdminProperty["status"]) {
   if (status === "sold") return "Sold";
   if (status === "rented") return "Rented";
   return "Available";
@@ -110,7 +110,7 @@ export function PropertiesTable({ result, search }: PropertiesTableProps) {
                 {property.location}
               </div>
               <div className="bg-white/65 px-5 py-5 text-sm text-muted-foreground">
-                <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs uppercase tracking-[0.16em]">{statusLabel(property.status)}</span>
+                <span className="rounded-full border border-black/8 bg-white/70 px-3 py-2 text-xs uppercase tracking-[0.16em]">{getMarketStatusLabel(property.status)}</span>
               </div>
               <div className="bg-white/65 px-5 py-5">
                 <div className="flex flex-wrap gap-2">
