@@ -38,6 +38,18 @@ export function Footer() {
           </div>
         </div>
       </div>
+      <div className="border-t border-white/10">
+        <div className="site-shell py-5 text-center text-xs text-white/50">
+          <a
+            href="https://kibunjabuilds.co.ke/"
+            target="_blank"
+            rel="noreferrer"
+            className="transition hover:text-[var(--gold)]"
+          >
+            Built and maintained by Kibunja Builds
+          </a>
+        </div>
+      </div>
     </footer>
   );
 }
