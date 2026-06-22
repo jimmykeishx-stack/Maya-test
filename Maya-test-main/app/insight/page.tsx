@@ -3,20 +3,7 @@ import Image from "next/image";
 import { CTASection } from "@/components/site/cta-section";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createMetadata } from "@/lib/metadata";
-// Fallback implementation for getPublishedBlogPosts (replace with real service when available)
-async function getPublishedBlogPosts(): Promise<
-  {
-    id: string;
-    slug: string;
-    title: string;
-    excerpt?: string | null;
-    category?: string | null;
-    featuredImageUrl?: string | null;
-  }[]
-> {
-  // Return an empty array by default; replace with actual fetching logic or restore the import.
-  return [];
-}
+import { getPublishedBlogPosts } from "@/services/blog-posts";
 
 export const metadata = createMetadata({
   title: "MAYA HAVEN INSIGHT",
@@ -30,7 +17,6 @@ export default async function InsightPage() {
   try {
     posts = await getPublishedBlogPosts();
   } catch {
-    // Supabase not configured — show empty state gracefully
     posts = [];
   }
 

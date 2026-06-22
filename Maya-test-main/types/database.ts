@@ -120,6 +120,34 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["blog_posts"]["Insert"]>;
         Relationships: [];
       };
+      event_gallery_items: {
+        Row: {
+          id: string;
+          title: string;
+          category: string;
+          excerpt: string;
+          image_url: string;
+          status: Database["public"]["Enums"]["blog_status"];
+          event_date: string | null;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          category: string;
+          excerpt: string;
+          image_url: string;
+          status?: Database["public"]["Enums"]["blog_status"];
+          event_date?: string | null;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["event_gallery_items"]["Insert"]>;
+        Relationships: [];
+      };
       inquiries: {
         Row: {
           id: string;

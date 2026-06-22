@@ -6,6 +6,7 @@ import type {
   AdminProperty,
   AdminPropertyListResult,
   AdminPropertyPayload,
+  AdminPropertySegment,
   AdminPropertyStatus
 } from "@/types/admin-property";
 
@@ -19,6 +20,7 @@ export const adminPropertySchema = z.object({
   description: z.string().trim().min(10, "Description is required."),
   propertyType: z.string().trim().min(2, "Property type is required."),
   listingType: z.enum(["sale", "rent"]),
+  segment: z.enum(["residential", "commercial", "affordable_housing"]).default("residential"),
   price: z.coerce.number().positive("Price must be greater than zero."),
   location: z.string().trim().min(2, "Location is required."),
   bedrooms: z.coerce.number().int().min(0).nullable().optional(),
@@ -28,7 +30,8 @@ export const adminPropertySchema = z.object({
   featured: z.boolean().default(false),
   status: z.enum(["available", "rented", "sold"]),
   coverImage: z.string().trim().url("Cover image is required."),
-  galleryImages: z.array(z.string().trim().url()).default([])
+  galleryImages: z.array(z.string().trim().url()).default([]),
+  youtubeVideoId: z.string().trim().nullable().optional()
 });
 
 export type AdminPropertyInput = z.infer<typeof adminPropertySchema>;
@@ -39,6 +42,35 @@ function slugify(value: string) {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function normalizeSegment(value: unknown): AdminPropertySegment {
+  const normalized = String(value ?? "").toLowerCase().replace(/-/g, "_");
+  if (normalized === "commercial") return "commercial";
+  if (normalized === "affordable_housing") return "affordable_housing";
+  return "residential";
+}
+
+function normalizeYoutubeVideoId(value: unknown) {
+  const raw = String(value ?? "").trim();
+  if (!raw) return null;
+
+  try {
+    const url = new URL(raw);
+    const host = url.hostname.replace(/^www\./, "");
+    if (host === "youtu.be") return url.pathname.split("/").filter(Boolean)[0] ?? null;
+    if (host.endsWith("youtube.com")) {
+      const fromQuery = url.searchParams.get("v");
+      if (fromQuery) return fromQuery;
+      const parts = url.pathname.split("/").filter(Boolean);
+      const embedIndex = parts.findIndex((part) => part === "embed" || part === "shorts");
+      if (embedIndex >= 0) return parts[embedIndex + 1] ?? null;
+    }
+  } catch {
+    // Accept a pasted video ID as-is.
+  }
+
+  return raw.replace(/[^a-zA-Z0-9_-]/g, "") || null;
 }
 
 function normalizeStatus(value: unknown): AdminPropertyStatus {
@@ -73,6 +105,7 @@ function mapAdminProperty(row: PropertyRow): AdminProperty {
     description: row.description,
     propertyType: row.property_type,
     listingType: row.listing_type,
+    segment: normalizeSegment(row.segment),
     price: Number(row.price),
     location: row.location ?? "",
     bedrooms: row.bedrooms,
@@ -83,6 +116,7 @@ function mapAdminProperty(row: PropertyRow): AdminProperty {
     status: normalizeStatus(row.status),
     coverImage: row.cover_image,
     galleryImages: normalizeStringArray(row.gallery_images),
+    youtubeVideoId: row.youtube_video_id ?? null,
     createdAt: row.created_at ?? "",
     updatedAt: row.updated_at ?? "",
     createdBy: row.created_by ?? "",
@@ -218,6 +252,7 @@ export async function createAdminProperty(payload: AdminPropertyPayload, created
     description: parsed.description,
     property_type: parsed.propertyType,
     listing_type: parsed.listingType,
+    segment: parsed.segment,
     status: parsed.status,
     price: parsed.price,
     location: parsed.location,
@@ -228,6 +263,7 @@ export async function createAdminProperty(payload: AdminPropertyPayload, created
     featured: parsed.featured,
     cover_image: primaryImage,
     gallery_images: galleryImages,
+    youtube_video_id: normalizeYoutubeVideoId(parsed.youtubeVideoId),
     created_by: createdBy,
     created_at: now,
     updated_at: now
@@ -255,6 +291,7 @@ export async function updateAdminProperty(id: string, payload: AdminPropertyPayl
     description: parsed.description,
     property_type: parsed.propertyType,
     listing_type: parsed.listingType,
+    segment: parsed.segment,
     status: parsed.status,
     price: parsed.price,
     location: parsed.location,
@@ -265,6 +302,7 @@ export async function updateAdminProperty(id: string, payload: AdminPropertyPayl
     featured: parsed.featured,
     cover_image: primaryImage,
     gallery_images: galleryImages,
+    youtube_video_id: normalizeYoutubeVideoId(parsed.youtubeVideoId),
     updated_at: new Date().toISOString()
   };
 

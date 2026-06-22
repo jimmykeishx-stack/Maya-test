@@ -1,4 +1,5 @@
 export type AdminListingType = "sale" | "rent";
+export type AdminPropertySegment = "residential" | "commercial" | "affordable_housing";
 export type AdminPropertyStatus = "available" | "rented" | "sold";
 
 export type AdminProperty = {
@@ -8,6 +9,7 @@ export type AdminProperty = {
   description: string;
   propertyType: string;
   listingType: AdminListingType;
+  segment: AdminPropertySegment;
   price: number;
   location: string;
   bedrooms: number | null;
@@ -18,6 +20,7 @@ export type AdminProperty = {
   status: AdminPropertyStatus;
   coverImage: string | null;
   galleryImages: string[];
+  youtubeVideoId: string | null;
   createdAt: string;
   updatedAt: string;
   createdBy: string | null;
@@ -29,6 +32,7 @@ export type AdminPropertyPayload = {
   description: string;
   propertyType: string;
   listingType: AdminListingType;
+  segment: AdminPropertySegment;
   price: number;
   location: string;
   bedrooms?: number | null;
@@ -39,6 +43,7 @@ export type AdminPropertyPayload = {
   status: AdminPropertyStatus;
   coverImage?: string | null;
   galleryImages?: string[];
+  youtubeVideoId?: string | null;
 };
 
 export type AdminPropertyListResult = {

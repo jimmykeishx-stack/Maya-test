@@ -28,7 +28,6 @@ export function EarbTrustBadge({ className, compact = false }: EarbTrustBadgePro
         <div className="space-y-2">
           <p className="quiet-label text-[var(--gold-strong)]">Professional Compliance</p>
           <h3 className="font-display text-2xl leading-tight text-foreground">Licensed & Registered</h3>
-          <p className="text-sm leading-7 text-muted-foreground">EARB Compliant with a trust-first presentation approach for investors, owners, and globally mobile clients.</p>
         </div>
       </div>
     </article>

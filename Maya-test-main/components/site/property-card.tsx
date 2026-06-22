@@ -34,14 +34,16 @@ export function PropertyCard({ property, priority = false }: PropertyCardProps) 
       className="group overflow-hidden rounded-[2rem] border border-black/6 bg-[rgba(255,251,244,0.84)] shadow-[0_28px_90px_rgba(15,12,8,0.08)]"
     >
       <div className="relative aspect-[4/4.5] overflow-hidden">
-        <Image
-          src={primaryImage}
-          alt={property.title}
-          fill
-          priority={priority}
-          className={cn("object-cover transition duration-700 group-hover:scale-105", isUnavailable && "opacity-80 grayscale-[0.08]")}
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,16,15,0.08),rgba(18,16,15,0.72))]" />
+        <Link href={`/properties/${property.slug}`} aria-label={`View ${property.title}`} className="absolute inset-0">
+          <Image
+            src={primaryImage}
+            alt={property.title}
+            fill
+            priority={priority}
+            className={cn("object-cover transition duration-700 group-hover:scale-105", isUnavailable && "opacity-80 grayscale-[0.08]")}
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(18,16,15,0.08),rgba(18,16,15,0.72))]" />
+        </Link>
         <div className="absolute left-4 top-4 flex flex-wrap gap-2 sm:left-5 sm:top-5">
           <span className="rounded-full border border-white/15 bg-white/8 px-2.5 py-1 text-[0.62rem] uppercase tracking-[0.24em] sm:px-3 sm:text-[0.7rem]">
             {getListingLabel(property.listingType)}

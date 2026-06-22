@@ -1,7 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
+import { AtSign, Facebook, Instagram } from "lucide-react";
 
 import { companyContact } from "@/data/site";
+
+const socialLinks = [
+  {
+    label: "Threads",
+    href: "https://www.threads.com/@mayahaven_homes",
+    icon: AtSign
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/mayahaven_homes",
+    icon: Instagram
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/people/Maya-Haven-Real-Estate/61575810097788/",
+    icon: Facebook
+  }
+] as const;
 
 export function Footer() {
   return (
@@ -35,6 +54,24 @@ export function Footer() {
               WhatsApp Concierge
             </a>
             <Link href="/terms">Terms & Conditions</Link>
+          </div>
+          <div className="flex gap-3 pt-2">
+            {socialLinks.map((item) => {
+              const Icon = item.icon;
+              return (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={item.label}
+                  title={item.label}
+                  className="inline-flex size-10 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/70 transition hover:border-[var(--gold)]/45 hover:text-[var(--gold)]"
+                >
+                  <Icon className="size-4" />
+                </a>
+              );
+            })}
           </div>
         </div>
       </div>

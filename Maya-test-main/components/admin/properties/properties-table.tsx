@@ -22,6 +22,11 @@ function formatPrice(value: number, listingType: AdminProperty["listingType"]) {
   return `KES ${formatted}${listingType === "rent" ? " / month" : ""}`;
 }
 
+function getSegmentLabel(segment: AdminProperty["segment"]) {
+  if (segment === "commercial") return "Commercial";
+  if (segment === "affordable_housing") return "Affordable Housing";
+  return "Residential";
+}
 function getMarketStatusLabel(status: AdminProperty["status"]) {
   if (status === "sold") return "Sold";
   if (status === "rented") return "Rented";
@@ -97,7 +102,7 @@ export function PropertiesTable({ result, search }: PropertiesTableProps) {
                   <div>
                     <p className="font-display text-2xl">{property.title}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{property.slug}</p>
-                    <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--gold-strong)]">{property.propertyType} / {property.listingType === "sale" ? "Sale" : "Rent"}</p>
+                    <p className="mt-2 text-xs uppercase tracking-[0.18em] text-[var(--gold-strong)]">{property.propertyType} / {property.listingType === "sale" ? "Sale" : "Rent"} / {getSegmentLabel(property.segment)}</p>
                   </div>
                 </div>
               </div>

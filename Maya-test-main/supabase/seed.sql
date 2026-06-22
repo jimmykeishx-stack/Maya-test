@@ -12,20 +12,6 @@ values
   ('Kiambu', 'Nairobi Metro', 'Ruaka', array['Two Rivers', 'Limuru Road'])
 on conflict do nothing;
 
-insert into public.blog_posts (slug, title, excerpt, body, status, category, tags, published_at)
-values
-  (
-    'how-investors-abroad-can-reduce-risk-before-paying-a-deposit',
-    'How Investors Abroad Can Reduce Risk Before Paying a Deposit',
-    'A practical guide to verification, developer vetting, legal review, and on-ground representation before funds move.',
-    'A practical guide to verification, developer vetting, legal review, and on-ground representation before funds move.',
-    'published',
-    'MAYA HAVEN INSIGHT',
-    array['global-investor-support', 'due-diligence'],
-    timezone('utc', now())
-  )
-on conflict (slug) do nothing;
-
 do $$
 <<seed_data>>
 declare

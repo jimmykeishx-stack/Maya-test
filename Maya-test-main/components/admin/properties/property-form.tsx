@@ -8,7 +8,7 @@ import { ImagePlus, Trash2 } from "lucide-react";
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import type { AdminProperty, AdminPropertyPayload } from "@/types/admin-property";
+import type { AdminProperty, AdminPropertyPayload, AdminPropertySegment } from "@/types/admin-property";
 
 type ImageDraft = {
   id: string;
@@ -52,12 +52,14 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
   const [description, setDescription] = useState(property?.description ?? "");
   const [propertyType, setPropertyType] = useState(property?.propertyType ?? "Apartment");
   const [listingType, setListingType] = useState<"sale" | "rent">(property?.listingType ?? "sale");
+  const [segment, setSegment] = useState<AdminPropertySegment>(property?.segment ?? "residential");
   const [price, setPrice] = useState(property ? String(property.price) : "");
   const [location, setLocation] = useState(property?.location ?? "");
   const [bedrooms, setBedrooms] = useState(property?.bedrooms === null || property?.bedrooms === undefined ? "" : String(property.bedrooms));
   const [bathrooms, setBathrooms] = useState(property?.bathrooms === null || property?.bathrooms === undefined ? "" : String(property.bathrooms));
   const [areaSqft, setAreaSqft] = useState(property?.areaSqft === null || property?.areaSqft === undefined ? "" : String(property.areaSqft));
   const [amenitiesText, setAmenitiesText] = useState(property?.amenities.join(", ") ?? "");
+  const [youtubeVideoId, setYoutubeVideoId] = useState(property?.youtubeVideoId ?? "");
   const [featured, setFeatured] = useState(Boolean(property?.featured));
   const [status, setStatus] = useState<"available" | "rented" | "sold">(property?.status ?? "available");
   const [coverImage, setCoverImage] = useState<ImageDraft | null>(property?.coverImage ? imageDraftFromUrl(property.coverImage) : null);
@@ -145,6 +147,7 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
         description,
         propertyType,
         listingType,
+        segment,
         price: Number(price),
         location,
         bedrooms: bedrooms ? Number(bedrooms) : null,
@@ -154,7 +157,8 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
         featured,
         status,
         coverImage: uploadedCoverUrl,
-        galleryImages: galleryUrls
+        galleryImages: galleryUrls,
+        youtubeVideoId: youtubeVideoId || null
       };
 
       const response = await fetch(mode === "edit" && property ? `/api/admin/properties/${property.id}` : "/api/admin/properties", {
@@ -200,7 +204,7 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
         <Textarea required value={description} onChange={(event) => setDescription(event.target.value)} placeholder="Describe the property, positioning, finishes, and buyer/renter fit." />
       </AdminField>
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-5">
         <AdminField label="Property Type">
           <Input required value={propertyType} onChange={(event) => setPropertyType(event.target.value)} placeholder="Apartment, Villa, Office..." />
         </AdminField>
@@ -208,6 +212,13 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
           <select value={listingType} onChange={(event) => setListingType(event.target.value as "sale" | "rent")} className="h-12 rounded-[1.2rem] border border-[rgba(42,39,34,0.12)] bg-white/70 px-4 text-sm outline-none">
             <option value="sale">Sale</option>
             <option value="rent">Rent</option>
+          </select>
+        </AdminField>
+        <AdminField label="Category">
+          <select value={segment} onChange={(event) => setSegment(event.target.value as AdminPropertySegment)} className="h-12 rounded-[1.2rem] border border-[rgba(42,39,34,0.12)] bg-white/70 px-4 text-sm outline-none">
+            <option value="residential">Residential</option>
+            <option value="commercial">Commercial</option>
+            <option value="affordable_housing">Affordable Housing</option>
           </select>
         </AdminField>
         <AdminField label="Status">
@@ -239,6 +250,10 @@ export function PropertyForm({ mode, property }: PropertyFormProps) {
 
       <AdminField label="Amenities">
         <Textarea value={amenitiesText} onChange={(event) => setAmenitiesText(event.target.value)} placeholder="Pool, Gym, Backup generator, CCTV" />
+      </AdminField>
+
+      <AdminField label="YouTube Video Link or ID">
+        <Input value={youtubeVideoId} onChange={(event) => setYoutubeVideoId(event.target.value)} placeholder="https://www.youtube.com/watch?v=..." />
       </AdminField>
 
       <label className="flex items-center gap-3 rounded-[1.4rem] border border-black/6 bg-white/60 px-4 py-4 text-sm">

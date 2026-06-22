@@ -13,7 +13,9 @@ import {
   getFeaturedProperties
 } from "@/lib/property-store";
 import { createMetadata } from "@/lib/metadata";
-import { eventsGalleryItems, insightPosts, serviceCards } from "@/data/site";
+import { serviceCards } from "@/data/site";
+import { getPublishedBlogPosts } from "@/services/blog-posts";
+import { getPublishedEventGalleryItems } from "@/services/event-gallery";
 
 export const metadata = createMetadata({
   title: "Property Marketplace & Global Investor Advisory",
@@ -43,6 +45,10 @@ export default async function HomePage() {
   const featuredProperties = await getFeaturedProperties();
   const affordableProperties = (await getAffordableHousingProperties()).slice(0, 2);
   const commercialProperties = (await getCommercialProperties()).slice(0, 2);
+  const [insightPosts, eventsGalleryItems] = await Promise.all([
+    getPublishedBlogPosts().then((posts) => posts.slice(0, 3)).catch(() => []),
+    getPublishedEventGalleryItems(3).catch(() => [])
+  ]);
 
   return (
     <>
@@ -132,7 +138,7 @@ export default async function HomePage() {
               );
             })}
           </div>
-        </div>Advisory and management services
+        </div>
       </section>
 
       <LeadershipSection />
@@ -216,15 +222,21 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="MAYA HAVEN INSIGHT"
           />
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {insightPosts.map((post) => (
-              <article key={post.title} className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6">
-                <p className="quiet-label text-[var(--gold-strong)]">{post.category}</p>
-                <h3 className="mt-4 font-display text-3xl leading-tight">{post.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-muted-foreground">{post.excerpt}</p>
-              </article>
-            ))}
-          </div>
+          {insightPosts.length ? (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {insightPosts.map((post) => (
+                <Link key={post.id} href={`/insight/${post.slug}`} className="rounded-[1.8rem] border border-black/6 bg-white/60 p-6 transition hover:-translate-y-0.5">
+                  <p className="quiet-label text-[var(--gold-strong)]">{post.category}</p>
+                  <h3 className="mt-4 font-display text-3xl leading-tight">{post.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-muted-foreground">{post.excerpt}</p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.8rem] border border-black/6 bg-white/60 p-8 text-sm text-muted-foreground">
+              No published insights yet.
+            </div>
+          )}
         </div>
       </section>
 
@@ -233,15 +245,21 @@ export default async function HomePage() {
           <SectionHeading
             eyebrow="Events & Gallery"
           />
-          <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {eventsGalleryItems.map((item) => (
-              <article key={item.title} className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6">
-                <p className="quiet-label text-[var(--gold)]">{item.category}</p>
-                <h3 className="mt-4 font-display text-3xl leading-tight">{item.title}</h3>
-                <p className="mt-4 text-sm leading-7 text-white/65">{item.excerpt}</p>
-              </article>
-            ))}
-          </div>
+          {eventsGalleryItems.length ? (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {eventsGalleryItems.map((item) => (
+                <Link key={item.id} href="/events-gallery" className="rounded-[1.8rem] border border-white/10 bg-white/5 p-6 transition hover:-translate-y-0.5">
+                  <p className="quiet-label text-[var(--gold)]">{item.category}</p>
+                  <h3 className="mt-4 font-display text-3xl leading-tight">{item.title}</h3>
+                  <p className="mt-4 text-sm leading-7 text-white/65">{item.excerpt}</p>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-[1.8rem] border border-white/10 bg-white/5 p-8 text-sm text-white/65">
+              No published event or gallery items yet.
+            </div>
+          )}
         </div>
       </section>
 

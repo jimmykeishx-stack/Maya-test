@@ -1,4 +1,4 @@
-import { Building2, FileText, FolderKanban, ImagePlus, PenLine, Plus, ShieldCheck } from "lucide-react";
+import { Building2, CalendarDays, FileText, FolderKanban, ImagePlus, Inbox, PenLine, Plus, ShieldCheck } from "lucide-react";
 
 import { AdminLogoutButton } from "@/components/admin/admin-logout-button";
 import { LuxuryButton } from "@/components/site/luxury-button";
@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth/admin";
 import { createMetadata } from "@/lib/metadata";
 import { getAdminProperties } from "@/services/admin-properties";
 import { getAdminBlogPosts } from "@/services/blog-posts";
+import { getAdminEventGalleryItems } from "@/services/event-gallery";
 
 export const metadata = createMetadata({
   title: "Admin",
@@ -16,9 +17,16 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   await requireAdmin("/admin");
-  const [result, postsResult] = await Promise.all([
+  const [result, postsResult, eventsResult] = await Promise.all([
     getAdminProperties({ page: 1, pageSize: 6 }),
-    getAdminBlogPosts({ page: 1, pageSize: 1 })
+    getAdminBlogPosts({ page: 1, pageSize: 1 }),
+    getAdminEventGalleryItems({ page: 1, pageSize: 1 }).catch(() => ({
+      items: [],
+      count: 0,
+      page: 1,
+      pageSize: 1,
+      pageCount: 1
+    }))
   ]);
   const availableCount = result.properties.filter((property) => property.status === "available").length;
   const saleCount = result.properties.filter((property) => property.listingType === "sale").length;
@@ -49,7 +57,8 @@ export default async function AdminPage() {
             { label: "Available", value: availableCount, icon: ShieldCheck },
             { label: "For Sale", value: saleCount, icon: Building2 },
             { label: "For Rent", value: rentCount, icon: ImagePlus },
-            { label: "Insight Posts", value: postsResult.count, icon: FileText }
+            { label: "Insight Posts", value: postsResult.count, icon: FileText },
+            { label: "Events & Gallery", value: eventsResult.count, icon: CalendarDays }
           ].map((item) => {
             const Icon = item.icon;
             return (
@@ -93,6 +102,37 @@ export default async function AdminPage() {
               <LuxuryButton href="/admin/insights/new" variant="outline" icon={false} className="justify-center">
                 <PenLine className="size-4" />
                 New Post
+              </LuxuryButton>
+            </div>
+          </article>
+
+          <article className="rounded-[2rem] border border-black/6 bg-white/60 p-6 sm:p-8">
+            <p className="quiet-label text-[var(--gold-strong)]">Events & Gallery</p>
+            <h2 className="mt-4 font-display text-3xl">Manage public gallery cards.</h2>
+            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+              Create, edit, publish, and archive event and gallery items shown on the public Events & Gallery page.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <LuxuryButton href="/admin/events-gallery" className="justify-center">
+                Manage Gallery
+              </LuxuryButton>
+              <LuxuryButton href="/admin/events-gallery/new" variant="outline" icon={false} className="justify-center">
+                <ImagePlus className="size-4" />
+                New Item
+              </LuxuryButton>
+            </div>
+          </article>
+
+          <article className="rounded-[2rem] border border-black/6 bg-white/60 p-6 sm:p-8">
+            <p className="quiet-label text-[var(--gold-strong)]">Submissions</p>
+            <h2 className="mt-4 font-display text-3xl">Review List With Us leads.</h2>
+            <p className="mt-4 text-sm leading-7 text-muted-foreground">
+              View owner property submissions and buyer inquiry records collected from public website forms.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <LuxuryButton href="/admin/inquiries" className="justify-center">
+                <Inbox className="size-4" />
+                View Submissions
               </LuxuryButton>
             </div>
           </article>
