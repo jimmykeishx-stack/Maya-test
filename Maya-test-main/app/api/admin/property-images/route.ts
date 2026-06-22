@@ -6,6 +6,21 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 const PROPERTY_IMAGE_BUCKETS = ["property-images", "property-media"] as const;
 const MAX_IMAGE_COUNT = 30;
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const ACCEPTED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tif", ".tiff", ".svg", ".heic", ".heif", ".avif"];
+const IMAGE_CONTENT_TYPES: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".bmp": "image/bmp",
+  ".tif": "image/tiff",
+  ".tiff": "image/tiff",
+  ".svg": "image/svg+xml",
+  ".heic": "image/heic",
+  ".heif": "image/heif",
+  ".avif": "image/avif"
+};
 
 function sanitizeFileName(fileName: string) {
   return fileName
@@ -13,6 +28,22 @@ function sanitizeFileName(fileName: string) {
     .replace(/[^a-z0-9.\-_]+/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-+|-+$/g, "");
+}
+
+function getFileExtension(fileName: string) {
+  const match = fileName.toLowerCase().match(/\.[a-z0-9]+$/);
+  return match?.[0] ?? "";
+}
+
+function isAcceptedImageFile(file: File) {
+  if (file.type.startsWith("image/")) return true;
+  const extension = getFileExtension(file.name);
+  return ACCEPTED_IMAGE_EXTENSIONS.includes(extension);
+}
+
+function inferContentType(file: File) {
+  if (file.type) return file.type;
+  return IMAGE_CONTENT_TYPES[getFileExtension(file.name)] ?? "application/octet-stream";
 }
 
 function isMissingBucketError(error: { message?: string } | null) {
@@ -44,10 +75,13 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: `Upload up to ${MAX_IMAGE_COUNT} images at once.` }, { status: 400 });
   }
 
-  const invalidFile = files.find((file) => !file.type.startsWith("image/") || file.size > MAX_IMAGE_SIZE);
+  const invalidFile = files.find((file) => !isAcceptedImageFile(file) || file.size > MAX_IMAGE_SIZE);
 
   if (invalidFile) {
-    return NextResponse.json({ error: "Upload image files only. Each image must be 10MB or smaller." }, { status: 400 });
+    return NextResponse.json(
+      { error: "Upload image files only. Supported formats include JPG, PNG, WEBP, HEIC, HEIF, AVIF, GIF, SVG, TIFF, and BMP. Each image must be 10MB or smaller." },
+      { status: 400 }
+    );
   }
 
   const media = [];
@@ -62,7 +96,7 @@ export async function POST(request: Request) {
     for (const bucket of PROPERTY_IMAGE_BUCKETS) {
       const { error: uploadError } = await supabase.storage.from(bucket).upload(storagePath, file, {
         cacheControl: "31536000",
-        contentType: file.type,
+        contentType: inferContentType(file),
         upsert: false
       });
 

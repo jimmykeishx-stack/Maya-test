@@ -1,43 +1,60 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ImagePlus } from "lucide-react";
+import { ImagePlus, Star, Trash2 } from "lucide-react";
 
 import { LuxuryButton } from "@/components/site/luxury-button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { EventGalleryItem, EventGalleryPayload, EventGalleryStatus } from "@/types/admin-event-gallery";
 
-type EventGalleryFormProps = {
-  mode: "create" | "edit";
-  item?: EventGalleryItem;
+const MAX_GALLERY_IMAGES = 10;
+const ACCEPTED_IMAGE_TYPES = "image/*,.heic,.heif,.avif,.webp,.jpg,.jpeg,.png,.gif,.bmp,.tif,.tiff,.svg";
+
+type UploadResponse = {
+  error?: string;
+  media?: Array<{ url: string }>;
 };
 
-async function uploadImage(file: File) {
+type GalleryImage = {
+  url: string;
+  source: "uploaded" | "manual";
+};
+
+function uniqueUrls(urls: string[]) {
+  return Array.from(new Set(urls.map((url) => url.trim()).filter(Boolean))).slice(0, MAX_GALLERY_IMAGES);
+}
+
+async function uploadImages(files: File[]) {
   const formData = new FormData();
-  formData.append("files", file);
+  files.forEach((file) => formData.append("files", file));
 
   const response = await fetch("/api/admin/property-images", {
     method: "POST",
     body: formData
   });
-  const body = (await response.json().catch(() => null)) as { error?: string; media?: Array<{ url: string }> } | null;
+  const body = (await response.json().catch(() => null)) as UploadResponse | null;
 
-  if (!response.ok || !body?.media?.[0]?.url) {
+  if (!response.ok || !body?.media?.length) {
     throw new Error(body?.error ?? "Image upload failed.");
   }
 
-  return body.media[0].url;
+  return body.media.map((item) => item.url).filter(Boolean);
 }
 
 export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
   const router = useRouter();
+  const initialImageUrls = useMemo(
+    () => uniqueUrls(item?.imageUrls?.length ? item.imageUrls : item?.imageUrl ? [item.imageUrl] : []),
+    [item]
+  );
   const [title, setTitle] = useState(item?.title ?? "");
   const [category, setCategory] = useState(item?.category ?? "");
   const [excerpt, setExcerpt] = useState(item?.excerpt ?? "");
-  const [imageUrl, setImageUrl] = useState(item?.imageUrl ?? "");
+  const [imageUrls, setImageUrls] = useState<GalleryImage[]>(initialImageUrls.map((url) => ({ url, source: "uploaded" })));
+  const [manualImageUrl, setManualImageUrl] = useState("");
   const [status, setStatus] = useState<EventGalleryStatus>(item?.status ?? "draft");
   const [eventDate, setEventDate] = useState(item?.eventDate?.slice(0, 10) ?? "");
   const [sortOrder, setSortOrder] = useState(String(item?.sortOrder ?? 0));
@@ -45,14 +62,29 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState("");
 
-  async function handleImageUpload(file?: File) {
-    if (!file) return;
+  const coverUrl = imageUrls[0]?.url ?? "";
+
+  async function handleImageUpload(fileList?: FileList | null) {
+    const remainingSlots = MAX_GALLERY_IMAGES - imageUrls.length;
+    const files = Array.from(fileList ?? []).slice(0, remainingSlots);
+
+    if (!files.length) {
+      if ((fileList?.length ?? 0) > 0 && remainingSlots <= 0) {
+        setError(`Upload up to ${MAX_GALLERY_IMAGES} images per event/gallery item.`);
+      }
+      return;
+    }
+
     setError("");
     setIsUploadingImage(true);
 
     try {
-      const url = await uploadImage(file);
-      setImageUrl(url);
+      const urls = await uploadImages(files);
+      setImageUrls((current) => uniqueUrls([...current.map((image) => image.url), ...urls]).map((url) => ({ url, source: "uploaded" })));
+
+      if ((fileList?.length ?? 0) > files.length) {
+        setError(`Only ${remainingSlots} more image${remainingSlots === 1 ? "" : "s"} could be added. Maximum is ${MAX_GALLERY_IMAGES}.`);
+      }
     } catch (uploadError) {
       setError(uploadError instanceof Error ? uploadError.message : "Image upload failed.");
     } finally {
@@ -60,11 +92,39 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
     }
   }
 
+  function addManualImageUrl() {
+    const nextUrl = manualImageUrl.trim();
+
+    if (!nextUrl) return;
+    if (imageUrls.length >= MAX_GALLERY_IMAGES) {
+      setError(`Upload up to ${MAX_GALLERY_IMAGES} images per event/gallery item.`);
+      return;
+    }
+
+    setError("");
+    setImageUrls((current) => uniqueUrls([...current.map((image) => image.url), nextUrl]).map((url) => ({ url, source: url === nextUrl ? "manual" : "uploaded" })));
+    setManualImageUrl("");
+  }
+
+  function removeImage(url: string) {
+    setImageUrls((current) => current.filter((image) => image.url !== url));
+  }
+
+  function makeCover(url: string) {
+    setImageUrls((current) => {
+      const selected = current.find((image) => image.url === url);
+      if (!selected) return current;
+      return [selected, ...current.filter((image) => image.url !== url)];
+    });
+  }
+
   async function handleSubmit() {
     setError("");
 
-    if (!imageUrl.trim()) {
-      setError("An image is required. Upload one from your device or paste an image URL.");
+    const galleryUrls = uniqueUrls(imageUrls.map((image) => image.url));
+
+    if (!galleryUrls.length) {
+      setError("At least one image is required. Upload from your device or paste an image URL.");
       return;
     }
 
@@ -75,7 +135,8 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
         title,
         category,
         excerpt,
-        imageUrl,
+        imageUrl: galleryUrls[0],
+        imageUrls: galleryUrls,
         status,
         eventDate: eventDate || null,
         sortOrder: Number(sortOrder || 0)
@@ -169,38 +230,93 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
       </div>
 
       <div className="grid gap-3">
-        <span className="text-sm font-medium text-foreground">Image</span>
-        <div className="grid gap-3 rounded-[1.4rem] border border-black/6 bg-white/55 p-4">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <span className="text-sm font-medium text-foreground">Images</span>
+          <span className="text-xs uppercase tracking-[0.18em] text-muted-foreground">{imageUrls.length} / {MAX_GALLERY_IMAGES} selected</span>
+        </div>
+        <div className="grid gap-4 rounded-[1.4rem] border border-black/6 bg-white/55 p-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-black/10 bg-white/80 px-5 py-3 text-sm uppercase tracking-[0.18em] transition hover:-translate-y-0.5">
               <ImagePlus className="size-4" />
-              {isUploadingImage ? "Uploading..." : "Upload Image"}
+              {isUploadingImage ? "Uploading..." : "Upload Images"}
               <input
                 type="file"
-                accept="image/*"
+                accept={ACCEPTED_IMAGE_TYPES}
+                multiple
                 className="hidden"
-                disabled={isUploadingImage}
-                onChange={(event) => void handleImageUpload(event.target.files?.[0])}
+                disabled={isUploadingImage || imageUrls.length >= MAX_GALLERY_IMAGES}
+                onChange={(event) => {
+                  void handleImageUpload(event.target.files);
+                  event.currentTarget.value = "";
+                }}
               />
             </label>
-            <Input
-              type="url"
-              value={imageUrl}
-              onChange={(event) => setImageUrl(event.target.value)}
-              placeholder="Uploaded image URL appears here, or paste one manually"
-            />
+            <div className="grid flex-1 gap-3 sm:grid-cols-[1fr_auto]">
+              <Input
+                type="url"
+                value={manualImageUrl}
+                onChange={(event) => setManualImageUrl(event.target.value)}
+                placeholder="Paste an image URL"
+              />
+              <button
+                type="button"
+                onClick={addManualImageUrl}
+                disabled={!manualImageUrl.trim() || imageUrls.length >= MAX_GALLERY_IMAGES}
+                className="rounded-full border border-black/10 bg-white/80 px-5 py-3 text-xs uppercase tracking-[0.16em] disabled:opacity-45"
+              >
+                Add URL
+              </button>
+            </div>
           </div>
-          {imageUrl ? (
+
+          {coverUrl ? (
             <div className="overflow-hidden rounded-[1.2rem] border border-black/6">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={imageUrl}
-                alt="Event/gallery preview"
+                src={coverUrl}
+                alt="Event/gallery cover preview"
                 className="aspect-[16/9] w-full object-cover"
                 onError={(event) => {
                   event.currentTarget.style.display = "none";
                 }}
               />
+            </div>
+          ) : null}
+
+          {imageUrls.length ? (
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              {imageUrls.map((image, index) => (
+                <article key={image.url} className="overflow-hidden rounded-[1rem] border border-black/6 bg-white/70">
+                  <div className="relative aspect-[4/3] bg-black/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={image.url} alt={`Gallery image ${index + 1}`} className="h-full w-full object-cover" />
+                    {index === 0 ? (
+                      <span className="absolute left-2 top-2 rounded-full bg-[#1c1712]/85 px-3 py-1 text-[0.65rem] uppercase tracking-[0.14em] text-white">
+                        Cover
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="flex flex-wrap gap-2 p-3">
+                    <button
+                      type="button"
+                      onClick={() => makeCover(image.url)}
+                      disabled={index === 0}
+                      className="inline-flex items-center gap-1 rounded-full border border-black/10 bg-white px-3 py-2 text-[0.7rem] uppercase tracking-[0.14em] disabled:opacity-45"
+                    >
+                      <Star className="size-3" />
+                      Cover
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeImage(image.url)}
+                      className="inline-flex items-center gap-1 rounded-full border border-red-200 bg-red-50 px-3 py-2 text-[0.7rem] uppercase tracking-[0.14em] text-red-700"
+                    >
+                      <Trash2 className="size-3" />
+                      Remove
+                    </button>
+                  </div>
+                </article>
+              ))}
             </div>
           ) : null}
         </div>
@@ -223,6 +339,11 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
     </form>
   );
 }
+
+type EventGalleryFormProps = {
+  mode: "create" | "edit";
+  item?: EventGalleryItem;
+};
 
 function AdminField({ label, children }: { label: string; children: ReactNode }) {
   return (

@@ -127,6 +127,7 @@ export type Database = {
           category: string;
           excerpt: string;
           image_url: string;
+          image_urls: string[];
           status: Database["public"]["Enums"]["blog_status"];
           event_date: string | null;
           sort_order: number;
@@ -139,6 +140,7 @@ export type Database = {
           category: string;
           excerpt: string;
           image_url: string;
+          image_urls?: string[];
           status?: Database["public"]["Enums"]["blog_status"];
           event_date?: string | null;
           sort_order?: number;
@@ -324,3 +326,4 @@ export type Database = {
     CompositeTypes: Record<string, never>;
   };
 };
+

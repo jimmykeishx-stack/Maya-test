@@ -15,6 +15,14 @@ type UploadPreview = {
 
 const MAX_IMAGES = 30;
 const MAX_IMAGE_SIZE = 10 * 1024 * 1024;
+const ACCEPTED_IMAGE_TYPES = "image/*,.heic,.heif,.avif,.webp,.jpg,.jpeg,.png,.gif,.bmp,.tif,.tiff,.svg";
+const ACCEPTED_IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png", ".webp", ".gif", ".bmp", ".tif", ".tiff", ".svg", ".heic", ".heif", ".avif"];
+
+function isAcceptedImageFile(file: File) {
+  if (file.type.startsWith("image/")) return true;
+  const name = file.name.toLowerCase();
+  return ACCEPTED_IMAGE_EXTENSIONS.some((extension) => name.endsWith(extension));
+}
 
 function replaceExtension(name: string, extension: string) {
   return name.replace(/\.[^.]+$/, extension);
@@ -33,7 +41,13 @@ async function optimizeImage(file: File) {
     return file;
   }
 
-  const bitmap = await createImageBitmap(file);
+  let bitmap: ImageBitmap;
+
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch {
+    return file;
+  }
   const longestSide = Math.max(bitmap.width, bitmap.height);
   const scale = longestSide > 2200 ? 2200 / longestSide : 1;
   const width = Math.max(1, Math.round(bitmap.width * scale));
@@ -115,7 +129,7 @@ export function ListWithUsForm() {
         break;
       }
 
-      if (!rawFile.type.startsWith("image/") || rawFile.size > MAX_IMAGE_SIZE * 2) {
+      if (!isAcceptedImageFile(rawFile) || rawFile.size > MAX_IMAGE_SIZE * 2) {
         skippedInvalid += 1;
         continue;
       }
@@ -152,7 +166,7 @@ export function ListWithUsForm() {
     if (!message && skippedDuplicates > 0 && skippedInvalid === 0) {
       message = `${skippedDuplicates} duplicate image${skippedDuplicates === 1 ? "" : "s"} removed from this submission.`;
     } else if (!message && skippedInvalid > 0) {
-      message = `${skippedInvalid} image${skippedInvalid === 1 ? "" : "s"} could not be added. Use image files under 20MB before optimization.`;
+      message = `${skippedInvalid} image${skippedInvalid === 1 ? "" : "s"} could not be added. Use common image formats under 20MB before optimization.`;
     }
 
     if (message) {
@@ -312,7 +326,7 @@ export function ListWithUsForm() {
           <input
             ref={inputRef}
             type="file"
-            accept="image/*"
+            accept={ACCEPTED_IMAGE_TYPES}
             multiple
             onChange={async (event) => {
               await addImages(Array.from(event.target.files ?? []));
@@ -335,7 +349,7 @@ export function ListWithUsForm() {
             </div>
           </div>
         </div>
-        <p className="text-xs leading-6 text-muted-foreground">Recommended: 20 to 30 clear property images. Each file must be 10MB or smaller after optimization.</p>
+        <p className="text-xs leading-6 text-muted-foreground">Recommended: 20 to 30 clear property images. Common phone and camera formats are accepted, including HEIC, HEIF, AVIF, JPG, PNG, WEBP, GIF, TIFF, BMP, and SVG. Each file must be 10MB or smaller after optimization.</p>
       </div>
 
       {images.length ? (
@@ -397,3 +411,4 @@ export function ListWithUsForm() {
     </form>
   );
 }
+

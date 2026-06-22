@@ -4,6 +4,7 @@ create table if not exists public.event_gallery_items (
   category text not null,
   excerpt text not null,
   image_url text not null,
+  image_urls text[] not null default '{}',
   status public.blog_status not null default 'draft',
   event_date date,
   sort_order integer not null default 0,
@@ -40,3 +41,4 @@ with check (public.is_admin());
 
 grant select on public.event_gallery_items to anon, authenticated;
 grant insert, update, delete on public.event_gallery_items to authenticated;
+

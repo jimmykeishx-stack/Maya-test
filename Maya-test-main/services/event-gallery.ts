@@ -14,6 +14,7 @@ type EventGalleryRow = {
   category: string;
   excerpt: string;
   image_url: string;
+  image_urls: string[] | null;
   status: EventGalleryStatus;
   event_date: string | null;
   sort_order: number;
@@ -26,6 +27,7 @@ type EventGalleryInsert = {
   category: string;
   excerpt: string;
   image_url: string;
+  image_urls?: string[];
   status?: EventGalleryStatus;
   event_date?: string | null;
   sort_order?: number;
@@ -40,18 +42,26 @@ export const eventGallerySchema = z.object({
   category: z.string().trim().min(2, "Category is required."),
   excerpt: z.string().trim().min(10, "Excerpt is required."),
   imageUrl: z.string().url("Image must be a valid URL."),
+  imageUrls: z.array(z.string().url()).max(10, "Upload up to 10 images.").default([]),
   status: z.enum(["draft", "published", "archived"]),
   eventDate: z.string().trim().nullable().optional(),
   sortOrder: z.coerce.number().int().min(0).default(0)
 });
 
+function normalizeImageUrls(imageUrl: string, imageUrls?: string[] | null) {
+  return [...new Set([imageUrl, ...(imageUrls ?? [])].filter(Boolean))].slice(0, 10);
+}
+
 function mapEventGalleryItem(row: EventGalleryRow): EventGalleryItem {
+  const imageUrls = normalizeImageUrls(row.image_url, row.image_urls);
+
   return {
     id: row.id,
     title: row.title,
     category: row.category,
     excerpt: row.excerpt,
     imageUrl: row.image_url,
+    imageUrls,
     status: row.status,
     eventDate: row.event_date,
     sortOrder: row.sort_order,
@@ -156,12 +166,14 @@ export async function createAdminEventGalleryItem(payload: EventGalleryPayload) 
   const supabase = await getClient();
   const parsed = eventGallerySchema.parse(payload);
   const now = new Date().toISOString();
+  const imageUrls = normalizeImageUrls(parsed.imageUrl, parsed.imageUrls);
 
   const insertPayload: EventGalleryInsert = {
     title: parsed.title,
     category: parsed.category,
     excerpt: parsed.excerpt,
-    image_url: parsed.imageUrl,
+    image_url: imageUrls[0],
+    image_urls: imageUrls,
     status: parsed.status,
     event_date: parsed.eventDate || null,
     sort_order: parsed.sortOrder,
@@ -185,12 +197,14 @@ export async function createAdminEventGalleryItem(payload: EventGalleryPayload) 
 export async function updateAdminEventGalleryItem(id: string, payload: EventGalleryPayload) {
   const supabase = await getClient();
   const parsed = eventGallerySchema.parse(payload);
+  const imageUrls = normalizeImageUrls(parsed.imageUrl, parsed.imageUrls);
 
   const updatePayload: EventGalleryUpdate = {
     title: parsed.title,
     category: parsed.category,
     excerpt: parsed.excerpt,
-    image_url: parsed.imageUrl,
+    image_url: imageUrls[0],
+    image_urls: imageUrls,
     status: parsed.status,
     event_date: parsed.eventDate || null,
     sort_order: parsed.sortOrder,

@@ -14,7 +14,8 @@ Run these in Supabase Dashboard -> SQL Editor -> New Query.
 10. Run `supabase/migrations/20260610_000010_blog_posts_admin_rls.sql`.
 11. Run `supabase/migrations/20260614_000011_event_gallery_admin.sql`.
 12. Run `supabase/migrations/20260614_000012_event_gallery_grants.sql`.
-13. Run `supabase/seed.sql`.
+13. Run `supabase/migrations/20260622_000013_event_gallery_image_urls.sql`.
+14. Run `supabase/seed.sql`.
 
 Do not run the simplified `CREATE TABLE properties (...)` script for this project. The Maya Haven frontend requires normalized media, amenities, agents, property-agent assignments, and inquiry tables.
 
@@ -25,6 +26,7 @@ The properties form schema alignment migration adds any missing columns required
 The blog posts admin RLS migration lets authenticated users listed in `public.admins` manage Insight posts, matching the admin auth model used by property CRUD.
 The event gallery migration creates the `event_gallery_items` table and lets admins manage published gallery cards from the admin area.
 The event gallery grants migration fixes table privileges for existing databases where the table was created before grants were added.
+The event gallery image URLs migration adds support for up to 10 images per event/gallery post while keeping the first image as the cover.
 
 After the SQL succeeds, restart the Next.js dev server so `.env.local` is loaded:
 

@@ -110,7 +110,7 @@ export function EventsGalleryTable({ result, search }: EventsGalleryTableProps) 
                   </div>
                   <div>
                     <p className="font-display text-xl leading-tight">{item.title}</p>
-                    <p className="mt-1 text-xs text-muted-foreground">Sort order: {item.sortOrder}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">Sort order: {item.sortOrder} / Images: {item.imageUrls.length || 1}</p>
                   </div>
                 </div>
               </div>
@@ -216,3 +216,4 @@ export function EventsGalleryTable({ result, search }: EventsGalleryTableProps) 
     </div>
   );
 }
+

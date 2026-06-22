@@ -6,6 +6,7 @@ export type EventGalleryItem = {
   category: string;
   excerpt: string;
   imageUrl: string;
+  imageUrls: string[];
   status: EventGalleryStatus;
   eventDate: string | null;
   sortOrder: number;
@@ -18,6 +19,7 @@ export type EventGalleryPayload = {
   category: string;
   excerpt: string;
   imageUrl: string;
+  imageUrls?: string[];
   status: EventGalleryStatus;
   eventDate?: string | null;
   sortOrder?: number;
