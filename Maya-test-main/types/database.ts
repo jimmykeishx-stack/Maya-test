@@ -182,7 +182,62 @@ export type Database = {
         Update: Partial<Database["public"]["Tables"]["inquiries"]["Insert"]>;
         Relationships: [];
       };
-      properties: {
+      owner_listing_submissions: {
+        Row: {
+          id: string;
+          full_name: string;
+          phone_number: string;
+          email: string;
+          property_type: string;
+          location: string;
+          listing_type: string;
+          expected_price: string;
+          property_description: string;
+          ownership_confirmed: boolean;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          full_name: string;
+          phone_number: string;
+          email: string;
+          property_type: string;
+          location: string;
+          listing_type: string;
+          expected_price: string;
+          property_description: string;
+          ownership_confirmed?: boolean;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["owner_listing_submissions"]["Insert"]>;
+        Relationships: [];
+      };
+      owner_listing_images: {
+        Row: {
+          id: string;
+          submission_id: string;
+          file_name: string;
+          mime_type: string | null;
+          size: number;
+          hash: string;
+          data_url: string;
+          sort_order: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          submission_id: string;
+          file_name: string;
+          mime_type?: string | null;
+          size: number;
+          hash: string;
+          data_url: string;
+          sort_order?: number;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["owner_listing_images"]["Insert"]>;
+        Relationships: [];
+      };      properties: {
         Row: {
           id: string;
           legacy_id: string | null;
@@ -326,4 +381,5 @@ export type Database = {
     CompositeTypes: Record<string, never>;
   };
 };
+
 

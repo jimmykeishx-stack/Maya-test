@@ -45,18 +45,24 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Each image must be 10MB or smaller after optimization." }, { status: 400 });
   }
 
-  const record = await saveOwnerSubmission({
-    fullName,
-    phoneNumber,
-    email,
-    propertyType,
-    location,
-    listingType,
-    expectedPrice,
-    propertyDescription,
-    ownershipConfirmed,
-    images
-  });
+  try {
+    const record = await saveOwnerSubmission({
+      fullName,
+      phoneNumber,
+      email,
+      propertyType,
+      location,
+      listingType,
+      expectedPrice,
+      propertyDescription,
+      ownershipConfirmed,
+      images
+    });
 
-  return NextResponse.json({ success: true, id: record.id, imageCount: record.images?.length ?? 0 });
+    return NextResponse.json({ success: true, id: record.id, imageCount: record.images?.length ?? 0 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Unable to submit owner listing.";
+    return NextResponse.json({ error: message }, { status: 500 });
+  }
 }
+

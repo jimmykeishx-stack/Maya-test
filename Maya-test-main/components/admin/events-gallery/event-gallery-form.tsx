@@ -13,11 +13,6 @@ import type { EventGalleryItem, EventGalleryPayload, EventGalleryStatus } from "
 const MAX_GALLERY_IMAGES = 10;
 const ACCEPTED_IMAGE_TYPES = "image/*,.heic,.heif,.avif,.webp,.jpg,.jpeg,.png,.gif,.bmp,.tif,.tiff,.svg";
 
-type UploadResponse = {
-  error?: string;
-  media?: Array<{ url: string }>;
-};
-
 type GalleryImage = {
   url: string;
   source: "uploaded" | "manual";
@@ -27,21 +22,65 @@ function uniqueUrls(urls: string[]) {
   return Array.from(new Set(urls.map((url) => url.trim()).filter(Boolean))).slice(0, MAX_GALLERY_IMAGES);
 }
 
-async function uploadImages(files: File[]) {
-  const formData = new FormData();
-  files.forEach((file) => formData.append("files", file));
+function replaceExtension(name: string, extension: string) {
+  return name.replace(/\.[^.]+$/, extension);
+}
 
-  const response = await fetch("/api/admin/property-images", {
-    method: "POST",
-    body: formData
+function readFileAsDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = () => reject(new Error("Image could not be read."));
+    reader.readAsDataURL(file);
   });
-  const body = (await response.json().catch(() => null)) as UploadResponse | null;
+}
 
-  if (!response.ok || !body?.media?.length) {
-    throw new Error(body?.error ?? "Image upload failed.");
+async function fileToGalleryImageUrl(file: File) {
+  if (!file.type.startsWith("image/") || file.type === "image/gif" || file.type === "image/svg+xml") {
+    return readFileAsDataUrl(file);
   }
 
-  return body.media.map((item) => item.url).filter(Boolean);
+  let bitmap: ImageBitmap;
+
+  try {
+    bitmap = await createImageBitmap(file);
+  } catch {
+    return readFileAsDataUrl(file);
+  }
+
+  const longestSide = Math.max(bitmap.width, bitmap.height);
+  const scale = longestSide > 1800 ? 1800 / longestSide : 1;
+  const width = Math.max(1, Math.round(bitmap.width * scale));
+  const height = Math.max(1, Math.round(bitmap.height * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+
+  const context = canvas.getContext("2d");
+
+  if (!context) {
+    bitmap.close();
+    return readFileAsDataUrl(file);
+  }
+
+  context.drawImage(bitmap, 0, 0, width, height);
+  bitmap.close();
+
+  const outputType = file.type === "image/webp" ? "image/webp" : "image/jpeg";
+  const blob = await new Promise<Blob | null>((resolve) => {
+    canvas.toBlob(resolve, outputType, 0.78);
+  });
+
+  if (!blob) {
+    return readFileAsDataUrl(file);
+  }
+
+  return readFileAsDataUrl(
+    new File([blob], replaceExtension(file.name, outputType === "image/webp" ? ".webp" : ".jpg"), {
+      type: outputType,
+      lastModified: file.lastModified
+    })
+  );
 }
 
 export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
@@ -79,7 +118,7 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
     setIsUploadingImage(true);
 
     try {
-      const urls = await uploadImages(files);
+      const urls = await Promise.all(files.map(fileToGalleryImageUrl));
       setImageUrls((current) => uniqueUrls([...current.map((image) => image.url), ...urls]).map((url) => ({ url, source: "uploaded" })));
 
       if ((fileList?.length ?? 0) > files.length) {
@@ -238,7 +277,7 @@ export function EventGalleryForm({ mode, item }: EventGalleryFormProps) {
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <label className="inline-flex cursor-pointer items-center justify-center gap-2 rounded-full border border-black/10 bg-white/80 px-5 py-3 text-sm uppercase tracking-[0.18em] transition hover:-translate-y-0.5">
               <ImagePlus className="size-4" />
-              {isUploadingImage ? "Uploading..." : "Upload Images"}
+              {isUploadingImage ? "Preparing..." : "Select Images"}
               <input
                 type="file"
                 accept={ACCEPTED_IMAGE_TYPES}

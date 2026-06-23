@@ -37,12 +37,17 @@ type EventGalleryInsert = {
 
 type EventGalleryUpdate = Partial<EventGalleryInsert>;
 
+const imageSourceSchema = z.string().refine((value) => {
+  if (value.startsWith("data:image/") && value.includes(";base64,")) return true;
+  return z.string().url().safeParse(value).success;
+}, "Image must be a valid URL or uploaded image.");
+
 export const eventGallerySchema = z.object({
   title: z.string().trim().min(2, "Title is required."),
   category: z.string().trim().min(2, "Category is required."),
   excerpt: z.string().trim().min(10, "Excerpt is required."),
-  imageUrl: z.string().url("Image must be a valid URL."),
-  imageUrls: z.array(z.string().url()).max(10, "Upload up to 10 images.").default([]),
+  imageUrl: imageSourceSchema,
+  imageUrls: z.array(imageSourceSchema).max(10, "Upload up to 10 images.").default([]),
   status: z.enum(["draft", "published", "archived"]),
   eventDate: z.string().trim().nullable().optional(),
   sortOrder: z.coerce.number().int().min(0).default(0)
@@ -233,3 +238,5 @@ export async function deleteAdminEventGalleryItem(id: string) {
     throw new Error(error.message);
   }
 }
+
+

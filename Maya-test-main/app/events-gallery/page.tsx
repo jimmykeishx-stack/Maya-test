@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 import { CTASection } from "@/components/site/cta-section";
 import { SectionHeading } from "@/components/site/section-heading";
 import { createMetadata } from "@/lib/metadata";
@@ -35,14 +33,16 @@ export default async function EventsGalleryPage() {
 
               return (
                 <article key={item.id} className="overflow-hidden rounded-[1.8rem] border border-black/6 bg-white/55 shadow-[0_18px_60px_rgba(15,12,8,0.06)]">
-                  <div className="relative aspect-[4/3]">
-                    <Image src={images[0]} alt={item.title} fill className="object-cover" />
+                  <div className="relative aspect-[4/3] bg-black/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={images[0]} alt={item.title} className="h-full w-full object-cover" />
                   </div>
                   {images.length > 1 ? (
                     <div className="grid grid-cols-4 gap-2 border-b border-black/6 bg-white/50 p-3">
                       {images.slice(1).map((imageUrl, index) => (
-                        <div key={`${imageUrl}-${index}`} className="relative aspect-square overflow-hidden rounded-[0.7rem] bg-black/5">
-                          <Image src={imageUrl} alt={`${item.title} gallery image ${index + 2}`} fill className="object-cover" sizes="(min-width: 1280px) 72px, 25vw" />
+                        <div key={`${imageUrl}-${index}`} className="aspect-square overflow-hidden rounded-[0.7rem] bg-black/5">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={imageUrl} alt={`${item.title} gallery image ${index + 2}`} className="h-full w-full object-cover" />
                         </div>
                       ))}
                     </div>

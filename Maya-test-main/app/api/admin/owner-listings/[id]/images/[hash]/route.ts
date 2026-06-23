@@ -3,7 +3,7 @@ import path from "node:path";
 import { NextResponse } from "next/server";
 
 import { requireAdminApi } from "@/lib/auth/api";
-import { getOwnerSubmissions } from "@/lib/submissions-store";
+import { getOwnerSubmissions, ownerSubmissionImageToResponse } from "@/lib/submissions-store";
 
 type RouteContext = {
   params: Promise<{ id: string; hash: string }>;
@@ -23,6 +23,19 @@ export async function GET(_request: Request, context: RouteContext) {
 
   if (!image) {
     return NextResponse.json({ error: "Image not found." }, { status: 404 });
+  }
+
+  const databaseImage = ownerSubmissionImageToResponse(image);
+
+  if (databaseImage) {
+    return new NextResponse(databaseImage.body, {
+      headers: {
+        "Content-Type": databaseImage.contentType,
+        "Content-Length": String(databaseImage.contentLength),
+        "Cache-Control": "private, max-age=300",
+        "Content-Disposition": `inline; filename="${encodeURIComponent(image.fileName)}"`
+      }
+    });
   }
 
   const uploadsRoot = path.resolve(process.cwd(), "data", "submissions", "uploads");
