@@ -54,7 +54,7 @@ async function saveFallbackInquiry(input: CreateInquiryInput): Promise<InquiryRe
   });
 
   return {
-    id: record.id || randomUUID(),
+    id: record.id,
     status: "new",
     createdAt: record.createdAt
   };
@@ -80,8 +80,8 @@ export async function createInquiry(input: CreateInquiryInput): Promise<InquiryR
     .single();
 
   if (error) {
-    console.warn("[Maya Haven] Supabase inquiry insert failed. Falling back to local inquiry storage.", error.message);
-    return saveFallbackInquiry(input);
+    console.error("[Maya Haven] Supabase inquiry insert failed.", error.message);
+    throw new Error("Unable to save inquiry. Please try again.");
   }
 
   return {
@@ -90,3 +90,4 @@ export async function createInquiry(input: CreateInquiryInput): Promise<InquiryR
     createdAt: data.created_at
   };
 }
+
