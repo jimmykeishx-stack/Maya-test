@@ -68,10 +68,9 @@ async function ensureDirectories() {
 }
 
 async function readRecords<T>(fileName: string) {
-  await ensureDirectories();
-  const filePath = path.join(submissionsDir, fileName);
-
   try {
+    await ensureDirectories();
+    const filePath = path.join(submissionsDir, fileName);
     const raw = await readFile(filePath, "utf8");
     return JSON.parse(raw) as T[];
   } catch {
@@ -350,4 +349,5 @@ export function ownerSubmissionImageToResponse(image: NonNullable<OwnerSubmissio
     contentLength: body.length
   };
 }
+
 
