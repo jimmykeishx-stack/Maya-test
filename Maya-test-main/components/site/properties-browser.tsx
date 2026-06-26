@@ -30,7 +30,8 @@ const defaultFilters: FilterValues = {
 export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrowserProps) {
   const [visibleCount, setVisibleCount] = useState(6);
   const [notifyPhone, setNotifyPhone] = useState("");
-  const [notifyRequested, setNotifyRequested] = useState(false);
+  const [notifyStatus, setNotifyStatus] = useState<"idle" | "saving" | "success" | "error">("idle");
+  const [notifyMessage, setNotifyMessage] = useState("");
   const [filters, setFilters] = useState<FilterValues>({
     ...defaultFilters,
     ...initialFilters
@@ -110,7 +111,8 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
         onChange={(field, value) => {
           startTransition(() => {
             setVisibleCount(6);
-            setNotifyRequested(false);
+            setNotifyStatus("idle");
+            setNotifyMessage("");
             setFilters((current) => {
               if (field === "listingType") {
                 const nextAvailability = value === "Sale" ? current.availability === "rented" ? "available" : current.availability : value === "Rent" ? current.availability === "sold" ? "available" : current.availability : current.availability;
@@ -174,7 +176,8 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
               inputMode="tel"
               value={notifyPhone}
               onChange={(event) => {
-                setNotifyRequested(false);
+                setNotifyStatus("idle");
+            setNotifyMessage("");
                 setNotifyPhone(event.target.value);
               }}
               placeholder="+254 720 584 744"
@@ -183,14 +186,49 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
             />
             <button
               type="button"
-              disabled={!canRequestNotify}
-              onClick={() => setNotifyRequested(true)}
+              disabled={!canRequestNotify || notifyStatus === "saving"}
+              onClick={async () => {
+                setNotifyStatus("saving");
+                setNotifyMessage("");
+
+                try {
+                  const response = await fetch("/api/v1/alerts", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      phoneNumber: normalizedNotifyPhone,
+                      whatsappNumber: normalizedNotifyPhone,
+                      channels: ["whatsapp"],
+                      searchName: "Property availability alert",
+                      filters: {
+                        listingType: filters.listingType !== "All" ? filters.listingType.toLowerCase() : undefined,
+                        segment: filters.segment !== "All" ? filters.segment : undefined,
+                        location: filters.location !== "All" ? filters.location : undefined,
+                        minBedrooms: Number.isNaN(parseInt(filters.bedrooms, 10)) ? undefined : parseInt(filters.bedrooms, 10),
+                        minBathrooms: Number.isNaN(parseInt(filters.bathrooms, 10)) ? undefined : parseInt(filters.bathrooms, 10),
+                        propertyType: filters.type !== "All" ? filters.type : undefined
+                      }
+                    })
+                  });
+                  const body = (await response.json().catch(() => null)) as { message?: string } | null;
+
+                  if (!response.ok) {
+                    throw new Error(body?.message ?? "Unable to save alert request.");
+                  }
+
+                  setNotifyStatus("success");
+                  setNotifyMessage(`Alert request saved for ${normalizedNotifyPhone}.`);
+                } catch (error) {
+                  setNotifyStatus("error");
+                  setNotifyMessage(error instanceof Error ? error.message : "Unable to save alert request.");
+                }
+              }}
               className="inline-flex h-12 w-full items-center justify-center rounded-full border border-[rgba(42,39,34,0.1)] bg-[#12100f] px-6 text-sm uppercase tracking-[0.2em] text-white transition enabled:hover:-translate-y-0.5 enabled:hover:bg-[#1b1814] disabled:cursor-not-allowed disabled:bg-black/20 disabled:text-black/35"
             >
-              Notify Me When Available
+              {notifyStatus === "saving" ? "Saving..." : "Notify Me When Available"}
             </button>
-            {notifyRequested ? (
-              <p className="text-sm text-[var(--gold-strong)]">Alert request saved in this frontend preview for {notifyPhone.trim()}.</p>
+            {notifyMessage ? (
+              <p className={`text-sm ${notifyStatus === "error" ? "text-red-700" : "text-[var(--gold-strong)]"}`}>{notifyMessage}</p>
             ) : (
               <p className="text-xs text-muted-foreground">Enter a phone number starting with +254 to unlock availability alerts.</p>
             )}
@@ -212,3 +250,4 @@ export function PropertiesBrowser({ properties, initialFilters }: PropertiesBrow
     </div>
   );
 }
+

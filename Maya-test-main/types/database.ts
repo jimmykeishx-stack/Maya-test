@@ -237,6 +237,34 @@ export type Database = {
         };
         Update: Partial<Database["public"]["Tables"]["owner_listing_images"]["Insert"]>;
         Relationships: [];
+      };
+      saved_search_alerts: {
+        Row: {
+          id: string;
+          user_id: string | null;
+          session_id: string | null;
+          email: string | null;
+          phone_number: string | null;
+          whatsapp_number: string | null;
+          channels: string[];
+          search_name: string;
+          filters: Json;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id?: string | null;
+          session_id?: string | null;
+          email?: string | null;
+          phone_number?: string | null;
+          whatsapp_number?: string | null;
+          channels: string[];
+          search_name: string;
+          filters?: Json;
+          created_at?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["saved_search_alerts"]["Insert"]>;
+        Relationships: [];
       };      properties: {
         Row: {
           id: string;
@@ -381,5 +409,6 @@ export type Database = {
     CompositeTypes: Record<string, never>;
   };
 };
+
 
 

@@ -16,7 +16,8 @@ Run these in Supabase Dashboard -> SQL Editor -> New Query.
 12. Run `supabase/migrations/20260614_000012_event_gallery_grants.sql`.
 13. Run `supabase/migrations/20260622_000013_event_gallery_image_urls.sql`.
 14. Run `supabase/migrations/20260623_000014_owner_listing_submissions.sql`.
-15. Run `supabase/seed.sql`.
+15. Run `supabase/migrations/20260626_000015_saved_search_alerts.sql`.
+16. Run `supabase/seed.sql`.
 
 Do not run the simplified `CREATE TABLE properties (...)` script for this project. The Maya Haven frontend requires normalized media, amenities, agents, property-agent assignments, and inquiry tables.
 
@@ -29,11 +30,14 @@ The event gallery migration creates the `event_gallery_items` table and lets adm
 The event gallery grants migration fixes table privileges for existing databases where the table was created before grants were added.
 The event gallery image URLs migration adds support for up to 10 images per event/gallery post while keeping the first image as the cover.
 The owner listing submissions migration stores List With Us submissions and uploaded images in public tables so deployed hosting does not need local filesystem writes.
+The saved search alerts migration stores property availability alert requests in Supabase instead of frontend-only preview state or local JSON files.
 
 After the SQL succeeds, restart the Next.js dev server so `.env.local` is loaded:
 
 ```bash
 npm run dev -- -p 3006
 ```
+
+
 
 
