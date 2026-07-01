@@ -8,6 +8,7 @@ type OwnerSubmissionImage = {
   fileName: string;
   mimeType: string;
   size: number;
+  dataUrl?: string;
 };
 
 type OwnerSubmissionGalleryProps = {
@@ -34,7 +35,7 @@ export function OwnerSubmissionGallery({ submissionId, propertyType, images }: O
   const imageUrls = useMemo(
     () => images.map((image) => ({
       ...image,
-      previewUrl: ownerImageUrl(submissionId, image.hash),
+      previewUrl: image.dataUrl || ownerImageUrl(submissionId, image.hash),
       downloadUrl: ownerImageDownloadUrl(submissionId, image.hash)
     })),
     [images, submissionId]
@@ -162,7 +163,7 @@ export function OwnerSubmissionGallery({ submissionId, propertyType, images }: O
           <div className="flex h-full w-full items-center justify-center p-4 pt-20 sm:p-8 sm:pt-24">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={ownerImageUrl(submissionId, activeImage.hash)}
+              src={activeImage.dataUrl || ownerImageUrl(submissionId, activeImage.hash)}
               alt={`${propertyType} upload ${activeIndex + 1}`}
               className="max-h-full max-w-full object-contain"
             />
@@ -172,3 +173,6 @@ export function OwnerSubmissionGallery({ submissionId, propertyType, images }: O
     </>
   );
 }
+
+
+

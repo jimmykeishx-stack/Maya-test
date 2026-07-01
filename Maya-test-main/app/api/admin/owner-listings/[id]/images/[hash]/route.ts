@@ -28,7 +28,7 @@ export async function GET(_request: Request, context: RouteContext) {
   const databaseImage = ownerSubmissionImageToResponse(image);
 
   if (databaseImage) {
-    return new NextResponse(databaseImage.body, {
+    return new NextResponse(new Uint8Array(databaseImage.body), {
       headers: {
         "Content-Type": databaseImage.contentType,
         "Content-Length": String(databaseImage.contentLength),
@@ -48,7 +48,7 @@ export async function GET(_request: Request, context: RouteContext) {
   try {
     const file = await readFile(imagePath);
 
-    return new NextResponse(file, {
+    return new NextResponse(new Uint8Array(file), {
       headers: {
         "Content-Type": image.mimeType,
         "Content-Length": String(image.size),
@@ -60,3 +60,4 @@ export async function GET(_request: Request, context: RouteContext) {
     return NextResponse.json({ error: "Image file could not be read." }, { status: 404 });
   }
 }
+
