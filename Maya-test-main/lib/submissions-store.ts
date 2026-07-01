@@ -59,6 +59,30 @@ type OwnerSubmissionImageRow = {
   sort_order: number;
 };
 
+const IMAGE_CONTENT_TYPES: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".webp": "image/webp",
+  ".gif": "image/gif",
+  ".bmp": "image/bmp",
+  ".tif": "image/tiff",
+  ".tiff": "image/tiff",
+  ".svg": "image/svg+xml",
+  ".heic": "image/heic",
+  ".heif": "image/heif",
+  ".avif": "image/avif"
+};
+
+function getFileExtension(fileName: string) {
+  const match = fileName.toLowerCase().match(/\.[a-z0-9]+$/);
+  return match?.[0] ?? "";
+}
+
+function inferImageContentType(fileName: string, mimeType?: string | null) {
+  if (mimeType?.startsWith("image/")) return mimeType;
+  return IMAGE_CONTENT_TYPES[getFileExtension(fileName)] ?? mimeType ?? "application/octet-stream";
+}
 const submissionsDir = path.join(process.cwd(), "data", "submissions");
 const uploadsDir = path.join(submissionsDir, "uploads");
 
@@ -89,7 +113,7 @@ function mapOwnerSubmission(row: OwnerSubmissionRow): OwnerSubmissionRecord {
     .sort((a, b) => a.sort_order - b.sort_order)
     .map((image) => ({
       fileName: image.file_name,
-      mimeType: image.mime_type ?? "application/octet-stream",
+      mimeType: inferImageContentType(image.file_name, image.mime_type),
       size: image.size,
       storedAt: "supabase-db",
       hash: image.hash,
@@ -169,7 +193,7 @@ function dataUrlToBuffer(dataUrl: string) {
 }
 
 function fileToDataUrl(file: File, buffer: Buffer) {
-  const mimeType = file.type || "application/octet-stream";
+  const mimeType = inferImageContentType(file.name, file.type);
   return `data:${mimeType};base64,${buffer.toString("base64")}`;
 }
 
@@ -191,7 +215,7 @@ async function buildImageRecords(images: File[] = []) {
 
     imageRecords.push({
       fileName: image.name,
-      mimeType: image.type || "application/octet-stream",
+      mimeType: inferImageContentType(image.name, image.type),
       size: image.size,
       storedAt: `supabase-db:${index + 1}`,
       hash,
@@ -309,7 +333,7 @@ export async function saveOwnerSubmission(input: {
     await writeFile(storedAt, buffer);
     imageRecords.push({
       fileName: image.name,
-      mimeType: image.type,
+      mimeType: inferImageContentType(image.name, image.type),
       size: image.size,
       storedAt,
       hash,
@@ -345,9 +369,10 @@ export function ownerSubmissionImageToResponse(image: NonNullable<OwnerSubmissio
 
   return {
     body,
-    contentType: image.mimeType || "application/octet-stream",
+    contentType: inferImageContentType(image.fileName, image.mimeType),
     contentLength: body.length
   };
 }
+
 
 

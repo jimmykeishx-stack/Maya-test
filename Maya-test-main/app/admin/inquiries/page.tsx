@@ -1,3 +1,4 @@
+import { OwnerSubmissionGallery } from "@/components/admin/owner-submission-gallery";
 import { requireAdmin } from "@/lib/auth/admin";
 import { createMetadata } from "@/lib/metadata";
 import { getBuyerInquiries, getOwnerSubmissions } from "@/lib/submissions-store";
@@ -9,12 +10,6 @@ export const metadata = createMetadata({
 
 export const dynamic = "force-dynamic";
 
-function ownerImageUrl(submissionId: string, hash: string) {
-  return `/api/admin/owner-listings/${submissionId}/images/${hash}`;
-}
-function ownerImageDownloadUrl(submissionId: string, hash: string) {
-  return `/api/admin/owner-listings/${submissionId}/images/${hash}/download`;
-}
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en-KE", {
     year: "numeric",
@@ -83,33 +78,11 @@ export default async function AdminInquiriesPage() {
                   </div>
                   <p className="mt-5 whitespace-pre-wrap text-sm leading-7 text-muted-foreground">{submission.propertyDescription}</p>
                   {submission.images?.length ? (
-                    <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                      {submission.images.map((image, index) => {
-                        const imageUrl = ownerImageUrl(submission.id, image.hash);
-                        return (
-                          <div
-                            key={image.hash}
-                            className="overflow-hidden rounded-[1.2rem] border border-black/6 bg-white/75"
-                          >
-                            <a href={imageUrl} target="_blank" rel="noreferrer" className="group block">
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
-                              <img src={imageUrl} alt={`${submission.propertyType} upload ${index + 1}`} className="aspect-[4/3] w-full object-cover transition group-hover:scale-[1.03]" />
-                            </a>
-                            <div className="grid gap-2 px-3 py-3 text-xs text-muted-foreground">
-                              <span className="truncate">{image.fileName}</span>
-                              <div className="flex flex-wrap gap-2">
-                                <a href={imageUrl} target="_blank" rel="noreferrer" className="rounded-full border border-black/10 bg-white px-3 py-2 uppercase tracking-[0.16em] text-[var(--gold-strong)]">
-                                  Open
-                                </a>
-                                <a href={ownerImageDownloadUrl(submission.id, image.hash)} className="rounded-full border border-black/10 bg-white px-3 py-2 uppercase tracking-[0.16em] text-foreground">
-                                  Download
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
+                    <OwnerSubmissionGallery
+                      submissionId={submission.id}
+                      propertyType={submission.propertyType}
+                      images={submission.images}
+                    />
                   ) : null}
                 </article>
               ))}
