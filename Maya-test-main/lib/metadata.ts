@@ -9,6 +9,7 @@ type MetadataArgs = {
 const defaultTitle = "Maya Haven | Luxury Nairobi Real Estate";
 const defaultDescription =
   "Cinematic luxury real estate across Nairobi, from penthouses and curated residences to expat housing and investment properties.";
+const brandIcon = "/media/brand/maya-haven-logo.jpeg";
 
 export function createMetadata({ title, description, image }: MetadataArgs = {}): Metadata {
   const resolvedTitle = title ? `${title} | Maya Haven` : defaultTitle;
@@ -19,6 +20,11 @@ export function createMetadata({ title, description, image }: MetadataArgs = {})
     title: resolvedTitle,
     description: resolvedDescription,
     metadataBase: new URL("https://maya-haven.example"),
+    icons: {
+      icon: brandIcon,
+      shortcut: brandIcon,
+      apple: brandIcon
+    },
     openGraph: {
       title: resolvedTitle,
       description: resolvedDescription,
@@ -33,3 +39,4 @@ export function createMetadata({ title, description, image }: MetadataArgs = {})
     }
   };
 }
+
